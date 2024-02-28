@@ -32,8 +32,12 @@ double &Tensor::operator[](size_t i) { return data[i]; }
 Tensor Tensor::operator+(const Tensor &other) const {
   if (ndims != other.ndims) {
     std::ostringstream ss;
-    ss << "Incompatible shapes: " << ndims << " and " << other.ndims;
+    ss << "Incompatible ranks: " << ndims << " and " << other.ndims;
     throw std::invalid_argument(ss.str());
+  }
+  if (shape != other.shape) {
+    std::ostringstream ss;
+    ss << "Incompatible shapes: " << shape << " and " << other.shape;
   }
 
   Tensor result(size, ndims, shape, strides);

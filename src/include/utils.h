@@ -1,23 +1,28 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-// #include <cstddef>
-// #include <initializer_list>
+#include <iostream>
 #include <memory>
 
 class Array {
 
 private:
-  const size_t size;
   std::unique_ptr<size_t[]> data;
 
 public:
+  const size_t size;
+
   Array(const Array &);
   Array(size_t size);
   Array(std::initializer_list<size_t>);
 
   size_t operator[](size_t) const;
   size_t &operator[](size_t);
+  bool operator!=(const Array &) const;
+
+  friend std::ostream &operator<<(std::ostream &, Array const &);
 };
+
+std::ostream &operator<<(std::ostream &, Array const &);
 
 #endif
