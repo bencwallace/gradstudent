@@ -25,10 +25,18 @@ int main() {
   Tensor sum = scalar1 + scalar1;
   assert(sum[0] == 48);
 
-  Tensor matrix1({4, 5});
+  Tensor matrix1({2, 2});
   try {
     matrix1 + scalar1;
   } catch (const std::exception &e) {
     assert(!std::strcmp(e.what(), "Incompatible ranks: 2 and 1"));
   }
+
+  // TODO: simplify tensor initialization
+  Tensor matrix2({2, 1});
+  matrix1[0] = 1; matrix1[1] = 2; matrix1[2] = 3; matrix1[3] = 4;
+  matrix2[0] = 5; matrix2[1] = 6;
+  Tensor matrix3 = matrix1.dot(matrix2);
+  assert(matrix3[0] == 17);
+  assert(matrix3[1] == 39);
 }

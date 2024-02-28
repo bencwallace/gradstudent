@@ -15,9 +15,12 @@ private:
   Array strides;
   std::shared_ptr<double[]> data;
 
-  Tensor(size_t, size_t, Array, Array);
+  Tensor(size_t, size_t, const Array &, const Array &);
+
+  size_t toIndex(const Array &) const;
 
 public:
+  Tensor(const Array &);
   Tensor(std::initializer_list<size_t>);
   Tensor(double);
   ~Tensor();
@@ -25,6 +28,8 @@ public:
   double operator[](size_t) const;
   double &operator[](size_t);
   Tensor operator+(const Tensor &) const;
+
+  Tensor dot(const Tensor &) const;
 };
 
 #endif
