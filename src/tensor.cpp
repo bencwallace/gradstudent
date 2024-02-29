@@ -104,18 +104,15 @@ Tensor Tensor::dot(const Tensor &other) const {
       otherMultiIndex[k] = resultMultiIndex[ndims + k - 2];
     }
 
+    // TODO: get these directly from slices of resultMultiIndex
+    size_t thisIndex = toIndex(thisMultiIndex);
+    size_t otherIndex = other.toIndex(otherMultiIndex);
+
     result.data[i] = 0;
     for (size_t j = 0; j < shape[shape.size - 1]; ++j) {
-      size_t thisIndex = toIndex(thisMultiIndex);
-      size_t otherIndex = other.toIndex(otherMultiIndex);
-
-      double thisVal = (*this)[thisIndex];
-      double otherVal = other[otherIndex];
-
-      result.data[i] += thisVal * otherVal;
-
-      ++thisMultiIndex[ndims - 1];  // TODO: directly increase thisIndex by strides[ndims - 1]
-      ++otherMultiIndex[0];  //  TODO: directly increase otherIndex by other.strides[0]
+      result.data[i] += (*this)[thisIndex] * other[otherIndex];;
+      thisIndex += strides[ndims - 1];
+      otherIndex += other.strides[0];
     }
 
     if (resultMultiIndex[currResultDim] < result_shape[currResultDim] - 1) {
