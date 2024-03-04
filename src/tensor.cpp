@@ -77,6 +77,18 @@ Tensor Tensor::operator+(const Tensor &other) const {
   return result;
 }
 
+Tensor Tensor::operator-() const {
+  Tensor result(size, ndims, shape, strides);
+  for (size_t i = 0; i < size; ++i) {
+    result.data[i] = -data[i];
+  }
+  return result;
+}
+
+Tensor Tensor::operator-(const Tensor &other) const {
+  return (*this) + (-other);
+}
+
 // OTHER METHODS
 
 Tensor Tensor::dot(const Tensor &other) const {

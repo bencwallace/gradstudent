@@ -25,6 +25,9 @@ int main() {
   Tensor sum = scalar1 + scalar1;
   assert(sum[0] == 48);
 
+  Tensor diff = scalar1 - scalar1;
+  assert(diff[0] == 0);
+
   Tensor matrix1({2, 2});
   try {
     matrix1 + scalar1;

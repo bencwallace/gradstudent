@@ -28,6 +28,8 @@ public:
   double operator[](size_t) const;
   double &operator[](size_t);
   Tensor operator+(const Tensor &) const;
+  Tensor operator-() const;
+  Tensor operator-(const Tensor &) const;
 
   Tensor dot(const Tensor &) const;
 };
