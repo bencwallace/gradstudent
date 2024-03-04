@@ -27,6 +27,18 @@ size_t Tensor::toIndex(const Array &multiIndex) const {
   return idx;
 }
 
+void Tensor::checkCompatibleShape(const Tensor &other) const {
+  if (ndims != other.ndims) {
+    std::ostringstream ss;
+    ss << "Incompatible ranks: " << ndims << " and " << other.ndims;
+    throw std::invalid_argument(ss.str());
+  }
+  if (shape != other.shape) {
+    std::ostringstream ss;
+    ss << "Incompatible shapes: " << shape << " and " << other.shape;
+  }
+}
+
 /* PUBLIC */
 
 // CONSTRUCTORS AND DESTRUCTORS
@@ -60,16 +72,7 @@ double Tensor::operator[](size_t i) const { return data[i]; }
 double &Tensor::operator[](size_t i) { return data[i]; }
 
 Tensor Tensor::operator+(const Tensor &other) const {
-  if (ndims != other.ndims) {
-    std::ostringstream ss;
-    ss << "Incompatible ranks: " << ndims << " and " << other.ndims;
-    throw std::invalid_argument(ss.str());
-  }
-  if (shape != other.shape) {
-    std::ostringstream ss;
-    ss << "Incompatible shapes: " << shape << " and " << other.shape;
-  }
-
+  checkCompatibleShape(other);
   Tensor result(size, ndims, shape, strides);
   for (size_t i = 0; i < size; ++i) {
     result.data[i] = data[i] + other.data[i];
