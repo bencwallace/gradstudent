@@ -4,11 +4,9 @@
 
 #include "tensor.h"
 
-Tensor::Tensor(double scalar) : Tensor({1}) { data[0] = scalar; }
+/* PRIVATE */
 
-Tensor::Tensor(size_t size, size_t ndims, const Array &shape, const Array &strides)
-    : size(size), ndims(ndims), shape(shape), strides(strides),
-      data(std::shared_ptr<double[]>(new double[size])) {}
+Tensor::Tensor(double scalar) : Tensor({1}) { data[0] = scalar; }
 
 size_t Tensor::toIndex(const Array &multiIndex) const {
   if (multiIndex.size != ndims) {
@@ -29,6 +27,14 @@ size_t Tensor::toIndex(const Array &multiIndex) const {
   return idx;
 }
 
+/* PUBLIC */
+
+// CONSTRUCTORS AND DESTRUCTORS
+
+Tensor::Tensor(size_t size, size_t ndims, const Array &shape, const Array &strides)
+    : size(size), ndims(ndims), shape(shape), strides(strides),
+      data(std::shared_ptr<double[]>(new double[size])) {}
+
 Tensor::Tensor(const Array &shape)
     : ndims(shape.size), shape(shape), strides(ndims) {
   if (ndims > 0) {
@@ -46,6 +52,8 @@ Tensor::Tensor(std::initializer_list<size_t> shape)
     : Tensor(Array(shape)) {}
 
 Tensor::~Tensor() {}
+
+// OPERATORS
 
 double Tensor::operator[](size_t i) const { return data[i]; }
 
@@ -68,6 +76,8 @@ Tensor Tensor::operator+(const Tensor &other) const {
   }
   return result;
 }
+
+// OTHER METHODS
 
 Tensor Tensor::dot(const Tensor &other) const {
   if (shape[shape.size - 1] != other.shape[0]) {
