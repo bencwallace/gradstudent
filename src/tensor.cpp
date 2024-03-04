@@ -147,3 +147,13 @@ Tensor Tensor::dot(const Tensor &other) const {
 
   return result;
 }
+
+/* FRIEND FUNCTIONS */
+
+Tensor operator*(double scalar, const Tensor &tensor) {
+  Tensor result(tensor.size, tensor.ndims, tensor.shape, tensor.strides);
+  for (size_t i = 0; i < result.size; ++i) {
+    result.data[i] = scalar * tensor.data[i];
+  }
+  return result;
+}

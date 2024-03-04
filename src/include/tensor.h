@@ -32,6 +32,10 @@ public:
   Tensor operator-(const Tensor &) const;
 
   Tensor dot(const Tensor &) const;
+
+  friend Tensor operator*(double, const Tensor&);
 };
+
+Tensor operator*(double, const Tensor&);
 
 #endif

@@ -25,6 +25,9 @@ int main() {
   Tensor sum = scalar1 + scalar1;
   assert(sum[0] == 48);
 
+  Tensor multiple = 5 * scalar1;
+  assert (multiple[0] == 120);
+
   Tensor diff = scalar1 - scalar1;
   assert(diff[0] == 0);
 
@@ -42,4 +45,6 @@ int main() {
   Tensor matrix3 = matrix1.dot(matrix2);
   assert(matrix3[0] == 17);
   assert(matrix3[1] == 39);
+
+  std::cout << "Tests passed" << std::endl;
 }
