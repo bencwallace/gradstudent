@@ -1,4 +1,4 @@
-set(SOURCE_FILES tensor.cpp array.cpp)
+set(SOURCE_FILES tensor.cpp array.cpp multiIndex.cpp)
 
 add_library(tensor ${SOURCE_FILES})
 

@@ -2,11 +2,12 @@
 #include <iostream>
 #include <sstream>
 
+#include "multiIndex.h"
 #include "tensor.h"
 
 /* PRIVATE */
 
-size_t Tensor::toIndex(const Array &multiIndex) const {
+size_t Tensor::toIndex(const Array &multiIndex, size_t start, size_t end) const {
   if (multiIndex.size != ndims) {
     std::stringstream ss;
     ss << "Expected multi-index of size " << ndims << ", got size " << multiIndex.size;
@@ -14,7 +15,7 @@ size_t Tensor::toIndex(const Array &multiIndex) const {
   }
 
   size_t idx = 0;
-  for (size_t i = 0; i < ndims; ++i) {
+  for (size_t i = start; i < end; ++i) {
     if (multiIndex[i] < 0 || multiIndex[i] >= shape[i]) {
       std::stringstream ss;
       ss << "Expected index " << i << " in [0, " << shape[i] << "), got: " << multiIndex[i];
@@ -23,6 +24,10 @@ size_t Tensor::toIndex(const Array &multiIndex) const {
     idx += multiIndex[i] * strides[i];
   }
   return idx;
+}
+
+size_t Tensor::toIndex(const Array &multiIndex) const {
+  return toIndex(multiIndex, 0, ndims);
 }
 
 Array Tensor::toMultiIndex(size_t idx) const {
@@ -119,25 +124,10 @@ Tensor Tensor::dot(const Tensor &other) const {
   }
 
   Tensor result(result_shape);
-  Array resultMultiIndex = zerosArray(result.ndims);
+  MultiIndex resultMultiIndex = MultiIndex(result.shape);
   for (size_t i = 0; i < result.size; ++i) {
-    resultMultiIndex = result.toMultiIndex(i);
-
-    Array thisMultiIndex(ndims);
-    for (size_t k = 0; k < ndims - 1; ++k) {
-      thisMultiIndex[k] = resultMultiIndex[k];
-    }
-    thisMultiIndex[ndims - 1] = 0;
-
-    Array otherMultiIndex(other.ndims);
-    otherMultiIndex[0] = 0;
-    for (size_t k = 1; k < other.ndims; ++k)  {
-      otherMultiIndex[k] = resultMultiIndex[ndims + k - 2];
-    }
-
-    // TODO: get these directly from slices of resultMultiIndex
-    size_t thisIndex = toIndex(thisMultiIndex);
-    size_t otherIndex = other.toIndex(otherMultiIndex);
+    size_t thisIndex = toIndex(resultMultiIndex, 0, ndims - 1);
+    size_t otherIndex = other.toIndex(resultMultiIndex, 1, ndims);
 
     result.data[i] = 0;
     for (size_t j = 0; j < shape[shape.size - 1]; ++j) {
@@ -145,6 +135,8 @@ Tensor Tensor::dot(const Tensor &other) const {
       thisIndex += strides[ndims - 1];
       otherIndex += other.strides[0];
     }
+
+    ++resultMultiIndex;
   }
 
   return result;
