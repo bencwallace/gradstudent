@@ -65,7 +65,11 @@ int main() {
   assert((matrix4[{1, 0}] == 2));
   assert((matrix4[{1, 1}] == 4));
 
-  // TODO: add test summing tensors with different strides
+  Tensor matrix5 = matrix4 + matrix1;
+  assert((matrix5[{0, 0}] == 2));
+  assert((matrix5[{0, 1}] == 5));
+  assert((matrix5[{1, 0}] == 5));
+  assert((matrix5[{1, 1}] == 8));
 
   std::cout << "Tests passed" << std::endl;
 }

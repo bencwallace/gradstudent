@@ -104,12 +104,13 @@ double &Tensor::operator[](std::initializer_list<size_t> coords) {
   return (*this)[Array(coords)];
 }
 
-// TODO: use multiIndex to fix behavior
 Tensor Tensor::operator+(const Tensor &other) const {
   checkCompatibleShape(other);
   Tensor result(size, ndims, shape, strides);
+  MultiIndex resultIdx(result.shape);
   for (size_t i = 0; i < size; ++i) {
-    result.data[i] = data[i] + other.data[i];
+    result[resultIdx] = (*this)[toIndex(resultIdx)] + other[other.toIndex(resultIdx)];
+    ++resultIdx;
   }
   return result;
 }
