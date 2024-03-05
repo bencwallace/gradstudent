@@ -43,6 +43,7 @@ public:
   explicit operator double() const;
 
   Tensor dot(const Tensor &) const;
+  Tensor flatten() const;
   Tensor permute(std::initializer_list<size_t>);
 
   friend Tensor operator*(double, const Tensor&);

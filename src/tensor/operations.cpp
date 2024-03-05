@@ -10,7 +10,6 @@ Tensor Tensor::dot(const Tensor &other) const {
     throw std::invalid_argument(ss.str());
   }
 
-  // TODO: simplify array initialization
   Array result_shape(shape.size + other.shape.size - 2);
   for (size_t i = 0; i < shape.size - 1; ++i) {
     result_shape[i] = shape[i];
@@ -36,6 +35,11 @@ Tensor Tensor::dot(const Tensor &other) const {
   }
 
   return result;
+}
+
+Tensor Tensor::flatten() const {
+  // TODO: return a 1-dimensional tensor
+  return Tensor(size, 2, Array({1, size}), Array({1, 1}), data);
 }
 
 Tensor Tensor::permute(std::initializer_list<size_t> axes) {
