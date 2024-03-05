@@ -15,6 +15,10 @@ private:
   std::shared_ptr<double[]> data;
 
   Tensor(size_t, size_t, const Array &, const Array &);
+  Tensor(size_t, size_t, const Array &, const Array &, const std::shared_ptr<double[]>);
+
+  double operator[](size_t) const;
+  double &operator[](size_t);
 
   size_t toIndex(const Array &, size_t, size_t) const;
   size_t toIndex(const Array &) const;
@@ -26,8 +30,10 @@ public:
   Tensor(std::initializer_list<size_t>);
   ~Tensor();
 
-  double operator[](size_t) const;
-  double &operator[](size_t);
+  double operator[](const Array &) const;
+  double &operator[](const Array &);
+  double operator[](std::initializer_list<size_t>) const;
+  double &operator[](std::initializer_list<size_t>);
   Tensor operator+(const Tensor &) const;
   Tensor operator-() const;
   Tensor operator-(const Tensor &) const;

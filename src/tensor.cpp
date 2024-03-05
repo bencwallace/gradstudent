@@ -52,13 +52,17 @@ void Tensor::checkCompatibleShape(const Tensor &other) const {
   }
 }
 
-/* PUBLIC */
-
-// CONSTRUCTORS AND DESTRUCTORS
-
 Tensor::Tensor(size_t size, size_t ndims, const Array &shape, const Array &strides)
     : size(size), ndims(ndims), shape(shape), strides(strides),
       data(std::shared_ptr<double[]>(new double[size])) {}
+
+Tensor::Tensor(size_t size, size_t ndims, const Array &shape, const Array &strides, const std::shared_ptr<double[]> data)
+    : size(size), ndims(ndims), shape(shape), strides(strides),
+      data(data) {}
+
+/* PUBLIC */
+
+// CONSTRUCTORS AND DESTRUCTORS
 
 Tensor::Tensor(const Array &shape)
     : ndims(shape.size), shape(shape), strides(ndims) {
@@ -84,6 +88,23 @@ double Tensor::operator[](size_t i) const { return data[i]; }
 
 double &Tensor::operator[](size_t i) { return data[i]; }
 
+double Tensor::operator[](const Array &multiIndex) const {
+  return (*this)[toIndex(multiIndex)];
+}
+
+double &Tensor::operator[](const Array &multiIndex) {
+  return (*this)[toIndex(multiIndex)];
+}
+
+double Tensor::operator[](std::initializer_list<size_t> coords) const {
+  return (*this)[Array(coords)];
+}
+
+double &Tensor::operator[](std::initializer_list<size_t> coords) {
+  return (*this)[Array(coords)];
+}
+
+// TODO: use multiIndex to fix behavior
 Tensor Tensor::operator+(const Tensor &other) const {
   checkCompatibleShape(other);
   Tensor result(size, ndims, shape, strides);
