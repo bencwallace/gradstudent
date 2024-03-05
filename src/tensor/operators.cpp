@@ -1,3 +1,5 @@
+#include <sstream>
+
 #include "multiIndex.h"
 #include "tensor.h"
 
@@ -57,6 +59,15 @@ Tensor Tensor::operator-() const {
 
 Tensor Tensor::operator-(const Tensor &other) const {
   return (*this) + (-other);
+}
+
+Tensor::operator double() const {
+  if (size != 1) {
+    std::stringstream ss;
+    ss << "Expected size 1, got " << size;
+    throw std::invalid_argument(ss.str());
+  }
+  return data[0];
 }
 
 /* FRIEND FUNCTIONS */
