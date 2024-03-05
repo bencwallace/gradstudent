@@ -5,9 +5,14 @@
 /* PRIVATE */
 
 size_t Tensor::toIndex(const Array &multiIndex, size_t start, size_t end) const {
-  if (multiIndex.size != ndims) {
+  if (start < 0) {
     std::stringstream ss;
-    ss << "Expected multi-index of size " << ndims << ", got size " << multiIndex.size;
+    ss << "Multi-index start point must be non-negative, got " << start;
+    throw std::invalid_argument(ss.str());
+  }
+  if (end > multiIndex.size) {
+    std::stringstream ss;
+    ss << "Invalid end point " << end << " for multi-index of size " << multiIndex.size;
     throw std::invalid_argument(ss.str());
   }
 

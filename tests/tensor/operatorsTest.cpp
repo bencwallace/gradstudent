@@ -2,33 +2,27 @@
 
 #include "tensor.h"
 
-TEST(ScalarTest, ScalarTest) {
-  Tensor scalar = scalarTensor(42);
-  EXPECT_EQ(scalar[{0}], 42);
-}
-
-TEST(ScalarTest, SetItemTest) {
-  Tensor scalar = scalarTensor(42);
-  scalar[{0}] = 24;
-  EXPECT_EQ(scalar[{0}], 24);
+TEST(ScalarTest, GetItemTest) {
+  Tensor scalar = scalarTensor(24);
+  EXPECT_EQ(static_cast<double>(scalar), 24);
 }
 
 TEST(ScalarTest, SumTest) {
   Tensor scalar = scalarTensor(24);
   Tensor sum = scalar + scalar;
-  EXPECT_EQ(sum[{0}], 48);
+  EXPECT_EQ(sum[{}], 48);
 }
 
 TEST(ScalarTest, ProdTest) {
   Tensor scalar = scalarTensor(24);
   Tensor multiple = 5 * scalar;
-  EXPECT_EQ(multiple[{0}], 120);
+  EXPECT_EQ(multiple[{}], 120);
 }
 
 TEST(ScalarTest, DiffTest) {
   Tensor scalar = scalarTensor(24);
   Tensor diff = scalar - scalar;
-  EXPECT_EQ(diff[{0}], 0);
+  EXPECT_EQ(diff[{}], 0);
 }
 
 TEST(MatrixTest, GetItemTest) {

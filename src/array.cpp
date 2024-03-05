@@ -45,10 +45,12 @@ bool Array::operator!=(const Array &other) const {
 
 std::ostream &operator<<(std::ostream &os, Array const &array) {
   std::ostream &result = os << "(";
-  for (size_t i = 0; i < array.size - 1; ++i) {
+  for (int i = 0; i < (int) array.size - 1; ++i) {
     result << array[i] << ", ";
   }
-  result << array[array.size - 1];
+  if (array.size > 0) {
+    result << array[array.size - 1];
+  }
   if (array.size == 1) {
     result << ",";
   }

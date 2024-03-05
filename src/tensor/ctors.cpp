@@ -19,6 +19,8 @@ Tensor::Tensor(const Array &shape)
   if (ndims > 0) {
     strides[ndims - 1] = 1;
     size = this->shape[ndims - 1];
+  } else {
+    size = 1;
   }
   for (int i = (int) ndims - 2; i >= 0; --i) {
     size *= this->shape[i];
@@ -53,5 +55,5 @@ Tensor::~Tensor() {}
 /* FRIEND FUNCTIONS */
 
 Tensor scalarTensor(double scalar) {
-  return Tensor({1}, {scalar});
+  return Tensor({}, {scalar});
 }

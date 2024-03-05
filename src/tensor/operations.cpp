@@ -38,8 +38,7 @@ Tensor Tensor::dot(const Tensor &other) const {
 }
 
 Tensor Tensor::flatten() const {
-  // TODO: return a 1-dimensional tensor
-  return Tensor(size, 2, Array({1, size}), Array({1, 1}), data);
+  return Tensor(size, 1, Array({size}), Array({1}), data);
 }
 
 Tensor Tensor::permute(std::initializer_list<size_t> axes) {

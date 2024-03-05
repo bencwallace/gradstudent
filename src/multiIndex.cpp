@@ -25,6 +25,8 @@ void MultiIndex::reset() {
 }
 
 MultiIndex MultiIndex::operator++() {
-  increment(shape.size - 1);
+  if (shape.size > 0) {
+    increment(shape.size - 1);
+  }
   return *this;
 }

@@ -10,7 +10,7 @@ TEST(MatrixTest, RankMismatchTest) {
         try {
           matrix + scalar;
         } catch (const std::invalid_argument &e) {
-          EXPECT_STREQ(e.what(), "Incompatible ranks: 2 and 1");
+          EXPECT_STREQ(e.what(), "Incompatible ranks: 2 and 0");
           throw;
         }
       },
