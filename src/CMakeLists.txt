@@ -1,4 +1,4 @@
-set(SOURCE_FILES tensor.cpp utils.cpp)
+set(SOURCE_FILES tensor.cpp array.cpp)
 
 add_library(tensor ${SOURCE_FILES})
 

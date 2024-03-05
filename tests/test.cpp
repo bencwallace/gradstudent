@@ -3,7 +3,7 @@
 #include <sstream>
 
 #include "tensor.h"
-#include "utils.h"
+#include "array.h"
 
 int main() {
   Array array1({10});

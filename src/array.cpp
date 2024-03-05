@@ -1,6 +1,6 @@
 #include <cstring>
 
-#include "utils.h"
+#include "array.h"
 
 Array::Array(const Array &array)
     : data(std::make_unique<size_t[]>(array.size)), size(array.size) {

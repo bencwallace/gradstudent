@@ -3,7 +3,7 @@
 #include <initializer_list>
 #include <memory>
 
-#include "utils.h"
+#include "array.h"
 
 class Tensor {
 
