@@ -43,3 +43,11 @@ std::ostream &operator<<(std::ostream &os, Array const &array) {
   result << ")";
   return result;
 }
+
+Array zerosArray(size_t size) {
+  Array result(size);
+  for (size_t i = 0; i < size; ++i) {
+    result[i] = 0;
+  }
+  return result;
+}

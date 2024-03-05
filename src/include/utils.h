@@ -21,8 +21,10 @@ public:
   bool operator!=(const Array &) const;
 
   friend std::ostream &operator<<(std::ostream &, Array const &);
+  friend Array zerosArray(size_t);
 };
 
 std::ostream &operator<<(std::ostream &, Array const &);
+Array zerosArray(size_t);
 
 #endif

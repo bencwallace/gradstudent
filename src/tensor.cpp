@@ -109,10 +109,7 @@ Tensor Tensor::dot(const Tensor &other) const {
   }
 
   Tensor result(result_shape);
-  Array resultMultiIndex(result_shape);
-  for (size_t i = 0; i < result.ndims; ++i) {
-    resultMultiIndex[i] = 0;
-  }
+  Array resultMultiIndex = zerosArray(result.ndims);
   size_t currResultDim = 0;
   for (size_t i = 0; i < result.size; ++i) {
     Array thisMultiIndex(ndims);
