@@ -1,75 +1,116 @@
-#include <cassert>
-#include <cstring>
-#include <sstream>
+#include <gtest/gtest.h>
 
 #include "tensor.h"
-#include "array.h"
 
-int main() {
+TEST(ArrayTest, PrintScalarTest) {
   Array array1({10});
   std::stringstream ss;
   ss << array1;
-  assert(ss.str() == "(10,)");
-  ss.str(std::string());
+  EXPECT_EQ(ss.str(), "(10,)");
+}
 
+TEST(ArrayTest, PrintTest) {
   Array array2({1, 2, 3});
+  std::stringstream ss;
   ss << array2;
-  assert(ss.str() == "(1, 2, 3)");
+  EXPECT_EQ(ss.str(), "(1, 2, 3)");
+}
 
-  Tensor scalar1 = scalarTensor(42);
-  assert(scalar1[{0}] == 42);
+TEST(ScalarTest, ScalarTest) {
+  Tensor scalar = scalarTensor(42);
+  EXPECT_EQ(scalar[{0}], 42);
+}
 
-  scalar1[{0}] = 24;
-  assert(scalar1[{0}] == 24);
+TEST(ScalarTest, SetItemTest) {
+  Tensor scalar = scalarTensor(42);
+  scalar[{0}] = 24;
+  EXPECT_EQ(scalar[{0}], 24);
+}
 
-  Tensor sum = scalar1 + scalar1;
-  assert(sum[{0}] == 48);
+TEST(ScalarTest, SumTest) {
+  Tensor scalar = scalarTensor(24);
+  Tensor sum = scalar + scalar;
+  EXPECT_EQ(sum[{0}], 48);
+}
 
-  Tensor multiple = 5 * scalar1;
-  assert (multiple[{0}] == 120);
+TEST(ScalarTest, ProdTest) {
+  Tensor scalar = scalarTensor(24);
+  Tensor multiple = 5 * scalar;
+  EXPECT_EQ(multiple[{0}], 120);
+}
 
-  Tensor diff = scalar1 - scalar1;
-  assert(diff[{0}] == 0);
+TEST(ScalarTest, DiffTest) {
+  Tensor scalar = scalarTensor(24);
+  Tensor diff = scalar - scalar;
+  EXPECT_EQ(diff[{0}], 0);
+}
 
-  Tensor matrix1({2, 2}, {1, 2, 3, 4});
-  assert((matrix1[{0, 0}] == 1) && (matrix1[{0, 1}] == 2) && (matrix1[{1, 0}] == 3) && (matrix1[{1, 1}] == 4));
-  try {
-    matrix1 + scalar1;
-  } catch (const std::exception &e) {
-    assert(!std::strcmp(e.what(), "Incompatible ranks: 2 and 1"));
-  }
+TEST(MatrixTest, GetItemTest) {
+  Tensor matrix({2, 2}, {1, 2, 3, 4});
+  EXPECT_EQ((matrix[{0, 0}]), 1);
+  EXPECT_EQ((matrix[{0, 1}]), 2);
+  EXPECT_EQ((matrix[{1, 0}]), 3);
+  EXPECT_EQ((matrix[{1, 1}]), 4);
+}
 
+TEST(MatrixTest, RankMismatchTest) {
+  Tensor scalar = scalarTensor(24);
+  Tensor matrix({2, 2}, {1, 2, 3, 4});
+  EXPECT_THROW({
+    try {
+      matrix + scalar;
+    } catch (const std::invalid_argument &e) {
+      EXPECT_STREQ(e.what(), "Incompatible ranks: 2 and 1");
+      throw;
+    }
+  }, std::invalid_argument);
+}
+
+TEST(MatrixTest, MatrixDotVectorTest) {
+  Tensor matrix({2, 2}, {1, 2, 3, 4});
   Tensor vector1({2, 1}, {5, 6});
-  Tensor vector2 = matrix1.dot(vector1);
-  assert((vector2[{0, 0}] == 17));
-  assert((vector2[{1, 0}] == 39));
+  Tensor vector2 = matrix.dot(vector1);
+  EXPECT_EQ((vector2[{0, 0}]), 17);
+  EXPECT_EQ((vector2[{1, 0}]), 39);
+}
 
+TEST(MatrixTest, MatrixDotMatrixTest) {
+  Tensor matrix1({2, 2}, {1, 2, 3, 4});
   Tensor matrix2({2, 3}, {6, 5, 4, 3, 2, 1});
   Tensor matrix3 = matrix1.dot(matrix2);
-  assert((matrix3[{0, 0}] == 12));
-  assert((matrix3[{0, 1}] == 9));
-  assert((matrix3[{0, 2}] == 6));
-  assert((matrix3[{1, 0}] == 30));
-  assert((matrix3[{1, 1}] == 23));
-  assert((matrix3[{1, 2}] == 16));
+  EXPECT_EQ((matrix3[{0, 0}]), 12);
+  EXPECT_EQ((matrix3[{0, 1}]), 9);
+  EXPECT_EQ((matrix3[{0, 2}]), 6);
+  EXPECT_EQ((matrix3[{1, 0}]), 30);
+  EXPECT_EQ((matrix3[{1, 1}]), 23);
+  EXPECT_EQ((matrix3[{1, 2}]), 16);
+}
 
-  Tensor matrix4 = matrix1.permute({1, 0});
-  assert((matrix4[{0, 0}] == 1));
-  assert((matrix4[{0, 1}] == 3));
-  assert((matrix4[{1, 0}] == 2));
-  assert((matrix4[{1, 1}] == 4));
+TEST(MatrixTest, PermuteTest) {
+  Tensor matrix1({2, 2}, {1, 2, 3, 4});
+  Tensor matrix2 = matrix1.permute({1, 0});
+  EXPECT_EQ((matrix2[{0, 0}]), 1);
+  EXPECT_EQ((matrix2[{0, 1}]), 3);
+  EXPECT_EQ((matrix2[{1, 0}]), 2);
+  EXPECT_EQ((matrix2[{1, 1}]), 4);
+}
 
-  Tensor matrix5 = matrix4 + matrix1;
-  assert((matrix5[{0, 0}] == 2));
-  assert((matrix5[{0, 1}] == 5));
-  assert((matrix5[{1, 0}] == 5));
-  assert((matrix5[{1, 1}] == 8));
+TEST(MatrixTest, SumTest) {
+  Tensor matrix1({2, 2}, {1, 2, 3, 4});
+  Tensor matrix2({2, 2}, {1, 3, 2, 4});
+  Tensor matrix3 = matrix2 + matrix1;
+  EXPECT_EQ((matrix3[{0, 0}]), 2);
+  EXPECT_EQ((matrix3[{0, 1}]), 5);
+  EXPECT_EQ((matrix3[{1, 0}]), 5);
+  EXPECT_EQ((matrix3[{1, 1}]), 8);
+}
 
-  Tensor matrix6 = matrix4 * matrix1;
-  assert((matrix6[{0, 0}] == 1));
-  assert((matrix6[{0, 1}] == 6));
-  assert((matrix6[{1, 0}] == 6));
-  assert((matrix6[{1, 1}] == 16));
-
-  std::cout << "Tests passed" << std::endl;
+TEST(MatrixTest, ProdTest) {
+  Tensor matrix1({2, 2}, {1, 2, 3, 4});
+  Tensor matrix2({2, 2}, {1, 3, 2, 4});
+  Tensor matrix3 = matrix2 * matrix1;
+  EXPECT_EQ((matrix3[{0, 0}]), 1);
+  EXPECT_EQ((matrix3[{0, 1}]), 6);
+  EXPECT_EQ((matrix3[{1, 0}]), 6);
+  EXPECT_EQ((matrix3[{1, 1}]), 16);
 }

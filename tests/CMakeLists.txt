@@ -1,5 +1,5 @@
 add_executable(runtests test.cpp)
 
-target_link_libraries(runtests PRIVATE tensor)
+target_link_libraries(runtests tensor GTest::gtest_main)
 
-add_test(NAME runtests COMMAND runtests)
+gtest_discover_tests(runtests)
