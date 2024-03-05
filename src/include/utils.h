@@ -1,5 +1,4 @@
-#ifndef UTILS_H
-#define UTILS_H
+#pragma once
 
 #include <iostream>
 #include <memory>
@@ -26,5 +25,3 @@ public:
 
 std::ostream &operator<<(std::ostream &, Array const &);
 Array zerosArray(size_t);
-
-#endif

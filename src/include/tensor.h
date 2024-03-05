@@ -1,5 +1,4 @@
-#ifndef TENSOR_H
-#define TENSOR_H
+#pragma once
 
 #include <initializer_list>
 #include <memory>
@@ -39,5 +38,3 @@ public:
 
 Tensor operator*(double, const Tensor&);
 Tensor scalarTensor(double);
-
-#endif
