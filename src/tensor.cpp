@@ -131,6 +131,17 @@ Tensor Tensor::operator+(const Tensor &other) const {
   return result;
 }
 
+Tensor Tensor::operator*(const Tensor &other) const {
+  checkCompatibleShape(other);
+  Tensor result(size, ndims, shape, strides);
+  MultiIndex resultIdx(result.shape);
+  for (size_t i = 0; i < size; ++i) {
+    result[resultIdx] = (*this)[toIndex(resultIdx)] * other[other.toIndex(resultIdx)];
+    ++resultIdx;
+  }
+  return result;
+}
+
 Tensor Tensor::operator-() const {
   Tensor result(size, ndims, shape, strides);
   for (size_t i = 0; i < size; ++i) {

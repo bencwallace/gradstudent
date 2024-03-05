@@ -39,6 +39,7 @@ public:
   Tensor operator+(const Tensor &) const;
   Tensor operator-() const;
   Tensor operator-(const Tensor &) const;
+  Tensor operator*(const Tensor &) const;
 
   Tensor dot(const Tensor &) const;
   Tensor permute(std::initializer_list<size_t>);
