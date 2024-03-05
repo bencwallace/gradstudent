@@ -49,12 +49,15 @@ int main() {
   assert(vector2[1] == 39);
 
   Tensor matrix2({2, 3});
-  matrix2[0] = 4; matrix2[1] = 3; matrix2[2] = 2; matrix2[3] = 1;
+  matrix2[0] = 6; matrix2[1] = 5; matrix2[2] = 4;
+  matrix2[3] = 3; matrix2[4] = 2; matrix2[5] = 1;
   Tensor matrix3 = matrix1.dot(matrix2);
-  assert(matrix3[0] == 8);
-  assert(matrix3[1] == 5);
-  assert(matrix3[2] == 20);
-  assert(matrix3[3] == 13);
+  assert(matrix3[0] == 12);
+  assert(matrix3[1] == 9);
+  assert(matrix3[2] == 6);
+  assert(matrix3[3] == 30);
+  assert(matrix3[4] == 23);
+  assert(matrix3[5] == 16);
 
   std::cout << "Tests passed" << std::endl;
 }

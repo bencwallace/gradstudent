@@ -15,6 +15,7 @@ public:
   Array(size_t size);
   Array(std::initializer_list<size_t>);
 
+  Array operator=(const Array &);
   size_t operator[](size_t) const;
   size_t &operator[](size_t);
   bool operator!=(const Array &) const;

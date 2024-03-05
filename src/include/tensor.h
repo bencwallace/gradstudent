@@ -17,6 +17,7 @@ private:
   Tensor(size_t, size_t, const Array &, const Array &);
 
   size_t toIndex(const Array &) const;
+  Array toMultiIndex(size_t) const;
   void checkCompatibleShape(const Tensor &) const;
 
 public:

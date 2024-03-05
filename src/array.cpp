@@ -1,4 +1,5 @@
 #include <cstring>
+#include <sstream>
 
 #include "array.h"
 
@@ -13,6 +14,16 @@ Array::Array(size_t size)
 Array::Array(std::initializer_list<size_t> data)
     : data(std::make_unique<size_t[]>(data.size())), size(data.size()) {
   std::copy(data.begin(), data.end(), this->data.get());
+}
+
+Array Array::operator=(const Array &other) {
+  if (size != other.size) {
+    std::stringstream ss;
+    ss << "Expected arrays of equal size, got " << size << " and " << other.size;
+    throw std::invalid_argument(ss.str());
+  }
+  std::copy(other.data.get(), other.data.get() + other.size, data.get());
+  return *this;
 }
 
 size_t Array::operator[](size_t i) const { return data[i]; }

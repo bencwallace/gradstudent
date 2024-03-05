@@ -25,6 +25,16 @@ size_t Tensor::toIndex(const Array &multiIndex) const {
   return idx;
 }
 
+Array Tensor::toMultiIndex(size_t idx) const {
+  // Not guaranteed to work for arrays with non-standard strides
+  Array result(ndims);
+  for (size_t i = 0; i < ndims; ++i) {
+    result[i] = idx / strides[i];
+    idx -= result[i] * strides[i];
+  }
+  return result;
+}
+
 void Tensor::checkCompatibleShape(const Tensor &other) const {
   if (ndims != other.ndims) {
     std::ostringstream ss;
@@ -110,8 +120,9 @@ Tensor Tensor::dot(const Tensor &other) const {
 
   Tensor result(result_shape);
   Array resultMultiIndex = zerosArray(result.ndims);
-  size_t currResultDim = 0;
   for (size_t i = 0; i < result.size; ++i) {
+    resultMultiIndex = result.toMultiIndex(i);
+
     Array thisMultiIndex(ndims);
     for (size_t k = 0; k < ndims - 1; ++k) {
       thisMultiIndex[k] = resultMultiIndex[k];
@@ -133,13 +144,6 @@ Tensor Tensor::dot(const Tensor &other) const {
       result.data[i] += (*this)[thisIndex] * other[otherIndex];;
       thisIndex += strides[ndims - 1];
       otherIndex += other.strides[0];
-    }
-
-    if (resultMultiIndex[currResultDim] < result_shape[currResultDim] - 1) {
-      ++resultMultiIndex[currResultDim];
-    } else {
-      resultMultiIndex[currResultDim] = 0;
-      ++currResultDim;
     }
   }
 
