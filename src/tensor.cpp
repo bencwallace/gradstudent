@@ -6,8 +6,6 @@
 
 /* PRIVATE */
 
-Tensor::Tensor(double scalar) : Tensor({1}) { data[0] = scalar; }
-
 size_t Tensor::toIndex(const Array &multiIndex) const {
   if (multiIndex.size != ndims) {
     std::stringstream ss;
@@ -158,5 +156,11 @@ Tensor operator*(double scalar, const Tensor &tensor) {
   for (size_t i = 0; i < result.size; ++i) {
     result.data[i] = scalar * tensor.data[i];
   }
+  return result;
+}
+
+Tensor scalarTensor(double scalar) {
+  Tensor result({1});
+  result[0] = scalar;
   return result;
 }

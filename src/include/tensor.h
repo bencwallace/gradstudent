@@ -23,7 +23,6 @@ private:
 public:
   Tensor(const Array &);
   Tensor(std::initializer_list<size_t>);
-  Tensor(double);
   ~Tensor();
 
   double operator[](size_t) const;
@@ -35,8 +34,10 @@ public:
   Tensor dot(const Tensor &) const;
 
   friend Tensor operator*(double, const Tensor&);
+  friend Tensor scalarTensor(double);
 };
 
 Tensor operator*(double, const Tensor&);
+Tensor scalarTensor(double);
 
 #endif

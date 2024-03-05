@@ -16,7 +16,7 @@ int main() {
   ss << array2;
   assert(ss.str() == "(1, 2, 3)");
 
-  Tensor scalar1(42);
+  Tensor scalar1 = scalarTensor(42);
   assert(scalar1[0] == 42);
 
   scalar1[0] = 24;
