@@ -77,8 +77,24 @@ Tensor::Tensor(const Array &shape)
   data = std::shared_ptr<double[]>(new double[size]);
 }
 
+Tensor::Tensor(const Array &shape, std::initializer_list<double> data)
+    : Tensor(shape) {
+  if (data.size() != size) {
+    std::stringstream ss;
+    ss << "Expected " << size << " data values, got " << data.size();
+    throw std::invalid_argument(ss.str());
+  }
+  size_t i = 0;
+  for (double val : data) {
+    this->data[i++] = val;
+  }
+}
+
 Tensor::Tensor(std::initializer_list<size_t> shape)
     : Tensor(Array(shape)) {}
+
+Tensor::Tensor(std::initializer_list<size_t> shape, std::initializer_list<double> data)
+    : Tensor(Array(shape), data) {}
 
 Tensor::~Tensor() {}
 
@@ -194,7 +210,5 @@ Tensor operator*(double scalar, const Tensor &tensor) {
 }
 
 Tensor scalarTensor(double scalar) {
-  Tensor result({1});
-  result[0] = scalar;
-  return result;
+  return Tensor({1}, {scalar});
 }
