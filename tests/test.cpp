@@ -42,11 +42,19 @@ int main() {
   assert(matrix1[0] == 1 && matrix1[1] == 2 && matrix1[2] == 3 && matrix1[3] == 4);
 
   // TODO: simplify tensor initialization
-  Tensor matrix2({2, 1});
-  matrix2[0] = 5; matrix2[1] = 6;
+  Tensor vector1({2, 1});
+  vector1[0] = 5; vector1[1] = 6;
+  Tensor vector2 = matrix1.dot(vector1);
+  assert(vector2[0] == 17);
+  assert(vector2[1] == 39);
+
+  Tensor matrix2({2, 3});
+  matrix2[0] = 4; matrix2[1] = 3; matrix2[2] = 2; matrix2[3] = 1;
   Tensor matrix3 = matrix1.dot(matrix2);
-  assert(matrix3[0] == 17);
-  assert(matrix3[1] == 39);
+  assert(matrix3[0] == 8);
+  assert(matrix3[1] == 5);
+  assert(matrix3[2] == 20);
+  assert(matrix3[3] == 13);
 
   std::cout << "Tests passed" << std::endl;
 }
