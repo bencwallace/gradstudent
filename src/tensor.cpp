@@ -163,6 +163,25 @@ Tensor Tensor::dot(const Tensor &other) const {
   return result;
 }
 
+Tensor Tensor::permute(std::initializer_list<size_t> axes) {
+  if (axes.size() != ndims) {
+    std::stringstream ss;
+    ss << "Expected axis list of length " << ndims << ", got " << axes.size();
+    throw std::invalid_argument(ss.str());
+  }
+
+  Array result_shape(ndims);
+  Array result_strides(ndims);
+  size_t i = 0;
+  for (size_t axis : axes) {
+    result_shape[i] = shape[axis];
+    result_strides[i] = strides[axis];
+    ++i;
+  }
+
+  return Tensor(size, ndims, result_shape, result_strides, data);
+}
+
 /* FRIEND FUNCTIONS */
 
 Tensor operator*(double scalar, const Tensor &tensor) {

@@ -59,6 +59,12 @@ int main() {
   assert((matrix3[{1, 1}] == 23));
   assert((matrix3[{1, 2}] == 16));
 
+  Tensor matrix4 = matrix1.permute({1, 0});
+  assert((matrix4[{0, 0}] == 1));
+  assert((matrix4[{0, 1}] == 3));
+  assert((matrix4[{1, 0}] == 2));
+  assert((matrix4[{1, 1}] == 4));
+
   // TODO: add test summing tensors with different strides
 
   std::cout << "Tests passed" << std::endl;
