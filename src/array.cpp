@@ -19,7 +19,8 @@ Array::Array(std::initializer_list<size_t> data)
 Array Array::operator=(const Array &other) {
   if (size != other.size) {
     std::stringstream ss;
-    ss << "Expected arrays of equal size, got " << size << " and " << other.size;
+    ss << "Expected arrays of equal size, got " << size << " and "
+       << other.size;
     throw std::invalid_argument(ss.str());
   }
   std::copy(other.data.get(), other.data.get() + other.size, data.get());

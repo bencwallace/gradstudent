@@ -15,7 +15,8 @@ private:
   std::shared_ptr<double[]> data;
 
   Tensor(size_t, size_t, const Array &, const Array &);
-  Tensor(size_t, size_t, const Array &, const Array &, const std::shared_ptr<double[]>);
+  Tensor(size_t, size_t, const Array &, const Array &,
+         const std::shared_ptr<double[]>);
 
   double operator[](size_t) const;
   double &operator[](size_t);
@@ -46,9 +47,9 @@ public:
   Tensor flatten() const;
   Tensor permute(std::initializer_list<size_t>);
 
-  friend Tensor operator*(double, const Tensor&);
+  friend Tensor operator*(double, const Tensor &);
   friend Tensor scalarTensor(double);
 };
 
-Tensor operator*(double, const Tensor&);
+Tensor operator*(double, const Tensor &);
 Tensor scalarTensor(double);

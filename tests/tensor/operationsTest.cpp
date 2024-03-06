@@ -5,14 +5,16 @@
 TEST(MatrixTest, RankMismatchTest) {
   Tensor scalar = scalarTensor(24);
   Tensor matrix({2, 2}, {1, 2, 3, 4});
-  EXPECT_THROW({
-    try {
-      matrix + scalar;
-    } catch (const std::invalid_argument &e) {
-      EXPECT_STREQ(e.what(), "Incompatible ranks: 2 and 1");
-      throw;
-    }
-  }, std::invalid_argument);
+  EXPECT_THROW(
+      {
+        try {
+          matrix + scalar;
+        } catch (const std::invalid_argument &e) {
+          EXPECT_STREQ(e.what(), "Incompatible ranks: 2 and 1");
+          throw;
+        }
+      },
+      std::invalid_argument);
 }
 
 TEST(MatrixTest, MatrixDotVectorTest) {
