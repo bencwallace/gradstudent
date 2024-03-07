@@ -2,5 +2,5 @@
 
 double norm2(const Tensor &tensor) {
   Tensor flat = tensor.flatten();
-  return static_cast<double>(flat.dot(flat));
+  return flat.dot(flat)[{}];
 }

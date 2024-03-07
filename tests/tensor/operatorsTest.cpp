@@ -4,7 +4,7 @@
 
 TEST(ScalarTest, GetItemTest) {
   Tensor scalar(24);
-  EXPECT_EQ(static_cast<double>(scalar), 24);
+  EXPECT_EQ(scalar[{}], 24);
 }
 
 TEST(ScalarTest, SumTest) {
