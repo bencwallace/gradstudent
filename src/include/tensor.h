@@ -32,7 +32,6 @@ public:
   Tensor(std::initializer_list<size_t>);
   Tensor(std::initializer_list<size_t>, std::initializer_list<double>);
   Tensor(double);
-  ~Tensor();
 
   double operator[](const Array &) const;
   double &operator[](const Array &);

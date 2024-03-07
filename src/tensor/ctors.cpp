@@ -50,7 +50,3 @@ Tensor::Tensor(std::initializer_list<size_t> shape, std::initializer_list<double
 
 Tensor::Tensor(double value)
     : Tensor({}, {value}) {}
-
-// DESTRUCTOR
-
-Tensor::~Tensor() {}
