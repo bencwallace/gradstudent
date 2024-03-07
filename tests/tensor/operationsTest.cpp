@@ -3,7 +3,7 @@
 #include "tensor.h"
 
 TEST(MatrixTest, RankMismatchTest) {
-  Tensor scalar = scalarTensor(24);
+  Tensor scalar(24);
   Tensor matrix({2, 2}, {1, 2, 3, 4});
   EXPECT_THROW(
       {

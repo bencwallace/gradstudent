@@ -3,24 +3,24 @@
 #include "tensor.h"
 
 TEST(ScalarTest, GetItemTest) {
-  Tensor scalar = scalarTensor(24);
+  Tensor scalar(24);
   EXPECT_EQ(static_cast<double>(scalar), 24);
 }
 
 TEST(ScalarTest, SumTest) {
-  Tensor scalar = scalarTensor(24);
+  Tensor scalar(24);
   Tensor sum = scalar + scalar;
   EXPECT_EQ(sum[{}], 48);
 }
 
 TEST(ScalarTest, ProdTest) {
-  Tensor scalar = scalarTensor(24);
+  Tensor scalar(24);
   Tensor multiple = 5 * scalar;
   EXPECT_EQ(multiple[{}], 120);
 }
 
 TEST(ScalarTest, DiffTest) {
-  Tensor scalar = scalarTensor(24);
+  Tensor scalar(24);
   Tensor diff = scalar - scalar;
   EXPECT_EQ(diff[{}], 0);
 }

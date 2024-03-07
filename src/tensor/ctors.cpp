@@ -48,12 +48,9 @@ Tensor::Tensor(std::initializer_list<size_t> shape)
 Tensor::Tensor(std::initializer_list<size_t> shape, std::initializer_list<double> data)
     : Tensor(Array(shape), data) {}
 
+Tensor::Tensor(double value)
+    : Tensor({}, {value}) {}
+
 // DESTRUCTOR
 
 Tensor::~Tensor() {}
-
-/* FRIEND FUNCTIONS */
-
-Tensor scalarTensor(double scalar) {
-  return Tensor({}, {scalar});
-}

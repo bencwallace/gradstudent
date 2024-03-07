@@ -31,6 +31,7 @@ public:
   Tensor(const Array &, std::initializer_list<double>);
   Tensor(std::initializer_list<size_t>);
   Tensor(std::initializer_list<size_t>, std::initializer_list<double>);
+  Tensor(double);
   ~Tensor();
 
   double operator[](const Array &) const;
@@ -48,8 +49,6 @@ public:
   Tensor permute(std::initializer_list<size_t>);
 
   friend Tensor operator*(double, const Tensor &);
-  friend Tensor scalarTensor(double);
 };
 
 Tensor operator*(double, const Tensor &);
-Tensor scalarTensor(double);
