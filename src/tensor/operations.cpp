@@ -22,7 +22,7 @@ Tensor Tensor::dot(const Tensor &other) const {
   MultiIndex resultMultiIndex = MultiIndex(result.shape);
   for (size_t i = 0; i < result.size; ++i) {
     size_t thisIndex = toIndex(resultMultiIndex, 0, ndims - 1);
-    size_t otherIndex = other.toIndex(resultMultiIndex, 1, ndims);
+    size_t otherIndex = other.toIndex(resultMultiIndex, ndims - 1, result.ndims);
 
     result.data[i] = 0;
     for (size_t j = 0; j < shape[shape.size - 1]; ++j) {
