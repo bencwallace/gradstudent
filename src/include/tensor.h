@@ -4,19 +4,18 @@
 #include <memory>
 
 #include "array.h"
+#include "tensor_data.h"
 
 class Tensor {
 
 private:
-  size_t size;
   size_t ndims;
   Array shape;
   Array strides;
-  std::shared_ptr<double[]> data;
+  TensorData data;
 
-  Tensor(size_t, size_t, const Array &, const Array &);
-  Tensor(size_t, size_t, const Array &, const Array &,
-         const std::shared_ptr<double[]>);
+  Tensor(const Array &, const Array &);
+  Tensor(const Array &, const Array &, const TensorData &);
 
   double operator[](size_t) const;
   double &operator[](size_t);
@@ -41,6 +40,8 @@ public:
   Tensor operator-() const;
   Tensor operator-(const Tensor &) const;
   Tensor operator*(const Tensor &) const;
+
+  size_t size() const;
 
   Tensor dot(const Tensor &) const;
   Tensor flatten() const;

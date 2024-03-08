@@ -3,6 +3,10 @@
 #include "multiIndex.h"
 #include "tensor.h"
 
+size_t Tensor::size() const {
+  return data.size();
+}
+
 Tensor Tensor::dot(const Tensor &other) const {
   if (shape[shape.size - 1] != other.shape[0]) {
     std::ostringstream ss;
@@ -20,7 +24,7 @@ Tensor Tensor::dot(const Tensor &other) const {
 
   Tensor result(result_shape);
   MultiIndex resultMultiIndex = MultiIndex(result.shape);
-  for (size_t i = 0; i < result.size; ++i) {
+  for (size_t i = 0; i < result.size(); ++i) {
     size_t thisIndex = toIndex(resultMultiIndex, 0, ndims - 1);
     size_t otherIndex = other.toIndex(resultMultiIndex, ndims - 1, result.ndims);
 
@@ -38,7 +42,7 @@ Tensor Tensor::dot(const Tensor &other) const {
 }
 
 Tensor Tensor::flatten() const {
-  return Tensor(size, 1, Array({size}), Array({1}), data);
+  return Tensor(Array({size()}), Array({1}), data);
 }
 
 Tensor Tensor::permute(std::initializer_list<size_t> axes) {
@@ -57,5 +61,5 @@ Tensor Tensor::permute(std::initializer_list<size_t> axes) {
     ++i;
   }
 
-  return Tensor(size, ndims, result_shape, result_strides, data);
+  return Tensor(result_shape, result_strides, data);
 }

@@ -20,6 +20,8 @@ public:
   size_t &operator[](size_t);
   bool operator!=(const Array &) const;
 
+  size_t prod() const;
+
   friend std::ostream &operator<<(std::ostream &, Array const &);
   friend Array zerosArray(size_t);
 };

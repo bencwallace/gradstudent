@@ -1,6 +1,7 @@
 #include <sstream>
 
 #include "multiIndex.h"
+#include "ops.h"
 #include "tensor.h"
 
 /* PRIVATE */
@@ -29,10 +30,10 @@ double &Tensor::operator[](std::initializer_list<size_t> coords) {
 
 Tensor Tensor::operator+(const Tensor &other) const {
   checkCompatibleShape(other);
-  Tensor result(size, ndims, shape, strides);
+  Tensor result(shape, strides);
   MultiIndex resultIdx(result.shape);
-  for (size_t i = 0; i < size; ++i) {
-    result[resultIdx] = (*this)[toIndex(resultIdx)] + other[other.toIndex(resultIdx)];
+  for (size_t i = 0; i < size(); ++i) {
+    result[resultIdx] = (*this)[resultIdx] + other[resultIdx];
     ++resultIdx;
   }
   return result;
@@ -40,9 +41,9 @@ Tensor Tensor::operator+(const Tensor &other) const {
 
 Tensor Tensor::operator*(const Tensor &other) const {
   checkCompatibleShape(other);
-  Tensor result(size, ndims, shape, strides);
+  Tensor result(shape, strides);
   MultiIndex resultIdx(result.shape);
-  for (size_t i = 0; i < size; ++i) {
+  for (size_t i = 0; i < size(); ++i) {
     result[resultIdx] = (*this)[toIndex(resultIdx)] * other[other.toIndex(resultIdx)];
     ++resultIdx;
   }
@@ -50,8 +51,8 @@ Tensor Tensor::operator*(const Tensor &other) const {
 }
 
 Tensor Tensor::operator-() const {
-  Tensor result(size, ndims, shape, strides);
-  for (size_t i = 0; i < size; ++i) {
+  Tensor result(shape, strides);
+  for (size_t i = 0; i < size(); ++i) {
     result.data[i] = -data[i];
   }
   return result;
@@ -64,8 +65,8 @@ Tensor Tensor::operator-(const Tensor &other) const {
 /* FRIEND FUNCTIONS */
 
 Tensor operator*(double scalar, const Tensor &tensor) {
-  Tensor result(tensor.size, tensor.ndims, tensor.shape, tensor.strides);
-  for (size_t i = 0; i < result.size; ++i) {
+  Tensor result(tensor.shape, tensor.strides);
+  for (size_t i = 0; i < result.size(); ++i) {
     result.data[i] = scalar * tensor.data[i];
   }
   return result;

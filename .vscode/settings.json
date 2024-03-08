@@ -68,7 +68,12 @@
         "variant": "cpp",
         "chrono": "cpp",
         "stop_token": "cpp",
-        "thread": "cpp"
+        "thread": "cpp",
+        "__tree": "cpp",
+        "list": "cpp",
+        "map": "cpp",
+        "set": "cpp",
+        "unordered_set": "cpp"
     },
     "files.exclude": {
         "**/.git": true,

@@ -1,5 +1,5 @@
 file(GLOB tensor_SRC "tensor/*.cpp")
-set(SOURCE_FILES ${tensor_SRC} array.cpp ops.cpp multiIndex.cpp)
+set(SOURCE_FILES ${tensor_SRC} array.cpp ops.cpp multiIndex.cpp tensor_data.cpp)
 
 add_library(tensor ${SOURCE_FILES})
 

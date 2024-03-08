@@ -43,6 +43,14 @@ bool Array::operator!=(const Array &other) const {
   return true;
 }
 
+size_t Array::prod() const {
+  size_t result = 1;
+  for (size_t i = 0; i < size; ++i) {
+    result *= data[i];
+  }
+  return result;
+}
+
 std::ostream &operator<<(std::ostream &os, Array const &array) {
   std::ostream &result = os << "(";
   for (int i = 0; i < (int) array.size - 1; ++i) {
