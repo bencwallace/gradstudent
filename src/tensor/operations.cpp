@@ -3,14 +3,6 @@
 #include "multiIndex.h"
 #include "tensor.h"
 
-size_t Tensor::size() const {
-  return data.size();
-}
-
-const Array &Tensor::shape() const {
-  return shape_;
-}
-
 Tensor Tensor::dot(const Tensor &other) const {
   if (shape_[shape_.size - 1] != other.shape_[0]) {
     std::ostringstream ss;

@@ -53,3 +53,13 @@ void Tensor::checkCompatibleShape(const Tensor &other) const {
     ss << "Incompatible shapes: " << shape_ << " and " << other.shape_;
   }
 }
+
+/* PRIVATE */
+
+size_t Tensor::size() const {
+  return data.size();
+}
+
+const Array &Tensor::shape() const {
+  return shape_;
+}
