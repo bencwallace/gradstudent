@@ -1,7 +1,7 @@
 #include <sstream>
 
 #include "multi_index.h"
-#include "ops.h"
+#include "kernels.h"
 #include "tensor.h"
 
 double Tensor::operator[](size_t i) const { return data[i]; }
@@ -27,20 +27,20 @@ double &Tensor::operator[](std::initializer_list<size_t> coords) {
 Tensor Tensor::operator+(const Tensor &other) const {
   checkCompatibleShape(other);
   Tensor result(shape_, strides_);
-  addOp(result, *this, other);
+  addKernel(result, *this, other);
   return result;
 }
 
 Tensor Tensor::operator*(const Tensor &other) const {
   checkCompatibleShape(other);
   Tensor result(shape_, strides_);
-  multOp(result, *this, other);
+  multKernel(result, *this, other);
   return result;
 }
 
 Tensor Tensor::operator-() const {
   Tensor result(shape_, strides_);
-  negOp(result, *this);
+  negKernel(result, *this);
   return result;
 }
 
@@ -52,6 +52,6 @@ Tensor Tensor::operator-(const Tensor &other) const {
 
 Tensor operator*(double scalar, const Tensor &tensor) {
   Tensor result(tensor.shape_, tensor.strides_);
-  multOp(result, scalar, tensor);
+  multKernel(result, scalar, tensor);
   return result;
 }

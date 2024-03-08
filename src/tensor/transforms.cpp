@@ -1,6 +1,6 @@
 #include <sstream>
 
-#include "ops.h"
+#include "kernels.h"
 #include "tensor.h"
 
 Tensor Tensor::dot(const Tensor &other) const {
@@ -19,6 +19,6 @@ Tensor Tensor::dot(const Tensor &other) const {
   }
 
   Tensor result(result_shape);
-  dotOp(result, *this, other);
+  dotKernel(result, *this, other);
   return result;
 }

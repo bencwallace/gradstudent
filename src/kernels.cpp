@@ -1,7 +1,7 @@
 #include "multi_index.h"
-#include "ops.h"
+#include "kernels.h"
 
-void addOp(Tensor &result, const Tensor &left, const Tensor &right) {
+void addKernel(Tensor &result, const Tensor &left, const Tensor &right) {
   MultiIndex resultIdx(result.shape());
   for (size_t i = 0; i < left.size(); ++i) {
     result[resultIdx] = left[resultIdx] + right[resultIdx];
@@ -9,13 +9,13 @@ void addOp(Tensor &result, const Tensor &left, const Tensor &right) {
   }
 }
 
-void multOp(Tensor &result, const double scalar, const Tensor &tensor) {
+void multKernel(Tensor &result, const double scalar, const Tensor &tensor) {
   for (size_t i = 0; i < result.size(); ++i) {
     result[i] = scalar * tensor[i];
   }
 }
 
-void multOp(Tensor &result, const Tensor &left, const Tensor &right) {
+void multKernel(Tensor &result, const Tensor &left, const Tensor &right) {
   MultiIndex resultIdx(result.shape());
   for (size_t i = 0; i < left.size(); ++i) {
     result[resultIdx] = left[resultIdx] * right[resultIdx];
@@ -23,13 +23,13 @@ void multOp(Tensor &result, const Tensor &left, const Tensor &right) {
   }
 }
 
-void negOp(Tensor &result, const Tensor &tensor) {
+void negKernel(Tensor &result, const Tensor &tensor) {
   for (size_t i = 0; i < tensor.size(); ++i) {
     result[i] = -tensor[i];
   }
 }
 
-void dotOp(Tensor &result, const Tensor &left, const Tensor &right) {
+void dotKernel(Tensor &result, const Tensor &left, const Tensor &right) {
   const Array &left_strides = left.strides();
   const Array &right_strides = right.strides();
 
