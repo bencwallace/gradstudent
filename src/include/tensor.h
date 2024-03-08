@@ -9,15 +9,14 @@
 class Tensor {
 
 private:
-  size_t ndims;
+  size_t ndims_;
   Array shape_;
-  Array strides;
+  Array strides_;
   TensorData data;
 
   Tensor(const Array &, const Array &);
   Tensor(const Array &, const Array &, const TensorData &);
 
-  size_t toIndex(const Array &, size_t, size_t) const;
   size_t toIndex(const Array &) const;
   Array toMultiIndex(size_t) const;
   void checkCompatibleShape(const Tensor &) const;
@@ -40,8 +39,11 @@ public:
   Tensor operator-(const Tensor &) const;
   Tensor operator*(const Tensor &) const;
 
+  size_t toIndex(const Array &, size_t, size_t) const;
   size_t size() const;
+  size_t ndims() const;
   const Array &shape() const;
+  const Array &strides() const;
 
   Tensor dot(const Tensor &) const;
   Tensor flatten() const;

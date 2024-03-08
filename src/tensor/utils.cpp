@@ -2,8 +2,6 @@
 
 #include "tensor.h"
 
-/* PRIVATE */
-
 size_t Tensor::toIndex(const Array &multiIndex, size_t start, size_t end) const {
   if (start < 0) {
     std::stringstream ss;
@@ -23,29 +21,29 @@ size_t Tensor::toIndex(const Array &multiIndex, size_t start, size_t end) const 
       ss << "Expected index " << i << " in [0, " << shape_[i] << "), got: " << multiIndex[i];
       throw std::invalid_argument(ss.str());
     }
-    idx += multiIndex[i] * strides[i];
+    idx += multiIndex[i] * strides_[i];
   }
   return idx;
 }
 
 size_t Tensor::toIndex(const Array &multiIndex) const {
-  return toIndex(multiIndex, 0, ndims);
+  return toIndex(multiIndex, 0, ndims_);
 }
 
 Array Tensor::toMultiIndex(size_t idx) const {
   // Not guaranteed to work for arrays with non-standard strides
-  Array result(ndims);
-  for (size_t i = 0; i < ndims; ++i) {
-    result[i] = idx / strides[i];
-    idx -= result[i] * strides[i];
+  Array result(ndims_);
+  for (size_t i = 0; i < ndims_; ++i) {
+    result[i] = idx / strides_[i];
+    idx -= result[i] * strides_[i];
   }
   return result;
 }
 
 void Tensor::checkCompatibleShape(const Tensor &other) const {
-  if (ndims != other.ndims) {
+  if (ndims_ != other.ndims_) {
     std::ostringstream ss;
-    ss << "Incompatible ranks: " << ndims << " and " << other.ndims;
+    ss << "Incompatible ranks: " << ndims_ << " and " << other.ndims_;
     throw std::invalid_argument(ss.str());
   }
   if (shape_ != other.shape_) {
@@ -54,12 +52,18 @@ void Tensor::checkCompatibleShape(const Tensor &other) const {
   }
 }
 
-/* PRIVATE */
-
 size_t Tensor::size() const {
   return data.size();
 }
 
+size_t Tensor::ndims() const {
+  return ndims_;
+}
+
 const Array &Tensor::shape() const {
   return shape_;
+}
+
+const Array &Tensor::strides() const {
+  return strides_;
 }

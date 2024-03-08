@@ -1,6 +1,7 @@
 #include <sstream>
 
 #include "multiIndex.h"
+#include "ops.h"
 #include "tensor.h"
 
 Tensor Tensor::dot(const Tensor &other) const {
@@ -19,21 +20,7 @@ Tensor Tensor::dot(const Tensor &other) const {
   }
 
   Tensor result(result_shape);
-  MultiIndex resultMultiIndex = MultiIndex(result.shape_);
-  for (size_t i = 0; i < result.size(); ++i) {
-    size_t thisIndex = toIndex(resultMultiIndex, 0, ndims - 1);
-    size_t otherIndex = other.toIndex(resultMultiIndex, ndims - 1, result.ndims);
-
-    result.data[i] = 0;
-    for (size_t j = 0; j < shape_[shape_.size - 1]; ++j) {
-      result.data[i] += this->data[thisIndex] * other.data[otherIndex];
-      thisIndex += strides[ndims - 1];
-      otherIndex += other.strides[0];
-    }
-
-    ++resultMultiIndex;
-  }
-
+  dotOp(result, *this, other);
   return result;
 }
 
@@ -42,18 +29,18 @@ Tensor Tensor::flatten() const {
 }
 
 Tensor Tensor::permute(std::initializer_list<size_t> axes) {
-  if (axes.size() != ndims) {
+  if (axes.size() != ndims_) {
     std::stringstream ss;
-    ss << "Expected axis list of length " << ndims << ", got " << axes.size();
+    ss << "Expected axis list of length " << ndims_ << ", got " << axes.size();
     throw std::invalid_argument(ss.str());
   }
 
-  Array result_shape(ndims);
-  Array result_strides(ndims);
+  Array result_shape(ndims_);
+  Array result_strides(ndims_);
   size_t i = 0;
   for (size_t axis : axes) {
     result_shape[i] = shape_[axis];
-    result_strides[i] = strides[axis];
+    result_strides[i] = strides_[axis];
     ++i;
   }
 

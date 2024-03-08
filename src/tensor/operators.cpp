@@ -26,20 +26,20 @@ double &Tensor::operator[](std::initializer_list<size_t> coords) {
 
 Tensor Tensor::operator+(const Tensor &other) const {
   checkCompatibleShape(other);
-  Tensor result(shape_, strides);
+  Tensor result(shape_, strides_);
   addOp(result, *this, other);
   return result;
 }
 
 Tensor Tensor::operator*(const Tensor &other) const {
   checkCompatibleShape(other);
-  Tensor result(shape_, strides);
+  Tensor result(shape_, strides_);
   multOp(result, *this, other);
   return result;
 }
 
 Tensor Tensor::operator-() const {
-  Tensor result(shape_, strides);
+  Tensor result(shape_, strides_);
   negOp(result, *this);
   return result;
 }
@@ -51,7 +51,7 @@ Tensor Tensor::operator-(const Tensor &other) const {
 /* FRIEND FUNCTIONS */
 
 Tensor operator*(double scalar, const Tensor &tensor) {
-  Tensor result(tensor.shape_, tensor.strides);
+  Tensor result(tensor.shape_, tensor.strides_);
   multOp(result, scalar, tensor);
   return result;
 }
