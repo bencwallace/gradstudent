@@ -1,6 +1,6 @@
 #include <sstream>
 
-#include "multiIndex.h"
+#include "multi_index.h"
 #include "ops.h"
 #include "tensor.h"
 

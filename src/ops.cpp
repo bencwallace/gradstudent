@@ -1,4 +1,4 @@
-#include "multiIndex.h"
+#include "multi_index.h"
 #include "ops.h"
 
 void addOp(Tensor &result, const Tensor &left, const Tensor &right) {

@@ -1,7 +1,7 @@
 #include <sstream>
 #include <stdexcept>
 
-#include "multiIndex.h"
+#include "multi_index.h"
 
 MultiIndex::MultiIndex(const Array &shape)
     : Array(zerosArray(shape.size)), shape(shape) {}
