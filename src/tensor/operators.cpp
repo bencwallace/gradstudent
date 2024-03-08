@@ -4,13 +4,9 @@
 #include "ops.h"
 #include "tensor.h"
 
-/* PRIVATE */
-
 double Tensor::operator[](size_t i) const { return data[i]; }
 
 double &Tensor::operator[](size_t i) { return data[i]; }
-
-/* PUBLIC */
 
 double Tensor::operator[](const Array &multiIndex) const {
   return (*this)[toIndex(multiIndex)];

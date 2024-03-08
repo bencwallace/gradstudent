@@ -17,9 +17,6 @@ private:
   Tensor(const Array &, const Array &);
   Tensor(const Array &, const Array &, const TensorData &);
 
-  double operator[](size_t) const;
-  double &operator[](size_t);
-
   size_t toIndex(const Array &, size_t, size_t) const;
   size_t toIndex(const Array &) const;
   Array toMultiIndex(size_t) const;
@@ -32,6 +29,8 @@ public:
   Tensor(std::initializer_list<size_t>, std::initializer_list<double>);
   Tensor(double);
 
+  double operator[](size_t) const;
+  double &operator[](size_t);
   double operator[](const Array &) const;
   double &operator[](const Array &);
   double operator[](std::initializer_list<size_t>) const;
