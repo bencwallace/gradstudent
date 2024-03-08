@@ -33,6 +33,21 @@ TEST(MatrixTest, GetItemTest) {
   EXPECT_EQ((matrix[{1, 1}]), 4);
 }
 
+TEST(MatrixTest, RankMismatchTest) {
+  Tensor scalar(24);
+  Tensor matrix({2, 2}, {1, 2, 3, 4});
+  EXPECT_THROW(
+      {
+        try {
+          matrix + scalar;
+        } catch (const std::invalid_argument &e) {
+          EXPECT_STREQ(e.what(), "Incompatible ranks: 2 and 0");
+          throw;
+        }
+      },
+      std::invalid_argument);
+}
+
 TEST(MatrixTest, SumTest) {
   Tensor matrix1({2, 2}, {1, 2, 3, 4});
   Tensor matrix2({2, 2}, {1, 3, 2, 4});
