@@ -7,30 +7,34 @@ size_t Tensor::size() const {
   return data.size();
 }
 
+const Array &Tensor::shape() const {
+  return shape_;
+}
+
 Tensor Tensor::dot(const Tensor &other) const {
-  if (shape[shape.size - 1] != other.shape[0]) {
+  if (shape_[shape_.size - 1] != other.shape_[0]) {
     std::ostringstream ss;
-    ss << "Incompatible shapes: " << shape << " and " << other.shape;
+    ss << "Incompatible shapes: " << shape_ << " and " << other.shape_;
     throw std::invalid_argument(ss.str());
   }
 
-  Array result_shape(shape.size + other.shape.size - 2);
-  for (size_t i = 0; i < shape.size - 1; ++i) {
-    result_shape[i] = shape[i];
+  Array result_shape(shape_.size + other.shape_.size - 2);
+  for (size_t i = 0; i < shape_.size - 1; ++i) {
+    result_shape[i] = shape_[i];
   }
-  for (size_t i = 1; i < other.shape.size; ++i) {
-    result_shape[shape.size + i - 2] = other.shape[i];
+  for (size_t i = 1; i < other.shape_.size; ++i) {
+    result_shape[shape_.size + i - 2] = other.shape_[i];
   }
 
   Tensor result(result_shape);
-  MultiIndex resultMultiIndex = MultiIndex(result.shape);
+  MultiIndex resultMultiIndex = MultiIndex(result.shape_);
   for (size_t i = 0; i < result.size(); ++i) {
     size_t thisIndex = toIndex(resultMultiIndex, 0, ndims - 1);
     size_t otherIndex = other.toIndex(resultMultiIndex, ndims - 1, result.ndims);
 
     result.data[i] = 0;
-    for (size_t j = 0; j < shape[shape.size - 1]; ++j) {
-      result.data[i] += (*this)[thisIndex] * other[otherIndex];;
+    for (size_t j = 0; j < shape_[shape_.size - 1]; ++j) {
+      result.data[i] += this->data[thisIndex] * other.data[otherIndex];
       thisIndex += strides[ndims - 1];
       otherIndex += other.strides[0];
     }
@@ -56,7 +60,7 @@ Tensor Tensor::permute(std::initializer_list<size_t> axes) {
   Array result_strides(ndims);
   size_t i = 0;
   for (size_t axis : axes) {
-    result_shape[i] = shape[axis];
+    result_shape[i] = shape_[axis];
     result_strides[i] = strides[axis];
     ++i;
   }

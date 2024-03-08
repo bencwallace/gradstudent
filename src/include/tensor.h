@@ -10,7 +10,7 @@ class Tensor {
 
 private:
   size_t ndims;
-  Array shape;
+  Array shape_;
   Array strides;
   TensorData data;
 
@@ -41,6 +41,7 @@ public:
   Tensor operator*(const Tensor &) const;
 
   size_t size() const;
+  const Array &shape() const;
 
   Tensor dot(const Tensor &) const;
   Tensor flatten() const;

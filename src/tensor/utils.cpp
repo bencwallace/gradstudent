@@ -18,9 +18,9 @@ size_t Tensor::toIndex(const Array &multiIndex, size_t start, size_t end) const 
 
   size_t idx = 0;
   for (size_t i = start; i < end; ++i) {
-    if (multiIndex[i] < 0 || multiIndex[i] >= shape[i]) {
+    if (multiIndex[i] < 0 || multiIndex[i] >= shape_[i]) {
       std::stringstream ss;
-      ss << "Expected index " << i << " in [0, " << shape[i] << "), got: " << multiIndex[i];
+      ss << "Expected index " << i << " in [0, " << shape_[i] << "), got: " << multiIndex[i];
       throw std::invalid_argument(ss.str());
     }
     idx += multiIndex[i] * strides[i];
@@ -48,8 +48,8 @@ void Tensor::checkCompatibleShape(const Tensor &other) const {
     ss << "Incompatible ranks: " << ndims << " and " << other.ndims;
     throw std::invalid_argument(ss.str());
   }
-  if (shape != other.shape) {
+  if (shape_ != other.shape_) {
     std::ostringstream ss;
-    ss << "Incompatible shapes: " << shape << " and " << other.shape;
+    ss << "Incompatible shapes: " << shape_ << " and " << other.shape_;
   }
 }

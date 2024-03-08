@@ -5,20 +5,20 @@
 /* PRIVATE */
 
 Tensor::Tensor(const Array &shape, const Array &strides)
-    : ndims(shape.size), shape(shape), strides(strides), data(shape.prod()) {}
+    : ndims(shape.size), shape_(shape), strides(strides), data(shape.prod()) {}
 
 Tensor::Tensor(const Array &shape, const Array &strides, const TensorData &data)
-    : ndims(shape.size), shape(shape), strides(strides), data(data) {}
+    : ndims(shape.size), shape_(shape), strides(strides), data(data) {}
 
 /* PUBLIC */
 
 Tensor::Tensor(const Array &shape)
-    : ndims(shape.size), shape(shape), strides(ndims), data(shape.prod()) {
+    : ndims(shape.size), shape_(shape), strides(ndims), data(shape.prod()) {
   if (ndims > 0) {
     strides[ndims - 1] = 1;
   }
   for (int i = (int) ndims - 2; i >= 0; --i) {
-    strides[i] = strides[i + 1] * this->shape[i + 1];
+    strides[i] = strides[i + 1] * this->shape_[i + 1];
   }
 }
 

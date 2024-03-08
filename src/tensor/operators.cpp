@@ -26,31 +26,21 @@ double &Tensor::operator[](std::initializer_list<size_t> coords) {
 
 Tensor Tensor::operator+(const Tensor &other) const {
   checkCompatibleShape(other);
-  Tensor result(shape, strides);
-  MultiIndex resultIdx(result.shape);
-  for (size_t i = 0; i < size(); ++i) {
-    result[resultIdx] = (*this)[resultIdx] + other[resultIdx];
-    ++resultIdx;
-  }
+  Tensor result(shape_, strides);
+  addOp(result, *this, other);
   return result;
 }
 
 Tensor Tensor::operator*(const Tensor &other) const {
   checkCompatibleShape(other);
-  Tensor result(shape, strides);
-  MultiIndex resultIdx(result.shape);
-  for (size_t i = 0; i < size(); ++i) {
-    result[resultIdx] = (*this)[toIndex(resultIdx)] * other[other.toIndex(resultIdx)];
-    ++resultIdx;
-  }
+  Tensor result(shape_, strides);
+  multOp(result, *this, other);
   return result;
 }
 
 Tensor Tensor::operator-() const {
-  Tensor result(shape, strides);
-  for (size_t i = 0; i < size(); ++i) {
-    result.data[i] = -data[i];
-  }
+  Tensor result(shape_, strides);
+  negOp(result, *this);
   return result;
 }
 
@@ -61,9 +51,7 @@ Tensor Tensor::operator-(const Tensor &other) const {
 /* FRIEND FUNCTIONS */
 
 Tensor operator*(double scalar, const Tensor &tensor) {
-  Tensor result(tensor.shape, tensor.strides);
-  for (size_t i = 0; i < result.size(); ++i) {
-    result.data[i] = scalar * tensor.data[i];
-  }
+  Tensor result(tensor.shape_, tensor.strides);
+  multOp(result, scalar, tensor);
   return result;
 }
