@@ -1,4 +1,4 @@
-#include "kernels.h"
+#include "ops.h"
 #include "tensor.h"
 
 #include <gtest/gtest.h>

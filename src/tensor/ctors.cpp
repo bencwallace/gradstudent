@@ -5,15 +5,15 @@
 /* PRIVATE */
 
 Tensor::Tensor(const Array &shape, const Array &strides)
-    : ndims_(shape.size), shape_(shape), strides_(strides), data(shape.prod()) {}
+    : ndims_(shape.size), shape_(shape), strides_(strides), data_(shape.prod()) {}
 
 Tensor::Tensor(const Array &shape, const Array &strides, const TensorData &data)
-    : ndims_(shape.size), shape_(shape), strides_(strides), data(data) {}
+    : ndims_(shape.size), shape_(shape), strides_(strides), data_(data) {}
 
 /* PUBLIC */
 
 Tensor::Tensor(const Array &shape)
-    : ndims_(shape.size), shape_(shape), strides_(shape.size), data(shape.prod()) {
+    : ndims_(shape.size), shape_(shape), strides_(shape.size), data_(shape.prod()) {
   if (ndims_ > 0) {
     strides_[ndims_ - 1] = 1;
   }
@@ -24,14 +24,14 @@ Tensor::Tensor(const Array &shape)
 
 Tensor::Tensor(const Array &shape, std::initializer_list<double> data)
     : Tensor(shape) {
-  if (data.size() != this->data.size()) {
+  if (data.size() != this->data_.size()) {
     std::stringstream ss;
-    ss << "Expected " << this->data.size() << " data values, got " << data.size();
+    ss << "Expected " << this->data_.size() << " data values, got " << data.size();
     throw std::invalid_argument(ss.str());
   }
   size_t i = 0;
   for (double val : data) {
-    this->data[i++] = val;
+    this->data_[i++] = val;
   }
 }
 

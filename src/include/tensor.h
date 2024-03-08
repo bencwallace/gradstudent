@@ -12,10 +12,9 @@ private:
   size_t ndims_;
   Array shape_;
   Array strides_;
-  TensorData data;
+  TensorData data_;
 
   Tensor(const Array &, const Array &);
-  Tensor(const Array &, const Array &, const TensorData &);
 
   size_t toIndex(const Array &) const;
   Array toMultiIndex(size_t) const;
@@ -26,6 +25,7 @@ public:
   Tensor(const Array &, std::initializer_list<double>);
   Tensor(std::initializer_list<size_t>);
   Tensor(std::initializer_list<size_t>, std::initializer_list<double>);
+  Tensor(const Array &, const Array &, const TensorData &);
   Tensor(double);
 
   double operator[](size_t) const;
@@ -44,10 +44,7 @@ public:
   size_t ndims() const;
   const Array &shape() const;
   const Array &strides() const;
-
-  Tensor dot(const Tensor &) const;
-  Tensor flatten() const;
-  Tensor permute(std::initializer_list<size_t>);
+  const TensorData &data() const;
 
   friend Tensor operator*(double, const Tensor &);
 };

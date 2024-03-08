@@ -48,8 +48,3 @@ void dotKernel(Tensor &result, const Tensor &left, const Tensor &right) {
     ++resultMultiIndex;
   }
 }
-
-double norm2(const Tensor &tensor) {
-  Tensor flat = tensor.flatten();
-  return flat.dot(flat)[{}];
-}

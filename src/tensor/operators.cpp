@@ -4,9 +4,9 @@
 #include "kernels.h"
 #include "tensor.h"
 
-double Tensor::operator[](size_t i) const { return data[i]; }
+double Tensor::operator[](size_t i) const { return data_[i]; }
 
-double &Tensor::operator[](size_t i) { return data[i]; }
+double &Tensor::operator[](size_t i) { return data_[i]; }
 
 double Tensor::operator[](const Array &multiIndex) const {
   return (*this)[toIndex(multiIndex)];
