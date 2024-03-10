@@ -11,6 +11,9 @@ Tensor::Tensor(const Array &shape, const Array &strides)
 Tensor::Tensor(const Array &shape, const Array &strides, const Tensor &tensor)
     : size_(shape.prod()), ndims_(shape.size), shape_(shape), strides_(strides), data_(tensor.data_) {}
 
+Tensor::Tensor(const Array &shape, const Array &strides, size_t offset, const Tensor &tensor)
+    : offset_(offset), size_(shape.prod()), ndims_(shape.size), shape_(shape), strides_(strides), data_(tensor.data_) {}
+
 /* PUBLIC */
 
 Tensor::Tensor(const Array &shape)

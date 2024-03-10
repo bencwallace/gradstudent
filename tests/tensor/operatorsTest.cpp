@@ -67,3 +67,8 @@ TEST(MatrixTest, ProdTest) {
   EXPECT_EQ((matrix3[{1, 0}]), 6);
   EXPECT_EQ((matrix3[{1, 1}]), 16);
 }
+
+TEST(MatrixTest, SliceTest) {
+  const Tensor matrix1({2, 2}, {1, 2, 3, 4});
+  EXPECT_EQ(matrix1[Array{0}], Tensor({2}, {1, 2}));
+}

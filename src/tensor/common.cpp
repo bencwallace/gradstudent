@@ -27,7 +27,7 @@ size_t Tensor::toIndex(const Array &mIdx, size_t start, size_t end) const {
 }
 
 size_t Tensor::toIndex(const Array &mIdx) const {
-  return toIndex(mIdx, 0, ndims_);
+  return toIndex(mIdx, 0, mIdx.size);
 }
 
 Array Tensor::toMultiIndex(size_t idx) const {

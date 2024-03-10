@@ -17,6 +17,7 @@ private:
   std::shared_ptr<TensorData> data_;
 
   Tensor(const Array &shape, const Array &strides);
+  Tensor(const Array &shape, const Array &strides, size_t offset, const Tensor &);
 
   size_t toIndex(const Array &) const;
   Array toMultiIndex(size_t) const;
