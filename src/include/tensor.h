@@ -12,6 +12,7 @@ private:
   size_t ndims_;
   Array shape_;
   Array strides_;
+  Array offset_;
   std::shared_ptr<TensorData> data_;
 
   Tensor(const Array &shape, const Array &strides);

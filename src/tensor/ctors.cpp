@@ -5,15 +5,17 @@
 /* PRIVATE */
 
 Tensor::Tensor(const Array &shape, const Array &strides)
-    : ndims_(shape.size), shape_(shape), strides_(strides), data_(new TensorDataCpu(shape.prod())) {}
+    : ndims_(shape.size), shape_(shape), strides_(strides), offset_(zerosArray(ndims_)),
+      data_(new TensorDataCpu(shape.prod())) {}
 
 Tensor::Tensor(const Array &shape, const Array &strides, const Tensor &tensor)
-    : ndims_(shape.size), shape_(shape), strides_(strides), data_(tensor.data_) {}
+    : ndims_(shape.size), shape_(shape), strides_(strides), offset_(ndims_), data_(tensor.data_) {}
 
 /* PUBLIC */
 
 Tensor::Tensor(const Array &shape)
-    : ndims_(shape.size), shape_(shape), strides_(shape.size), data_(new TensorDataCpu(shape.prod())) {
+    : ndims_(shape.size), shape_(shape), strides_(shape.size), offset_(ndims_),
+      data_(new TensorDataCpu(shape.prod())) {
   if (ndims_ > 0) {
     strides_[ndims_ - 1] = 1;
   }
