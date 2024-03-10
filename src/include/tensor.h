@@ -11,7 +11,6 @@ class Tensor {
 private:
   size_t offset_ = 0;
   size_t size_;
-  size_t ndims_;
   Array shape_;
   Array strides_;
   std::shared_ptr<TensorData> data_;

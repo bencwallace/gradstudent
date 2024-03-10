@@ -32,8 +32,8 @@ size_t Tensor::toIndex(const Array &mIdx) const {
 
 Array Tensor::toMultiIndex(size_t idx) const {
   // Not guaranteed to work for arrays with non-standard strides
-  Array result(ndims_);
-  for (size_t i = 0; i < ndims_; ++i) {
+  Array result(ndims());
+  for (size_t i = 0; i < ndims(); ++i) {
     result[i] = idx / strides_[i];
     idx -= result[i] * strides_[i];
   }
@@ -41,9 +41,9 @@ Array Tensor::toMultiIndex(size_t idx) const {
 }
 
 void Tensor::checkCompatibleShape(const Tensor &other) const {
-  if (ndims_ != other.ndims_) {
+  if (ndims() != other.ndims()) {
     std::ostringstream ss;
-    ss << "Incompatible ranks: " << ndims_ << " and " << other.ndims_;
+    ss << "Incompatible ranks: " << ndims() << " and " << other.ndims();
     throw std::invalid_argument(ss.str());
   }
   if (shape_ != other.shape_) {
@@ -57,7 +57,7 @@ size_t Tensor::size() const {
 }
 
 size_t Tensor::ndims() const {
-  return ndims_;
+  return shape_.size;
 }
 
 const Array &Tensor::shape() const {

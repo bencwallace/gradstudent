@@ -5,24 +5,24 @@
 /* PRIVATE */
 
 Tensor::Tensor(const Array &shape, const Array &strides)
-    : size_(shape.prod()), ndims_(shape.size), shape_(shape), strides_(strides),
+    : size_(shape.prod()), shape_(shape), strides_(strides),
       data_(new TensorDataCpu(size_)) {}
 
 Tensor::Tensor(const Array &shape, const Array &strides, const Tensor &tensor)
-    : size_(shape.prod()), ndims_(shape.size), shape_(shape), strides_(strides), data_(tensor.data_) {}
+    : size_(shape.prod()), shape_(shape), strides_(strides), data_(tensor.data_) {}
 
 Tensor::Tensor(const Array &shape, const Array &strides, size_t offset, const Tensor &tensor)
-    : offset_(offset), size_(shape.prod()), ndims_(shape.size), shape_(shape), strides_(strides), data_(tensor.data_) {}
+    : offset_(offset), size_(shape.prod()), shape_(shape), strides_(strides), data_(tensor.data_) {}
 
 /* PUBLIC */
 
 Tensor::Tensor(const Array &shape)
-    : size_(shape.prod()), ndims_(shape.size), shape_(shape), strides_(shape.size),
+    : size_(shape.prod()), shape_(shape), strides_(shape.size),
       data_(new TensorDataCpu(size_)) {
-  if (ndims_ > 0) {
-    strides_[ndims_ - 1] = 1;
+  if (ndims() > 0) {
+    strides_[ndims() - 1] = 1;
   }
-  for (int i = (int) ndims_ - 2; i >= 0; --i) {
+  for (int i = (int) ndims() - 2; i >= 0; --i) {
     strides_[i] = strides_[i + 1] * this->shape_[i + 1];
   }
 }

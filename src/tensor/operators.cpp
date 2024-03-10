@@ -9,16 +9,16 @@ double Tensor::operator[](size_t i) const { return (*data_)[offset_ + i]; }
 double &Tensor::operator[](size_t i) { return (*data_)[offset_ + i]; }
 
 Tensor Tensor::operator[](const Array &mIdx) const {
-  if (mIdx.size > ndims_) {
+  if (mIdx.size > ndims()) {
     std::stringstream ss;
-    ss << "Multi-index of size " << mIdx.size << " too large for tensor of rank " << ndims_;
+    ss << "Multi-index of size " << mIdx.size << " too large for tensor of rank " << ndims();
     throw std::invalid_argument(ss.str());
   }
 
-  size_t result_ndims = ndims_ - mIdx.size;
+  size_t result_ndims = ndims() - mIdx.size;
   Array result_shape(result_ndims);
   Array result_strides(result_ndims);
-  for (size_t i = mIdx.size; i < ndims_; ++i) {
+  for (size_t i = mIdx.size; i < ndims(); ++i) {
     result_shape[i - mIdx.size] = shape_[i];
     result_strides[i - mIdx.size] = strides_[i];
   }
@@ -55,7 +55,7 @@ Tensor Tensor::operator-(const Tensor &other) const {
 }
 
 bool Tensor::operator==(const Tensor &other) const {
-  if (size() != other.size() || ndims_ != other.ndims_ || shape_ != other.shape_) {
+  if (size() != other.size() || ndims() != other.ndims() || shape_ != other.shape_) {
     return false;
   }
 
