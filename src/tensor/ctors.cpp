@@ -2,20 +2,11 @@
 
 #include "tensor.h"
 
-/* PRIVATE */
-
-Tensor::Tensor(const Array &shape, const Array &strides)
-    : size_(shape.prod()), shape_(shape), strides_(strides),
-      data_(new TensorDataCpu(size_)) {}
-
-Tensor::Tensor(const Array &shape, const Array &strides, const Tensor &tensor)
-    : size_(shape.prod()), shape_(shape), strides_(strides), data_(tensor.data_) {}
-
-Tensor::Tensor(const Array &shape, const Array &strides, size_t offset, const Tensor &tensor)
+// tensor view constructor
+Tensor::Tensor(const Array &shape, const Array &strides, const Tensor &tensor, size_t offset)
     : offset_(offset), size_(shape.prod()), shape_(shape), strides_(strides), data_(tensor.data_) {}
 
-/* PUBLIC */
-
+// empty tensor constructor
 Tensor::Tensor(const Array &shape)
     : size_(shape.prod()), shape_(shape), strides_(shape.size),
       data_(new TensorDataCpu(size_)) {
@@ -27,6 +18,7 @@ Tensor::Tensor(const Array &shape)
   }
 }
 
+// non-empty tensor constructor
 Tensor::Tensor(const Array &shape, std::initializer_list<double> data)
     : Tensor(shape) {
   if (data.size() != this->data_->size()) {
@@ -40,5 +32,6 @@ Tensor::Tensor(const Array &shape, std::initializer_list<double> data)
   }
 }
 
+// scalar tensor constructor
 Tensor::Tensor(double value)
     : Tensor({}, {value}) {}

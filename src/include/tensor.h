@@ -9,26 +9,22 @@
 class Tensor {
 
 private:
-  size_t offset_ = 0;
+  size_t offset_;
   size_t size_;
   Array shape_;
   Array strides_;
   std::shared_ptr<TensorData> data_;
-
-  Tensor(const Array &shape, const Array &strides);
-  Tensor(const Array &shape, const Array &strides, size_t offset, const Tensor &);
 
   size_t toIndex(const Array &) const;
   Array toMultiIndex(size_t) const;
   void checkCompatibleShape(const Tensor &) const;
 
 public:
+  Tensor(const Array &shape, const Array &strides, const Tensor &, size_t offset = 0);
   Tensor(const Array &shape);
 
   Tensor(const Array &shape, std::initializer_list<double> data);
   Tensor(double);
-
-  Tensor(const Array &shape, const Array &strides, const Tensor &);
 
   double operator[](size_t) const;
   double &operator[](size_t);

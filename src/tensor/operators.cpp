@@ -23,7 +23,7 @@ Tensor Tensor::operator[](const Array &mIdx) const {
     result_strides[i - mIdx.size] = strides_[i];
   }
 
-  return Tensor(result_shape, result_strides, toIndex(mIdx), *this);
+  return Tensor(result_shape, result_strides, *this, toIndex(mIdx));
 }
 
 double &Tensor::operator[](const Array &mIdx) {
@@ -32,20 +32,20 @@ double &Tensor::operator[](const Array &mIdx) {
 
 Tensor Tensor::operator+(const Tensor &other) const {
   checkCompatibleShape(other);
-  Tensor result(shape_, strides_);
+  Tensor result(shape_);
   addKernel(result, *this, other);
   return result;
 }
 
 Tensor Tensor::operator*(const Tensor &other) const {
   checkCompatibleShape(other);
-  Tensor result(shape_, strides_);
+  Tensor result(shape_);
   multKernel(result, *this, other);
   return result;
 }
 
 Tensor Tensor::operator-() const {
-  Tensor result(shape_, strides_);
+  Tensor result(shape_);
   negKernel(result, *this);
   return result;
 }
@@ -82,7 +82,7 @@ Tensor::operator double() const {
 /* FRIEND FUNCTIONS */
 
 Tensor operator*(double scalar, const Tensor &tensor) {
-  Tensor result(tensor.shape_, tensor.strides_);
+  Tensor result(tensor.shape_);
   multKernel(result, scalar, tensor);
   return result;
 }
