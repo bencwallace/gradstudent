@@ -33,14 +33,14 @@ size_t &Array::operator[](size_t i) { return data[i]; }
 
 bool Array::operator!=(const Array &other) const {
   if (size != other.size) {
-    return false;
+    return true;
   }
   for (size_t i = 0; i < size; ++i) {
     if ((*this)[i] != other[i]) {
-      return false;
+      return true;
     }
   }
-  return true;
+  return false;
 }
 
 size_t Array::prod() const {
