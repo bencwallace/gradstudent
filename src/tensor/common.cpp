@@ -14,14 +14,14 @@ size_t Tensor::toIndex(const Array &mIdx, size_t start, size_t end) const {
     throw std::invalid_argument(ss.str());
   }
 
-  size_t idx = 0;
+  size_t idx = offset_;
   for (size_t i = start; i < end; ++i) {
     if (mIdx[i] < 0 || mIdx[i] >= shape_[i]) {
       std::stringstream ss;
       ss << "Expected index " << i << " in [0, " << shape_[i] << "), got: " << mIdx[i];
       throw std::invalid_argument(ss.str());
     }
-    idx += (mIdx[i] + offset_[i]) * strides_[i];
+    idx += mIdx[i] * strides_[i];
   }
   return idx;
 }
