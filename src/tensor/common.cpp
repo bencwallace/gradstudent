@@ -2,32 +2,32 @@
 
 #include "tensor.h"
 
-size_t Tensor::toIndex(const Array &multiIndex, size_t start, size_t end) const {
+size_t Tensor::toIndex(const Array &mIdx, size_t start, size_t end) const {
   if (start < 0) {
     std::stringstream ss;
     ss << "Multi-index start point must be non-negative, got " << start;
     throw std::invalid_argument(ss.str());
   }
-  if (end > multiIndex.size) {
+  if (end > mIdx.size) {
     std::stringstream ss;
-    ss << "Invalid end point " << end << " for multi-index of size " << multiIndex.size;
+    ss << "Invalid end point " << end << " for multi-index of size " << mIdx.size;
     throw std::invalid_argument(ss.str());
   }
 
   size_t idx = 0;
   for (size_t i = start; i < end; ++i) {
-    if (multiIndex[i] < 0 || multiIndex[i] >= shape_[i]) {
+    if (mIdx[i] < 0 || mIdx[i] >= shape_[i]) {
       std::stringstream ss;
-      ss << "Expected index " << i << " in [0, " << shape_[i] << "), got: " << multiIndex[i];
+      ss << "Expected index " << i << " in [0, " << shape_[i] << "), got: " << mIdx[i];
       throw std::invalid_argument(ss.str());
     }
-    idx += (multiIndex[i] + offset_[i]) * strides_[i];
+    idx += (mIdx[i] + offset_[i]) * strides_[i];
   }
   return idx;
 }
 
-size_t Tensor::toIndex(const Array &multiIndex) const {
-  return toIndex(multiIndex, 0, ndims_);
+size_t Tensor::toIndex(const Array &mIdx) const {
+  return toIndex(mIdx, 0, ndims_);
 }
 
 Array Tensor::toMultiIndex(size_t idx) const {

@@ -8,12 +8,12 @@ double Tensor::operator[](size_t i) const { return (*data_)[i]; }
 
 double &Tensor::operator[](size_t i) { return (*data_)[i]; }
 
-Tensor Tensor::operator[](const Array &multiIndex) const {
-  return (*this)[toIndex(multiIndex)];
+Tensor Tensor::operator[](const Array &mIdx) const {
+  return (*this)[toIndex(mIdx)];
 }
 
-double &Tensor::operator[](const Array &multiIndex) {
-  return (*this)[toIndex(multiIndex)];
+double &Tensor::operator[](const Array &mIdx) {
+  return (*this)[toIndex(mIdx)];
 }
 
 Tensor Tensor::operator+(const Tensor &other) const {
