@@ -32,8 +32,6 @@ public:
   double &operator[](size_t);
   double operator[](const Array &) const;
   double &operator[](const Array &);
-  double operator[](std::initializer_list<size_t>) const;
-  double &operator[](std::initializer_list<size_t>);
   Tensor operator+(const Tensor &) const;
   Tensor operator-() const;
   Tensor operator-(const Tensor &) const;

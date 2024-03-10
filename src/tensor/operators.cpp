@@ -16,14 +16,6 @@ double &Tensor::operator[](const Array &multiIndex) {
   return (*this)[toIndex(multiIndex)];
 }
 
-double Tensor::operator[](std::initializer_list<size_t> coords) const {
-  return (*this)[Array(coords)];
-}
-
-double &Tensor::operator[](std::initializer_list<size_t> coords) {
-  return (*this)[Array(coords)];
-}
-
 Tensor Tensor::operator+(const Tensor &other) const {
   checkCompatibleShape(other);
   Tensor result(shape_, strides_);
