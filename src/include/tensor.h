@@ -37,6 +37,7 @@ public:
   Tensor operator-() const;
   Tensor operator-(const Tensor &) const;
   Tensor operator*(const Tensor &) const;
+  bool operator==(const Tensor &) const;
   explicit operator double() const;
 
   size_t toIndex(const Array &, size_t, size_t) const;
