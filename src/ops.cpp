@@ -27,7 +27,7 @@ Tensor dot(const Tensor &left, const Tensor &right) {
 }
 
 Tensor flatten(const Tensor &tensor) {
-  return Tensor(Array({tensor.size()}), Array({1}), tensor.data());
+  return Tensor(Array({tensor.size()}), Array({1}), tensor);
 }
 
 Tensor permute(const Tensor &tensor, std::initializer_list<size_t> axes) {
@@ -39,7 +39,6 @@ Tensor permute(const Tensor &tensor, std::initializer_list<size_t> axes) {
 
   const Array &shape = tensor.shape();
   const Array &strides = tensor.strides();
-  const TensorData &data = tensor.data();
 
   Array result_shape(tensor.ndims());
   Array result_strides(tensor.ndims());
@@ -50,7 +49,7 @@ Tensor permute(const Tensor &tensor, std::initializer_list<size_t> axes) {
     ++i;
   }
 
-  return Tensor(result_shape, result_strides, data);
+  return Tensor(result_shape, result_strides, tensor);
 }
 
 double norm2(const Tensor &tensor) {

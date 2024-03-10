@@ -12,7 +12,7 @@ private:
   size_t ndims_;
   Array shape_;
   Array strides_;
-  TensorData data_;
+  std::shared_ptr<TensorData> data_;
 
   Tensor(const Array &, const Array &);
 
@@ -21,12 +21,12 @@ private:
   void checkCompatibleShape(const Tensor &) const;
 
 public:
-  Tensor(const Array &);
-  Tensor(const Array &, std::initializer_list<double>);
-  Tensor(std::initializer_list<size_t>);
-  Tensor(std::initializer_list<size_t>, std::initializer_list<double>);
-  Tensor(const Array &, const Array &, const TensorData &);
+  Tensor(const Array &shape);
+
+  Tensor(const Array &shape, std::initializer_list<double> data);
   Tensor(double);
+
+  Tensor(const Array &shape, const Array &strides, const Tensor &);
 
   double operator[](size_t) const;
   double &operator[](size_t);
@@ -44,7 +44,6 @@ public:
   size_t ndims() const;
   const Array &shape() const;
   const Array &strides() const;
-  const TensorData &data() const;
 
   friend Tensor operator*(double, const Tensor &);
 };
