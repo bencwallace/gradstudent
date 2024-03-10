@@ -8,7 +8,7 @@ double Tensor::operator[](size_t i) const { return (*data_)[i]; }
 
 double &Tensor::operator[](size_t i) { return (*data_)[i]; }
 
-double Tensor::operator[](const Array &multiIndex) const {
+Tensor Tensor::operator[](const Array &multiIndex) const {
   return (*this)[toIndex(multiIndex)];
 }
 
@@ -38,6 +38,15 @@ Tensor Tensor::operator-() const {
 
 Tensor Tensor::operator-(const Tensor &other) const {
   return (*this) + (-other);
+}
+
+Tensor::operator double() const {
+  if (size() != 1) {
+    std::stringstream ss;
+    ss << "Expected tensor of size 1, got size " << size();
+    throw std::invalid_argument(ss.str());
+  }
+  return (*this)[0];
 }
 
 /* FRIEND FUNCTIONS */

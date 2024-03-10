@@ -54,5 +54,5 @@ Tensor permute(const Tensor &tensor, std::initializer_list<size_t> axes) {
 
 double norm2(const Tensor &tensor) {
   Tensor flat = flatten(tensor);
-  return dot(flat, flat)[{}];
+  return static_cast<double>(dot(flat, flat));
 }

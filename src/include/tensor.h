@@ -14,7 +14,7 @@ private:
   Array strides_;
   std::shared_ptr<TensorData> data_;
 
-  Tensor(const Array &, const Array &);
+  Tensor(const Array &shape, const Array &strides);
 
   size_t toIndex(const Array &) const;
   Array toMultiIndex(size_t) const;
@@ -30,14 +30,16 @@ public:
 
   double operator[](size_t) const;
   double &operator[](size_t);
-  double operator[](const Array &) const;
+  Tensor operator[](const Array &) const;
   double &operator[](const Array &);
   Tensor operator+(const Tensor &) const;
   Tensor operator-() const;
   Tensor operator-(const Tensor &) const;
   Tensor operator*(const Tensor &) const;
+  explicit operator double() const;
 
   size_t toIndex(const Array &, size_t, size_t) const;
+
   size_t size() const;
   size_t ndims() const;
   const Array &shape() const;

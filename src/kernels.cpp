@@ -4,7 +4,7 @@
 void addKernel(Tensor &result, const Tensor &left, const Tensor &right) {
   MultiIndex resultIdx(result.shape());
   for (size_t i = 0; i < left.size(); ++i) {
-    result[resultIdx] = left[resultIdx] + right[resultIdx];
+    result[resultIdx] = static_cast<double>(left[resultIdx]) + static_cast<double>(right[resultIdx]);
     ++resultIdx;
   }
 }
@@ -18,7 +18,7 @@ void multKernel(Tensor &result, const double scalar, const Tensor &tensor) {
 void multKernel(Tensor &result, const Tensor &left, const Tensor &right) {
   MultiIndex resultIdx(result.shape());
   for (size_t i = 0; i < left.size(); ++i) {
-    result[resultIdx] = left[resultIdx] * right[resultIdx];
+    result[resultIdx] = static_cast<double>(left[resultIdx]) * static_cast<double>(right[resultIdx]);
     ++resultIdx;
   }
 }

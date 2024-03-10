@@ -4,25 +4,25 @@
 
 TEST(ScalarTest, GetItemTest) {
   Tensor scalar(24);
-  EXPECT_EQ(scalar[{}], 24);
+  EXPECT_EQ(static_cast<double>(scalar), 24);
 }
 
 TEST(ScalarTest, SumTest) {
   Tensor scalar(24);
   Tensor sum = scalar + scalar;
-  EXPECT_EQ(sum[{}], 48);
+  EXPECT_EQ(static_cast<double>(sum), 48);
 }
 
 TEST(ScalarTest, ProdTest) {
   Tensor scalar(24);
   Tensor multiple = 5 * scalar;
-  EXPECT_EQ(multiple[{}], 120);
+  EXPECT_EQ(static_cast<double>(multiple), 120);
 }
 
 TEST(ScalarTest, DiffTest) {
   Tensor scalar(24);
   Tensor diff = scalar - scalar;
-  EXPECT_EQ(diff[{}], 0);
+  EXPECT_EQ(static_cast<double>(diff), 0);
 }
 
 TEST(MatrixTest, GetItemTest) {
