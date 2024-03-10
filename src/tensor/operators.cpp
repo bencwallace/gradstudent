@@ -4,6 +4,22 @@
 #include "kernels.h"
 #include "tensor.h"
 
+Tensor &Tensor::operator=(const Tensor &other) {
+  if (size_ != other.size_ || shape_ != other.shape_) {
+    std::stringstream ss;
+    ss << "Can't copy tensor of shape " << other.shape_ << " into tensor of shape " << shape_;
+    throw std::invalid_argument(ss.str());
+  }
+
+  MultiIndex mIdx(shape_);
+  for (size_t i = 0; i < size_; ++i) {
+    (*this)[toIndex(mIdx)] = other[toIndex(mIdx)];
+    ++mIdx;
+  }
+
+  return *this;
+}
+
 double Tensor::operator[](size_t i) const { return (*data_)[offset_ + i]; }
 
 double &Tensor::operator[](size_t i) { return (*data_)[offset_ + i]; }

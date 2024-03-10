@@ -30,6 +30,13 @@ TEST(ScalarTest, DiffTest) {
   EXPECT_EQ(static_cast<double>(diff), 0);
 }
 
+TEST(VectorTest, Copy) {
+  Tensor vector1(Array({4}));
+  Tensor vector2({4}, {1, 2, 3, 4});
+  vector1 = vector2;
+  EXPECT_TRUE(vector1 == vector2);
+}
+
 TEST(MatrixTest, GetItemTest) {
   Tensor matrix({2, 2}, {1, 2, 3, 4});
   EXPECT_EQ((matrix[{0, 0}]), 1);

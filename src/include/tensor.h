@@ -20,12 +20,15 @@ private:
   void checkCompatibleShape(const Tensor &) const;
 
 public:
+  Tensor(const Tensor &);
+
   Tensor(const Array &shape, const Array &strides, const Tensor &, size_t offset = 0);
-  Tensor(const Array &shape);
+  Tensor(const Array &shape, size_t offset = 0);
 
   Tensor(const Array &shape, std::initializer_list<double> data);
   Tensor(double);
 
+  Tensor &operator=(const Tensor &);
   double operator[](size_t) const;
   double &operator[](size_t);
   Tensor operator[](const Array &) const;
