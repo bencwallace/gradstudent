@@ -1,6 +1,7 @@
 #include <sstream>
 
 #include "tensor.h"
+#include "utils.h"
 
 // tensor view constructor
 Tensor::Tensor(const Array &shape, const Array &strides, const Tensor &tensor, size_t offset)
@@ -8,15 +9,8 @@ Tensor::Tensor(const Array &shape, const Array &strides, const Tensor &tensor, s
 
 // empty tensor constructor
 Tensor::Tensor(const Array &shape)
-    : size_(shape.prod()), shape_(shape), strides_(shape.size),
-      data_(new TensorDataCpu(size_)) {
-  if (ndims() > 0) {
-    strides_[ndims() - 1] = 1;
-  }
-  for (int i = (int) ndims() - 2; i >= 0; --i) {
-    strides_[i] = strides_[i + 1] * this->shape_[i + 1];
-  }
-}
+    : size_(shape.prod()), shape_(shape), strides_(defaultStrides(shape_)),
+      data_(new TensorDataCpu(size_)) {}
 
 // non-empty tensor constructor
 Tensor::Tensor(const Array &shape, std::initializer_list<double> data)
