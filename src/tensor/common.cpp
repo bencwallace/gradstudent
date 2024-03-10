@@ -21,7 +21,7 @@ size_t Tensor::toIndex(const Array &multiIndex, size_t start, size_t end) const 
       ss << "Expected index " << i << " in [0, " << shape_[i] << "), got: " << multiIndex[i];
       throw std::invalid_argument(ss.str());
     }
-    idx += multiIndex[i] * strides_[i];
+    idx += (multiIndex[i] + offset_[i]) * strides_[i];
   }
   return idx;
 }
