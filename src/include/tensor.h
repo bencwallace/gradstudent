@@ -9,6 +9,7 @@
 class Tensor {
 
 private:
+  size_t size_;
   size_t ndims_;
   Array shape_;
   Array strides_;

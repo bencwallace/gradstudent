@@ -53,7 +53,7 @@ void Tensor::checkCompatibleShape(const Tensor &other) const {
 }
 
 size_t Tensor::size() const {
-  return data_->size();
+  return size_;
 }
 
 size_t Tensor::ndims() const {
