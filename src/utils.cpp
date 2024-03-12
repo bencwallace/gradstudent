@@ -1,6 +1,6 @@
 #include "utils.h"
 
-Array defaultStrides(Array &shape) {
+Array defaultStrides(const Array &shape) {
   Array strides(shape.size);
   if (shape.size > 0) {
     strides[shape.size - 1] = 1;

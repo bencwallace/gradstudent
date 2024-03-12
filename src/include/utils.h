@@ -2,4 +2,4 @@
 
 #include "array.h"
 
-Array defaultStrides(Array &shape);
+Array defaultStrides(const Array &shape);
