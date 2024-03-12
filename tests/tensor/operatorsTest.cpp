@@ -60,13 +60,23 @@ TEST(MatrixTest, RankMismatchTest) {
       std::invalid_argument);
 }
 
-TEST(MatrixTest, SumTest) {
+TEST(MatrixTest, Sum) {
   Tensor matrix1({2, 2}, {1, 2, 3, 4});
   Tensor matrix2({2, 2}, {1, 3, 2, 4});
   Tensor matrix3 = matrix2 + matrix1;
   EXPECT_EQ((matrix3[{0, 0}]), 2);
   EXPECT_EQ((matrix3[{0, 1}]), 5);
   EXPECT_EQ((matrix3[{1, 0}]), 5);
+  EXPECT_EQ((matrix3[{1, 1}]), 8);
+}
+
+TEST(MatrixTest, SumStrides) {
+  Tensor matrix1({2, 2}, {2, 1}, {1, 2, 3, 4});
+  Tensor matrix2({2, 2}, {1, 2}, {1, 3, 2, 4});
+  Tensor matrix3 = matrix2 + matrix1;
+  EXPECT_EQ((matrix3[{0, 0}]), 2);
+  EXPECT_EQ((matrix3[{0, 1}]), 4);
+  EXPECT_EQ((matrix3[{1, 0}]), 6);
   EXPECT_EQ((matrix3[{1, 1}]), 8);
 }
 
