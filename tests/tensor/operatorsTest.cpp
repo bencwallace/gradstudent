@@ -2,9 +2,14 @@
 
 #include "tensor.h"
 
-TEST(ScalarTest, GetItemTest) {
+TEST(ScalarTest, Cast) {
   Tensor scalar(24);
   EXPECT_EQ(static_cast<double>(scalar), 24);
+}
+
+TEST(ScalarTest, EmptySubscript) {
+  Tensor scalar(24);
+  EXPECT_EQ(scalar[{}], 24);
 }
 
 TEST(ScalarTest, SumTest) {
