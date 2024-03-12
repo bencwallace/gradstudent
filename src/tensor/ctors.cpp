@@ -7,10 +7,8 @@
 // tensor copy constructor
 Tensor::Tensor(const Tensor &other)
     : Tensor(other.shape_) {
-  MultiIndex mIdx(shape_);
-  for (size_t i = 0; i < size_; ++i) {
-    (*this)[toIndex(mIdx)] = other[other.toIndex(mIdx)];
-    ++mIdx;
+  for (MultiIndex mIdx : MultiIndexRange(shape_)) {
+    (*this)[mIdx] = static_cast<double>(other[mIdx]);
   }
 }
 
