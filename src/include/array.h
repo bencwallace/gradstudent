@@ -18,6 +18,7 @@ public:
   Array operator=(const Array &);
   size_t operator[](size_t) const;
   size_t &operator[](size_t);
+  bool operator==(const Array &) const;
   bool operator!=(const Array &) const;
 
   size_t prod() const;
