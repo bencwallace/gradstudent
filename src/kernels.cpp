@@ -2,16 +2,14 @@
 #include "kernels.h"
 
 void addKernel(Tensor &result, const Tensor &left, const Tensor &right) {
-  MultiIndex resultIdx(result.shape());
-  for (size_t i = 0; i < left.size(); ++i) {
-    result[resultIdx] = static_cast<double>(left[resultIdx]) + static_cast<double>(right[resultIdx]);
-    ++resultIdx;
+  for (auto mIdx : MultiIndexRange(result.shape())) {
+    result[mIdx] = static_cast<double>(left[mIdx]) + static_cast<double>(right[mIdx]);
   }
 }
 
 void multKernel(Tensor &result, const double scalar, const Tensor &tensor) {
-  for (size_t i = 0; i < result.size(); ++i) {
-    result[i] = scalar * tensor[i];
+  for (auto mIdx : MultiIndexRange(result.shape())) {
+    result[mIdx] = scalar * static_cast<double>(tensor[mIdx]);
   }
 }
 
