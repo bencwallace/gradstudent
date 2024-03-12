@@ -12,10 +12,13 @@ TEST(ScalarTest, EmptySubscript) {
   EXPECT_EQ(scalar[{}], 24);
 }
 
-TEST(ScalarTest, SumTest) {
+TEST(ScalarTest, Sum) {
   Tensor scalar(24);
   Tensor sum = scalar + scalar;
-  EXPECT_EQ(static_cast<double>(sum), 48);
+  EXPECT_EQ(sum.ndims(), 0);
+  EXPECT_EQ(sum.shape(), Array{});
+  EXPECT_EQ(sum.size(), 1);
+  EXPECT_EQ(sum[0], 48);
 }
 
 TEST(ScalarTest, ProdTest) {
@@ -34,7 +37,7 @@ TEST(VectorTest, Copy) {
   Tensor vector1(Array({4}));
   Tensor vector2({4}, {1, 2, 3, 4});
   vector1 = vector2;
-  EXPECT_TRUE(vector1 == vector2);
+  EXPECT_EQ(vector1, vector2);
 }
 
 TEST(MatrixTest, GetItemTest) {
