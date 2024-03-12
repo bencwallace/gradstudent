@@ -8,7 +8,7 @@
 Tensor::Tensor(const Tensor &other)
     : Tensor(other.shape_) {
   for (MultiIndex mIdx : MultiIndexRange(shape_)) {
-    (*this)[mIdx] = static_cast<double>(other[mIdx]);
+    (*this)[mIdx] = other[mIdx];
   }
 }
 

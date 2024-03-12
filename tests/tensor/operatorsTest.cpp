@@ -92,5 +92,5 @@ TEST(MatrixTest, ProdTest) {
 
 TEST(MatrixTest, SliceTest) {
   const Tensor matrix1({2, 2}, {1, 2, 3, 4});
-  EXPECT_EQ(matrix1[Array{0}], Tensor({2}, {1, 2}));
+  EXPECT_EQ(matrix1.slice(Array{0}), Tensor({2}, {1, 2}));
 }

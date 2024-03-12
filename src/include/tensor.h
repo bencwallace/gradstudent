@@ -32,7 +32,7 @@ public:
   Tensor &operator=(const Tensor &);
   double operator[](size_t) const;
   double &operator[](size_t);
-  Tensor operator[](const Array &) const;
+  double operator[](const Array &) const;
   double &operator[](const Array &);
   Tensor operator+(const Tensor &) const;
   Tensor operator-() const;
@@ -42,6 +42,8 @@ public:
   explicit operator double() const;
 
   size_t toIndex(const Array &, size_t, size_t) const;
+
+  Tensor slice(const Array &mIdx) const;
 
   size_t size() const;
   size_t ndims() const;
