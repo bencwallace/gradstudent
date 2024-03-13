@@ -5,7 +5,10 @@ RUN apt-get -qq update \
         build-essential \
         cmake \
         ca-certificates \
+        git \
         make \
+        openssh-client \
+        sudo \
         wget \
         xz-utils \
     && rm -rf /var/lib/apt/lists/*
@@ -14,3 +17,6 @@ ARG CLANG_URL=https://github.com/llvm/llvm-project/releases/download/llvmorg-17.
 RUN wget ${CLANG_URL} -O /tmp/clang.tar.xz \
     && tar -xvkf /tmp/clang.tar.xz -C /usr/local --strip-components=1 \
     && rm /tmp/clang.tar.xz
+
+RUN useradd -m -s /bin/bash -G sudo vscode \
+    && passwd -d vscode
