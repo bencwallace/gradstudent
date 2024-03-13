@@ -12,7 +12,7 @@ private:
 public:
   MultiIndex(const Array &);
 
-  void reset();
+  void setToEnd();
   bool operator==(const MultiIndex &) const;
   bool operator!=(const MultiIndex &) const;
   MultiIndex operator++();

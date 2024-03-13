@@ -31,11 +31,11 @@ void MultiIndex::increment(size_t currDim) {
     (*this)[currDim] = 0;
     return increment(currDim - 1);
   } else {
-    reset();
+    setToEnd();
   }
 }
 
-void MultiIndex::reset() {
+void MultiIndex::setToEnd() {
   for (size_t i = 0; i < shape.size; ++i) {
     (*this)[i] = -1;
   }
@@ -64,7 +64,7 @@ MultiIndexIter::MultiIndexIter(const Array &shape, bool end)
     : curr(new MultiIndex(shape)) {
   if (end) {
     if (shape.size > 0) {
-      curr->reset();
+      curr->setToEnd();
     } else {
       delete curr;
       curr = nullptr;
