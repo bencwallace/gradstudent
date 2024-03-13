@@ -5,6 +5,7 @@ RUN apt-get -qq update \
         build-essential \
         cmake \
         ca-certificates \
+        gdb \
         git \
         make \
         openssh-client \
