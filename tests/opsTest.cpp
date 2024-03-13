@@ -3,7 +3,7 @@
 
 #include <gtest/gtest.h>
 
-TEST(MatrixTest, MatrixDotVectorTest) {
+TEST(DotTest, MatrixVector) {
   Tensor matrix({2, 2}, {1, 2, 3, 4});
   Tensor vector1({2, 1}, {5, 6});
   Tensor vector2 = dot(matrix, vector1);
@@ -11,7 +11,7 @@ TEST(MatrixTest, MatrixDotVectorTest) {
   EXPECT_EQ((vector2[{1, 0}]), 39);
 }
 
-TEST(MatrixTest, MatrixDotMatrixTest) {
+TEST(DotTest, MatrixMatrix) {
   Tensor matrix1({2, 2}, {1, 2, 3, 4});
   Tensor matrix2({2, 3}, {6, 5, 4, 3, 2, 1});
   Tensor matrix3 = dot(matrix1, matrix2);
@@ -23,7 +23,7 @@ TEST(MatrixTest, MatrixDotMatrixTest) {
   EXPECT_EQ((matrix3[{1, 2}]), 16);
 }
 
-TEST(MatrixTest, PermuteTest) {
+TEST(PermuteTest, Matrix) {
   Tensor matrix1({2, 2}, {1, 2, 3, 4});
   Tensor matrix2 = permute(matrix1, {1, 0});
   EXPECT_EQ((matrix2[{0, 0}]), 1);
@@ -32,8 +32,7 @@ TEST(MatrixTest, PermuteTest) {
   EXPECT_EQ((matrix2[{1, 1}]), 4);
 }
 
-
-TEST(NormTest, Norm2Test) {
+TEST(NormTest, Matrix) {
   Tensor tensor({2, 2}, {1, 2, 3, 4});
   EXPECT_EQ(norm2(tensor), 30);
 }
