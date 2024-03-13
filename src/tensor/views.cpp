@@ -2,7 +2,7 @@
 
 #include "tensor.h"
 
-Tensor Tensor::slice(const Array &mIdx) const {
+Tensor Tensor::slice(const Array &mIdx) {
   if (mIdx.size > ndims()) {
     std::stringstream ss;
     ss << "Multi-index of size " << mIdx.size

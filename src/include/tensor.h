@@ -45,7 +45,7 @@ public:
 
   size_t toIndex(const Array &, size_t, size_t) const;
 
-  Tensor slice(const Array &mIdx) const;
+  Tensor slice(const Array &mIdx);
 
   size_t size() const;
   size_t ndims() const;
