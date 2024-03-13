@@ -43,6 +43,11 @@ TEST(SubscriptGetTest, CustomStrides) {
   EXPECT_EQ((matrix[{1, 1}]), 4);
 }
 
+TEST(SubscriptGetTest, Const) {
+  const Tensor scalar(24);
+  EXPECT_EQ(scalar[{}], 24);
+}
+
 TEST(SubscriptSetTest, Empty) {
   Tensor scalar(24);
   scalar[{}] = 42;
