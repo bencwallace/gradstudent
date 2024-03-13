@@ -1,5 +1,5 @@
-#include "multi_index.h"
 #include "kernels.h"
+#include "multi_index.h"
 
 void addKernel(Tensor &result, const Tensor &left, const Tensor &right) {
   for (auto mIdx : MultiIndexRange(result.shape())) {
@@ -34,7 +34,8 @@ void dotKernel(Tensor &result, const Tensor &left, const Tensor &right) {
   MultiIndex resultMultiIndex = MultiIndex(result.shape());
   for (size_t i = 0; i < result.size(); ++i) {
     size_t thisIndex = left.toIndex(resultMultiIndex, 0, left.ndims() - 1);
-    size_t otherIndex = right.toIndex(resultMultiIndex, left.ndims() - 1, result.ndims());
+    size_t otherIndex =
+        right.toIndex(resultMultiIndex, left.ndims() - 1, result.ndims());
 
     result[i] = 0;
     for (size_t j = 0; j < left.shape()[left.ndims() - 1]; ++j) {

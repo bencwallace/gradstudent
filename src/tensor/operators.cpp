@@ -1,13 +1,14 @@
 #include <sstream>
 
-#include "multi_index.h"
 #include "kernels.h"
+#include "multi_index.h"
 #include "tensor.h"
 
 Tensor &Tensor::operator=(const Tensor &other) {
   if (size_ != other.size_ || shape_ != other.shape_) {
     std::stringstream ss;
-    ss << "Can't copy tensor of shape " << other.shape_ << " into tensor of shape " << shape_;
+    ss << "Can't copy tensor of shape " << other.shape_
+       << " into tensor of shape " << shape_;
     throw std::invalid_argument(ss.str());
   }
 
@@ -26,9 +27,7 @@ double Tensor::operator[](const Array &mIdx) const {
   return (*this)[toIndex(mIdx)];
 }
 
-double &Tensor::operator[](const Array &mIdx) {
-  return (*this)[toIndex(mIdx)];
-}
+double &Tensor::operator[](const Array &mIdx) { return (*this)[toIndex(mIdx)]; }
 
 Tensor Tensor::operator+(const Tensor &other) const {
   checkCompatibleShape(other);
@@ -55,7 +54,8 @@ Tensor Tensor::operator-(const Tensor &other) const {
 }
 
 bool Tensor::operator==(const Tensor &other) const {
-  if (size() != other.size() || ndims() != other.ndims() || shape_ != other.shape_) {
+  if (size() != other.size() || ndims() != other.ndims() ||
+      shape_ != other.shape_) {
     return false;
   }
 

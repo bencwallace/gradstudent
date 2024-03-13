@@ -16,10 +16,8 @@ public:
   virtual double operator[](size_t) const = 0;
   virtual double &operator[](size_t) = 0;
 
-  virtual ~TensorData() {};
-
+  virtual ~TensorData(){};
 };
-
 
 class TensorDataCpu : public TensorData {
 
@@ -31,5 +29,4 @@ public:
 
   double operator[](size_t) const override;
   double &operator[](size_t) override;
-
 };

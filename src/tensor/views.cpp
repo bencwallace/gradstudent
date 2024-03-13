@@ -5,7 +5,8 @@
 Tensor Tensor::slice(const Array &mIdx) const {
   if (mIdx.size > ndims()) {
     std::stringstream ss;
-    ss << "Multi-index of size " << mIdx.size << " too large for tensor of rank " << ndims();
+    ss << "Multi-index of size " << mIdx.size
+       << " too large for tensor of rank " << ndims();
     throw std::invalid_argument(ss.str());
   }
 

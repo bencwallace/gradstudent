@@ -43,9 +43,7 @@ bool Array::operator==(const Array &other) const {
   return true;
 }
 
-bool Array::operator!=(const Array &other) const {
-  return !(*this == other);
-}
+bool Array::operator!=(const Array &other) const { return !(*this == other); }
 
 size_t Array::prod() const {
   size_t result = 1;
@@ -57,7 +55,7 @@ size_t Array::prod() const {
 
 std::ostream &operator<<(std::ostream &os, Array const &array) {
   std::ostream &result = os << "(";
-  for (int i = 0; i < (int) array.size - 1; ++i) {
+  for (int i = 0; i < (int)array.size - 1; ++i) {
     result << array[i] << ", ";
   }
   if (array.size > 0) {

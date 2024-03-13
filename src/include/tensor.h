@@ -21,11 +21,13 @@ private:
 
 public:
   Tensor(const Tensor &);
-  explicit Tensor(const Array &shape, const Array &strides, const Tensor &, size_t offset = 0);
+  explicit Tensor(const Array &shape, const Array &strides, const Tensor &,
+                  size_t offset = 0);
 
   Tensor(const Array &shape);
 
-  Tensor(const Array &shape, const Array &strides, std::initializer_list<double> data);
+  Tensor(const Array &shape, const Array &strides,
+         std::initializer_list<double> data);
   Tensor(const Array &shape, std::initializer_list<double> data);
   Tensor(double);
 

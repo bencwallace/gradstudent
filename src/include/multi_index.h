@@ -18,7 +18,6 @@ public:
   MultiIndex operator++();
 };
 
-
 class MultiIndexRange {
 
 private:
@@ -27,17 +26,17 @@ private:
 public:
   struct MultiIndexIter {
     using iterator_category = std::forward_iterator_tag;
-    using difference_type   = std::ptrdiff_t;
-    using value_type        = MultiIndex;
-    using pointer           = MultiIndex*;
-    using reference         = MultiIndex&;
+    using difference_type = std::ptrdiff_t;
+    using value_type = MultiIndex;
+    using pointer = MultiIndex *;
+    using reference = MultiIndex &;
 
     MultiIndexIter(const Array &shape, bool end = false);
     ~MultiIndexIter();
 
     reference operator*() const;
     pointer operator->();
-    MultiIndexIter& operator++();
+    MultiIndexIter &operator++();
     MultiIndexIter operator++(int);
     friend bool operator==(const MultiIndexIter &, const MultiIndexIter &);
     friend bool operator!=(const MultiIndexIter &, const MultiIndexIter &);
@@ -50,5 +49,4 @@ public:
 
   MultiIndexIter begin();
   MultiIndexIter end();
-
 };

@@ -33,7 +33,8 @@ Tensor flatten(const Tensor &tensor) {
 Tensor permute(const Tensor &tensor, std::initializer_list<size_t> axes) {
   if (axes.size() != tensor.ndims()) {
     std::stringstream ss;
-    ss << "Expected axis list of length " << tensor.ndims() << ", got " << axes.size();
+    ss << "Expected axis list of length " << tensor.ndims() << ", got "
+       << axes.size();
     throw std::invalid_argument(ss.str());
   }
 

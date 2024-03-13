@@ -50,18 +50,13 @@ MultiIndex MultiIndex::operator++() {
 
 /* MultiIndexRange */
 
-MultiIndexRange::MultiIndexRange(const Array &shape)
-    : shape(shape) {}
+MultiIndexRange::MultiIndexRange(const Array &shape) : shape(shape) {}
 
 using MultiIndexIter = MultiIndexRange::MultiIndexIter;
 
-MultiIndexIter MultiIndexRange::begin() {
-  return MultiIndexIter(shape);
-}
+MultiIndexIter MultiIndexRange::begin() { return MultiIndexIter(shape); }
 
-MultiIndexIter MultiIndexRange::end() {
-  return MultiIndexIter(shape, true);
-}
+MultiIndexIter MultiIndexRange::end() { return MultiIndexIter(shape, true); }
 
 /* MultiIndexIter */
 
@@ -92,7 +87,7 @@ MultiIndexIter::reference MultiIndexIter::operator*() const {
 
 MultiIndexIter::pointer MultiIndexIter::operator->() { return curr; }
 
-MultiIndexIter& MultiIndexIter::operator++() {
+MultiIndexIter &MultiIndexIter::operator++() {
   if (curr->size > 0) {
     ++(*curr);
   } else {
@@ -108,7 +103,7 @@ MultiIndexIter MultiIndexIter::operator++(int) {
   return temp;
 }
 
-bool operator==(const MultiIndexIter& a, const MultiIndexIter& b) {
+bool operator==(const MultiIndexIter &a, const MultiIndexIter &b) {
   // if (a.curr == nullptr || b.curr == nullptr) {
   //   return false;
   // }
@@ -118,7 +113,7 @@ bool operator==(const MultiIndexIter& a, const MultiIndexIter& b) {
   return *a.curr == *b.curr;
 };
 
-bool operator!=(const MultiIndexIter& a, const MultiIndexIter& b) {
+bool operator!=(const MultiIndexIter &a, const MultiIndexIter &b) {
   if (a.curr == nullptr || b.curr == nullptr) {
     return a.curr != b.curr;
   }
