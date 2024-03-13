@@ -22,12 +22,12 @@ TEST(CastTest, NonScalar) {
   EXPECT_THROW((void)static_cast<double>(vector);, std::invalid_argument);
 }
 
-TEST(SubscriptTest, Empty) {
+TEST(SubscriptGetTest, Empty) {
   Tensor scalar(24);
   EXPECT_EQ(scalar[{}], 24);
 }
 
-TEST(SubscriptTest, DefaultStrides) {
+TEST(SubscriptGetTest, DefaultStrides) {
   Tensor matrix({2, 2}, {1, 2, 3, 4});
   EXPECT_EQ((matrix[{0, 0}]), 1);
   EXPECT_EQ((matrix[{0, 1}]), 2);
@@ -35,12 +35,44 @@ TEST(SubscriptTest, DefaultStrides) {
   EXPECT_EQ((matrix[{1, 1}]), 4);
 }
 
-TEST(SubscriptTest, CustomStrides) {
+TEST(SubscriptGetTest, CustomStrides) {
   Tensor matrix({2, 2}, {1, 2}, {1, 3, 2, 4});
   EXPECT_EQ((matrix[{0, 0}]), 1);
   EXPECT_EQ((matrix[{0, 1}]), 2);
   EXPECT_EQ((matrix[{1, 0}]), 3);
   EXPECT_EQ((matrix[{1, 1}]), 4);
+}
+
+TEST(SubscriptSetTest, Empty) {
+  Tensor scalar(24);
+  scalar[{}] = 42;
+  EXPECT_EQ(scalar[0], 42);
+}
+
+TEST(SubscriptSetTest, DefaultStrides) {
+  Tensor matrix({2, 2}, {5, 6, 7, 8});
+  matrix[{0, 0}] = 1;
+  matrix[{0, 1}] = 2;
+  matrix[{1, 0}] = 3;
+  matrix[{1, 1}] = 4;
+
+  EXPECT_EQ((matrix[0]), 1);
+  EXPECT_EQ((matrix[1]), 2);
+  EXPECT_EQ((matrix[2]), 3);
+  EXPECT_EQ((matrix[3]), 4);
+}
+
+TEST(SubscriptSetTest, CustomStrides) {
+  Tensor matrix({2, 2}, {1, 2}, {5, 6, 7, 8});
+  matrix[{0, 0}] = 1;
+  matrix[{0, 1}] = 2;
+  matrix[{1, 0}] = 3;
+  matrix[{1, 1}] = 4;
+
+  EXPECT_EQ((matrix[0]), 1);
+  EXPECT_EQ((matrix[2]), 2);
+  EXPECT_EQ((matrix[1]), 3);
+  EXPECT_EQ((matrix[3]), 4);
 }
 
 TEST(SumTest, Scalar) {
