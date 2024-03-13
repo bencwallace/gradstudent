@@ -6,15 +6,20 @@ class MultiIndex : public Array {
 
 private:
   const Array shape;
+  const Array strides;
+  const size_t offset;
 
   void increment(size_t);
 
 public:
-  MultiIndex(const Array &);
   MultiIndex(const MultiIndex &);
+  MultiIndex(const Array &, const Array &, const size_t);
 
   MultiIndex &operator=(const MultiIndex &);
   void setToEnd();
+  size_t toIndex() const;
+  size_t toIndex(size_t, size_t) const;
+
   bool operator==(const MultiIndex &) const;
   bool operator!=(const MultiIndex &) const;
   MultiIndex operator++();
@@ -24,6 +29,8 @@ class MultiIndexRange {
 
 private:
   Array shape;
+  Array strides;
+  size_t offset;
 
 public:
   struct MultiIndexIter {
@@ -34,7 +41,8 @@ public:
     using reference = MultiIndex &;
 
     MultiIndexIter(const MultiIndexIter &);
-    MultiIndexIter(const Array &shape, bool end = false);
+    MultiIndexIter(const Array &shape, const Array &strides, size_t offset,
+                   bool end = false);
     ~MultiIndexIter();
 
     MultiIndexIter &operator=(const MultiIndexIter &);
@@ -51,7 +59,7 @@ public:
     pointer curr;
   };
 
-  MultiIndexRange(const Array &shape);
+  MultiIndexRange(const Array &shape, const Array &strides, size_t offset);
 
   MultiIndexIter begin();
   MultiIndexIter end();

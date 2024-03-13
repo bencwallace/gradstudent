@@ -5,7 +5,7 @@
 
 class Array {
 
-private:
+protected:
   std::unique_ptr<size_t[]> data;
 
 public:

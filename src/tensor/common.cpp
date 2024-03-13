@@ -1,35 +1,15 @@
 #include <sstream>
 
 #include "tensor.h"
-
-size_t Tensor::toIndex(const Array &mIdx, size_t start, size_t end) const {
-  if (start < 0) {
-    std::stringstream ss;
-    ss << "Multi-index start point must be non-negative, got " << start;
-    throw std::invalid_argument(ss.str());
-  }
-  if (end > mIdx.size) {
-    std::stringstream ss;
-    ss << "Invalid end point " << end << " for multi-index of size "
-       << mIdx.size;
-    throw std::invalid_argument(ss.str());
-  }
-
-  size_t idx = offset_;
-  for (size_t i = start; i < end; ++i) {
-    if (mIdx[i] < 0 || mIdx[i] >= shape_[i]) {
-      std::stringstream ss;
-      ss << "Expected index " << i << " in [0, " << shape_[i]
-         << "), got: " << mIdx[i];
-      throw std::invalid_argument(ss.str());
-    }
-    idx += mIdx[i] * strides_[i];
-  }
-  return idx;
-}
+#include "utils.h"
 
 size_t Tensor::toIndex(const Array &mIdx) const {
-  return toIndex(mIdx, 0, mIdx.size);
+  // return toIndex(mIdx, 0, mIdx.size);
+  return sumProd(mIdx, strides_);
+}
+
+MultiIndexRange Tensor::multiIndexRange() const {
+  return MultiIndexRange(shape_, strides_, offset_);
 }
 
 Array Tensor::toMultiIndex(size_t idx) const {

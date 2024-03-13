@@ -6,7 +6,7 @@
 
 // tensor copy constructor
 Tensor::Tensor(const Tensor &other) : Tensor(other.shape_) {
-  for (MultiIndex mIdx : MultiIndexRange(shape_)) {
+  for (MultiIndex mIdx : multiIndexRange()) {
     (*this)[mIdx] = other[mIdx];
   }
 }

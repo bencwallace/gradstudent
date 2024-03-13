@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "array.h"
+#include "multi_index.h"
 #include "tensor_data.h"
 
 class Tensor {
@@ -43,7 +44,7 @@ public:
   bool operator==(const Tensor &) const;
   explicit operator double() const;
 
-  size_t toIndex(const Array &, size_t, size_t) const;
+  MultiIndexRange multiIndexRange() const;
 
   Tensor slice(const Array &mIdx);
 

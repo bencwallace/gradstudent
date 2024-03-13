@@ -12,7 +12,7 @@ Tensor &Tensor::operator=(const Tensor &other) {
     throw std::invalid_argument(ss.str());
   }
 
-  for (MultiIndex mIdx : MultiIndexRange(shape_)) {
+  for (MultiIndex mIdx : multiIndexRange()) {
     (*this)[mIdx] = other[mIdx];
   }
 
@@ -59,7 +59,7 @@ bool Tensor::operator==(const Tensor &other) const {
     return false;
   }
 
-  for (MultiIndex mIdx : MultiIndexRange(shape_)) {
+  for (MultiIndex mIdx : multiIndexRange()) {
     if ((*this)[mIdx] != other[mIdx]) {
       return false;
     }

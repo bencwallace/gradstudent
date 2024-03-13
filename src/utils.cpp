@@ -10,3 +10,16 @@ Array defaultStrides(const Array &shape) {
   }
   return strides;
 }
+
+size_t sumProd(const Array &left, const Array &right) {
+  return sumProd(left, right, 0, left.size);
+}
+
+size_t sumProd(const Array &left, const Array &right, size_t start,
+               size_t end) {
+  size_t result = 0;
+  for (size_t i = start; i < end; ++i) {
+    result += left[i] * right[i];
+  }
+  return result;
+}

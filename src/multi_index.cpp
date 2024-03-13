@@ -2,14 +2,17 @@
 #include <stdexcept>
 
 #include "multi_index.h"
+#include "utils.h"
 
 /* MultiIndex */
 
-MultiIndex::MultiIndex(const Array &shape)
-    : Array(zerosArray(shape.size)), shape(shape) {}
+MultiIndex::MultiIndex(const Array &shape, const Array &strides, size_t offset)
+    : Array(zerosArray(shape.size)), shape(shape), strides(strides),
+      offset(offset) {}
 
 MultiIndex::MultiIndex(const MultiIndex &other)
-    : Array(other), shape(other.shape) {}
+    : Array(other), shape(other.shape), strides(other.strides),
+      offset(other.offset) {}
 
 bool MultiIndex::operator==(const MultiIndex &other) const {
   if (size != other.size) {
@@ -54,6 +57,23 @@ void MultiIndex::setToEnd() {
   }
 }
 
+size_t MultiIndex::toIndex(size_t start, size_t end) const {
+  if (start < 0) {
+    std::stringstream ss;
+    ss << "Multi-index start point must be non-negative, got " << start;
+    throw std::invalid_argument(ss.str());
+  }
+  if (end > size) {
+    std::stringstream ss;
+    ss << "Invalid end point " << end << " for multi-index of size " << size;
+    throw std::invalid_argument(ss.str());
+  }
+
+  return offset + sumProd((*this), strides, start, end);
+}
+
+size_t MultiIndex::toIndex() const { return toIndex(0, size); }
+
 MultiIndex MultiIndex::operator++() {
   if (shape.size > 0) {
     increment(shape.size - 1);
@@ -63,13 +83,19 @@ MultiIndex MultiIndex::operator++() {
 
 /* MultiIndexRange */
 
-MultiIndexRange::MultiIndexRange(const Array &shape) : shape(shape) {}
+MultiIndexRange::MultiIndexRange(const Array &shape, const Array &strides,
+                                 size_t offset)
+    : shape(shape), strides(strides), offset(offset) {}
 
 using MultiIndexIter = MultiIndexRange::MultiIndexIter;
 
-MultiIndexIter MultiIndexRange::begin() { return MultiIndexIter(shape); }
+MultiIndexIter MultiIndexRange::begin() {
+  return MultiIndexIter(shape, strides, offset);
+}
 
-MultiIndexIter MultiIndexRange::end() { return MultiIndexIter(shape, true); }
+MultiIndexIter MultiIndexRange::end() {
+  return MultiIndexIter(shape, strides, offset, true);
+}
 
 /* MultiIndexIter */
 
@@ -79,8 +105,9 @@ MultiIndexIter::MultiIndexIter(value_type start)
 MultiIndexIter::MultiIndexIter(const MultiIndexIter &other)
     : MultiIndexIter(*other.curr) {}
 
-MultiIndexIter::MultiIndexIter(const Array &shape, bool end)
-    : curr(new MultiIndex(shape)) {
+MultiIndexIter::MultiIndexIter(const Array &shape, const Array &strides,
+                               size_t offset, bool end)
+    : curr(new MultiIndex(shape, strides, offset)) {
   if (end) {
     if (shape.size > 0) {
       curr->setToEnd();
