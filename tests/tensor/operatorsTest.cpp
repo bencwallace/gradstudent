@@ -59,10 +59,10 @@ TEST(SumTest, Matrix) {
   EXPECT_EQ(matrix3.shape(), Array({2, 2}));
   EXPECT_EQ(matrix3.size(), 4);
 
-  EXPECT_EQ((matrix3[{0, 0}]), 2);
-  EXPECT_EQ((matrix3[{0, 1}]), 5);
-  EXPECT_EQ((matrix3[{1, 0}]), 5);
-  EXPECT_EQ((matrix3[{1, 1}]), 8);
+  EXPECT_EQ((matrix3[0]), 2);
+  EXPECT_EQ((matrix3[1]), 5);
+  EXPECT_EQ((matrix3[2]), 5);
+  EXPECT_EQ((matrix3[3]), 8);
 }
 
 TEST(SumTest, StridedMatrix) {
@@ -73,10 +73,10 @@ TEST(SumTest, StridedMatrix) {
   EXPECT_EQ(matrix3.shape(), Array({2, 2}));
   EXPECT_EQ(matrix3.size(), 4);
 
-  EXPECT_EQ((matrix3[{0, 0}]), 2);
-  EXPECT_EQ((matrix3[{0, 1}]), 4);
-  EXPECT_EQ((matrix3[{1, 0}]), 6);
-  EXPECT_EQ((matrix3[{1, 1}]), 8);
+  EXPECT_EQ((matrix3[0]), 2);
+  EXPECT_EQ((matrix3[1]), 4);
+  EXPECT_EQ((matrix3[2]), 6);
+  EXPECT_EQ((matrix3[3]), 8);
 }
 
 TEST(SumTest, RankMismatch) {
@@ -110,10 +110,10 @@ TEST(ScalarProdTest, Matrix) {
   EXPECT_EQ(multiple.shape(), Array({2, 2}));
   EXPECT_EQ(multiple.size(), 4);
 
-  EXPECT_EQ((multiple[{0, 0}]), 5);
-  EXPECT_EQ((multiple[{0, 1}]), 10);
-  EXPECT_EQ((multiple[{1, 0}]), 15);
-  EXPECT_EQ((multiple[{1, 1}]), 20);
+  EXPECT_EQ((multiple[0]), 5);
+  EXPECT_EQ((multiple[1]), 10);
+  EXPECT_EQ((multiple[2]), 15);
+  EXPECT_EQ((multiple[3]), 20);
 }
 
 TEST(ScalarProdTest, StridedMatrix) {
@@ -123,10 +123,10 @@ TEST(ScalarProdTest, StridedMatrix) {
   EXPECT_EQ(multiple.shape(), Array({2, 2}));
   EXPECT_EQ(multiple.size(), 4);
 
-  EXPECT_EQ((multiple[{0, 0}]), 5);
-  EXPECT_EQ((multiple[{0, 1}]), 10);
-  EXPECT_EQ((multiple[{1, 0}]), 15);
-  EXPECT_EQ((multiple[{1, 1}]), 20);
+  EXPECT_EQ((multiple[0]), 5);
+  EXPECT_EQ((multiple[1]), 10);
+  EXPECT_EQ((multiple[2]), 15);
+  EXPECT_EQ((multiple[3]), 20);
 }
 
 TEST(DiffTest, Scalar) {
@@ -144,10 +144,10 @@ TEST(DiffTest, Matrix) {
   EXPECT_EQ(diff.shape(), Array({2, 2}));
   EXPECT_EQ(diff.size(), 4);
 
-  EXPECT_EQ((diff[{0, 0}]), 0);
-  EXPECT_EQ((diff[{0, 1}]), 0);
-  EXPECT_EQ((diff[{1, 0}]), 0);
-  EXPECT_EQ((diff[{1, 1}]), 0);
+  EXPECT_EQ((diff[0]), 0);
+  EXPECT_EQ((diff[1]), 0);
+  EXPECT_EQ((diff[2]), 0);
+  EXPECT_EQ((diff[3]), 0);
 }
 
 TEST(DiffTest, StridedMatrix) {
@@ -158,10 +158,10 @@ TEST(DiffTest, StridedMatrix) {
   EXPECT_EQ(diff.shape(), Array({2, 2}));
   EXPECT_EQ(diff.size(), 4);
 
-  EXPECT_EQ((diff[{0, 0}]), 0);
-  EXPECT_EQ((diff[{0, 1}]), 0);
-  EXPECT_EQ((diff[{1, 0}]), 0);
-  EXPECT_EQ((diff[{1, 1}]), 0);
+  EXPECT_EQ((diff[0]), 0);
+  EXPECT_EQ((diff[1]), 0);
+  EXPECT_EQ((diff[2]), 0);
+  EXPECT_EQ((diff[3]), 0);
 }
 
 TEST(CopyTest, Vector) {
@@ -197,10 +197,10 @@ TEST(ProdTest, Matrix) {
 
   EXPECT_EQ(matrix3.shape(), Array({2, 2}));
 
-  EXPECT_EQ((matrix3[{0, 0}]), 1);
-  EXPECT_EQ((matrix3[{0, 1}]), 6);
-  EXPECT_EQ((matrix3[{1, 0}]), 6);
-  EXPECT_EQ((matrix3[{1, 1}]), 16);
+  EXPECT_EQ((matrix3[0]), 1);
+  EXPECT_EQ((matrix3[1]), 6);
+  EXPECT_EQ((matrix3[2]), 6);
+  EXPECT_EQ((matrix3[3]), 16);
 }
 
 TEST(ProdTest, StridedMatrix) {
