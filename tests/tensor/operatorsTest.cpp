@@ -180,6 +180,16 @@ TEST(CopyTest, Matrix) {
   EXPECT_EQ(matrix1, matrix2);
 }
 
+TEST(CopyTest, StridedMatrix) {
+  Tensor matrix1({2, 2}, {2, 1}, {});
+  Tensor matrix2({2, 2}, {1, 2}, {1, 2, 3, 4});
+  matrix1 = matrix2;
+  EXPECT_EQ((matrix1[0]), 1);
+  EXPECT_EQ((matrix1[1]), 3);
+  EXPECT_EQ((matrix1[2]), 2);
+  EXPECT_EQ((matrix1[3]), 4);
+}
+
 TEST(ProdTest, Matrix) {
   Tensor matrix1({2, 2}, {1, 2, 3, 4});
   Tensor matrix2({2, 2}, {1, 3, 2, 4});

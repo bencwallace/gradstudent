@@ -13,7 +13,7 @@ Tensor &Tensor::operator=(const Tensor &other) {
 
   MultiIndex mIdx(shape_);
   for (size_t i = 0; i < size_; ++i) {
-    (*this)[toIndex(mIdx)] = other[toIndex(mIdx)];
+    (*this)[mIdx] = other[mIdx];
     ++mIdx;
   }
 
