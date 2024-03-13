@@ -1,4 +1,4 @@
-file(GLOB tensor_SRC arrayTest.cpp opsTest.cpp "tensor/*.cpp")
+file(GLOB tensor_SRC "*.cpp" "tensor/*.cpp")
 
 add_executable(runtests ${tensor_SRC})
 
