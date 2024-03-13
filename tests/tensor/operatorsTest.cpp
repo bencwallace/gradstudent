@@ -221,3 +221,21 @@ TEST(SliceTest, Matrix) {
   slice[0] = 0;
   EXPECT_EQ(matrix1[0], 0);
 }
+
+TEST(IsEqualTest, EqualScalar) {
+  Tensor scalar1(13);
+  Tensor scalar2(13);
+  EXPECT_TRUE(scalar1 == scalar2);
+}
+
+TEST(IsEqualTest, UnequalScalar) {
+  Tensor scalar1(13);
+  Tensor scalar2(31);
+  EXPECT_FALSE(scalar1 == scalar2);
+}
+
+TEST(IsEqualTest, EqualMatrix) {
+  Tensor matrix1({2, 2}, {2, 1}, {1, 2, 3, 4});
+  Tensor matrix2({2, 2}, {1, 2}, {1, 3, 2, 4});
+  EXPECT_TRUE(matrix1 == matrix2);
+}
