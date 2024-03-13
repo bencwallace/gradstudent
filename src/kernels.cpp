@@ -14,10 +14,8 @@ void multKernel(Tensor &result, const double scalar, const Tensor &tensor) {
 }
 
 void multKernel(Tensor &result, const Tensor &left, const Tensor &right) {
-  MultiIndex resultIdx(result.shape());
-  for (size_t i = 0; i < left.size(); ++i) {
+  for (MultiIndex resultIdx : MultiIndexRange(result.shape())) {
     result[resultIdx] = left[resultIdx] * right[resultIdx];
-    ++resultIdx;
   }
 }
 
