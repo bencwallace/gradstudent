@@ -31,11 +31,11 @@ void dotKernel(Tensor &result, const Tensor &left, const Tensor &right) {
   const Array &left_strides = left.strides();
   const Array &right_strides = right.strides();
 
-  MultiIndex resultMultiIndex = MultiIndex(result.shape());
-  for (size_t i = 0; i < result.size(); ++i) {
-    size_t thisIndex = left.toIndex(resultMultiIndex, 0, left.ndims() - 1);
+  size_t i = 0;
+  for (MultiIndex resultMultiIdx : MultiIndexRange(result.shape())) {
+    size_t thisIndex = left.toIndex(resultMultiIdx, 0, left.ndims() - 1);
     size_t otherIndex =
-        right.toIndex(resultMultiIndex, left.ndims() - 1, result.ndims());
+        right.toIndex(resultMultiIdx, left.ndims() - 1, result.ndims());
 
     result[i] = 0;
     for (size_t j = 0; j < left.shape()[left.ndims() - 1]; ++j) {
@@ -44,6 +44,6 @@ void dotKernel(Tensor &result, const Tensor &left, const Tensor &right) {
       otherIndex += right_strides[0];
     }
 
-    ++resultMultiIndex;
+    ++i;
   }
 }
