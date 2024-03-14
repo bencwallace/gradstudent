@@ -10,11 +10,11 @@
 class Tensor {
 
 private:
-  size_t offset_;
-  size_t size_;
+  const size_t offset_;
+  const size_t size_;
   const array_t shape_;
   const array_t strides_;
-  std::shared_ptr<TensorData> data_;
+  const std::shared_ptr<TensorData> data_;
 
   inline size_t toIndex(const array_t &mIdx) const {
     return sumProd(mIdx, strides_);

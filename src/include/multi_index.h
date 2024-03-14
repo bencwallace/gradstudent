@@ -7,7 +7,7 @@
 class MultiIndex {
 
 private:
-  std::unique_ptr<size_t[]> data_;
+  const std::unique_ptr<size_t[]> data_;
   bool isEnd_;
 
   void increment(size_t);
