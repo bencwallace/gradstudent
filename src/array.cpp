@@ -2,6 +2,7 @@
 #include <sstream>
 
 #include "array.h"
+#include "multi_index.h"
 
 Array::Array(const Array &array)
     : data(std::make_unique<size_t[]>(array.size)), size(array.size) {
@@ -15,6 +16,8 @@ Array::Array(std::initializer_list<size_t> data)
     : data(std::make_unique<size_t[]>(data.size())), size(data.size()) {
   std::copy(data.begin(), data.end(), this->data.get());
 }
+
+Array::Array(const MultiIndex &mIdx) : Array(mIdx.data()) {}
 
 Array Array::operator=(const Array &other) {
   if (size != other.size) {

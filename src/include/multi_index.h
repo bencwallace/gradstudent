@@ -2,9 +2,10 @@
 
 #include "array.h"
 
-class MultiIndex : public Array {
+class MultiIndex {
 
 private:
+  Array data_;
   const Array shape;
   const Array strides;
   const size_t offset;
@@ -20,6 +21,10 @@ public:
   size_t toIndex() const;
   size_t toIndex(size_t, size_t) const;
 
+  size_t size() const { return data_.size; };
+  Array data() const { return data_; }
+  size_t operator[](size_t i) const { return data_[i]; }
+  size_t &operator[](size_t i) { return data_[i]; }
   bool operator==(const MultiIndex &) const;
   bool operator!=(const MultiIndex &) const;
   MultiIndex operator++();

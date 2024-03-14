@@ -7,15 +7,15 @@
 /* MultiIndex */
 
 MultiIndex::MultiIndex(const Array &shape, const Array &strides, size_t offset)
-    : Array(zerosArray(shape.size)), shape(shape), strides(strides),
+    : data_(zerosArray(shape.size)), shape(shape), strides(strides),
       offset(offset) {}
 
 MultiIndex::MultiIndex(const MultiIndex &other)
-    : Array(other), shape(other.shape), strides(other.strides),
+    : data_(other.data_), shape(other.shape), strides(other.strides),
       offset(other.offset) {}
 
 bool MultiIndex::operator==(const MultiIndex &other) const {
-  if (size != other.size) {
+  if (size() != other.size()) {
     return false;
   }
   for (size_t i = 0; i < shape.size; ++i) {
@@ -47,7 +47,7 @@ MultiIndex &MultiIndex::operator=(const MultiIndex &other) {
     ss << "Expected multi-indices of equal shape, got shapes " << shape
        << "and " << other.shape;
   }
-  Array::operator=(other);
+  data_ = other.data_;
   return *this;
 }
 
@@ -63,16 +63,16 @@ size_t MultiIndex::toIndex(size_t start, size_t end) const {
     ss << "Multi-index start point must be non-negative, got " << start;
     throw std::invalid_argument(ss.str());
   }
-  if (end > size) {
+  if (end > size()) {
     std::stringstream ss;
-    ss << "Invalid end point " << end << " for multi-index of size " << size;
+    ss << "Invalid end point " << end << " for multi-index of size " << size();
     throw std::invalid_argument(ss.str());
   }
 
-  return offset + sumProd((*this), strides, start, end);
+  return offset + sumProd(this->data_, strides, start, end);
 }
 
-size_t MultiIndex::toIndex() const { return toIndex(0, size); }
+size_t MultiIndex::toIndex() const { return toIndex(0, size()); }
 
 MultiIndex MultiIndex::operator++() {
   if (shape.size > 0) {
@@ -137,7 +137,7 @@ MultiIndexIter::reference MultiIndexIter::operator*() const {
 MultiIndexIter::pointer MultiIndexIter::operator->() { return curr; }
 
 MultiIndexIter &MultiIndexIter::operator++() {
-  if (curr->size > 0) {
+  if (curr->size() > 0) {
     ++(*curr);
   } else {
     delete curr;
