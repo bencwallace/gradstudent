@@ -11,7 +11,9 @@ private:
 
 public:
   MultiIndex(const Array &);
+  MultiIndex(const MultiIndex &);
 
+  MultiIndex &operator=(const MultiIndex &);
   void setToEnd();
   bool operator==(const MultiIndex &) const;
   bool operator!=(const MultiIndex &) const;
@@ -31,9 +33,11 @@ public:
     using pointer = MultiIndex *;
     using reference = MultiIndex &;
 
+    MultiIndexIter(const MultiIndexIter &);
     MultiIndexIter(const Array &shape, bool end = false);
     ~MultiIndexIter();
 
+    MultiIndexIter &operator=(const MultiIndexIter &);
     reference operator*() const;
     pointer operator->();
     MultiIndexIter &operator++();
@@ -42,6 +46,8 @@ public:
     friend bool operator!=(const MultiIndexIter &, const MultiIndexIter &);
 
   private:
+    MultiIndexIter(value_type start);
+
     pointer curr;
   };
 

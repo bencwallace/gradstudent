@@ -8,6 +8,9 @@
 MultiIndex::MultiIndex(const Array &shape)
     : Array(zerosArray(shape.size)), shape(shape) {}
 
+MultiIndex::MultiIndex(const MultiIndex &other)
+    : Array(other), shape(other.shape) {}
+
 bool MultiIndex::operator==(const MultiIndex &other) const {
   if (size != other.size) {
     return false;
@@ -35,6 +38,16 @@ void MultiIndex::increment(size_t currDim) {
   }
 }
 
+MultiIndex &MultiIndex::operator=(const MultiIndex &other) {
+  if (shape != other.shape) {
+    std::stringstream ss;
+    ss << "Expected multi-indices of equal shape, got shapes " << shape
+       << "and " << other.shape;
+  }
+  Array::operator=(other);
+  return *this;
+}
+
 void MultiIndex::setToEnd() {
   for (size_t i = 0; i < shape.size; ++i) {
     (*this)[i] = -1;
@@ -60,6 +73,12 @@ MultiIndexIter MultiIndexRange::end() { return MultiIndexIter(shape, true); }
 
 /* MultiIndexIter */
 
+MultiIndexIter::MultiIndexIter(value_type start)
+    : curr(new value_type(start)) {}
+
+MultiIndexIter::MultiIndexIter(const MultiIndexIter &other)
+    : MultiIndexIter(*other.curr) {}
+
 MultiIndexIter::MultiIndexIter(const Array &shape, bool end)
     : curr(new MultiIndex(shape)) {
   if (end) {
@@ -76,6 +95,20 @@ MultiIndexIter::~MultiIndexIter() {
   if (curr) {
     delete curr;
   }
+}
+
+MultiIndexIter &MultiIndexIter::operator=(const MultiIndexIter &other) {
+  if (other.curr == nullptr && curr != nullptr) {
+    delete curr;
+    curr = nullptr;
+  } else if (other.curr != nullptr) {
+    if (curr == nullptr) {
+      curr = new MultiIndex(*other.curr);
+    } else {
+      *curr = *other.curr;
+    }
+  }
+  return *this;
 }
 
 MultiIndexIter::reference MultiIndexIter::operator*() const {
@@ -104,9 +137,6 @@ MultiIndexIter MultiIndexIter::operator++(int) {
 }
 
 bool operator==(const MultiIndexIter &a, const MultiIndexIter &b) {
-  // if (a.curr == nullptr || b.curr == nullptr) {
-  //   return false;
-  // }
   if (a.curr == nullptr || b.curr == nullptr) {
     return a.curr == b.curr;
   }
