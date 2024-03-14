@@ -12,20 +12,20 @@ Tensor::Tensor(const Tensor &other) : Tensor(other.shape_) {
 }
 
 // tensor view constructor
-Tensor::Tensor(const Array &shape, const Array &strides, const Tensor &tensor,
-               size_t offset)
-    : offset_(offset), size_(shape.prod()), shape_(shape), strides_(strides),
+Tensor::Tensor(const array_t &shape, const array_t &strides,
+               const Tensor &tensor, size_t offset)
+    : offset_(offset), size_(prod(shape)), shape_(shape), strides_(strides),
       data_(tensor.data_) {}
 
 // empty tensor constructor (default strides)
-Tensor::Tensor(const Array &shape)
-    : offset_(0), size_(shape.prod()), shape_(shape),
+Tensor::Tensor(const array_t &shape)
+    : offset_(0), size_(prod(shape)), shape_(shape),
       strides_(defaultStrides(shape)), data_(new TensorDataCpu(size_)) {}
 
 // non-empty tensor constructor
-Tensor::Tensor(const Array &shape, const Array &strides,
+Tensor::Tensor(const array_t &shape, const array_t &strides,
                std::initializer_list<double> data)
-    : offset_(0), size_(shape.prod()), shape_(shape), strides_(strides),
+    : offset_(0), size_(prod(shape)), shape_(shape), strides_(strides),
       data_(new TensorDataCpu(size_)) {
   if (data.size() > 0 && data.size() != this->data_->size()) {
     std::stringstream ss;
@@ -40,7 +40,7 @@ Tensor::Tensor(const Array &shape, const Array &strides,
 }
 
 // non-empty tensor constructor (default strides)
-Tensor::Tensor(const Array &shape, std::initializer_list<double> data)
+Tensor::Tensor(const array_t &shape, std::initializer_list<double> data)
     : Tensor(shape, defaultStrides(shape), data) {}
 
 // scalar tensor constructor

@@ -3,7 +3,6 @@
 #include <initializer_list>
 #include <memory>
 
-#include "array.h"
 #include "multi_index.h"
 #include "tensor_data.h"
 #include "utils.h"
@@ -13,37 +12,36 @@ class Tensor {
 private:
   size_t offset_;
   size_t size_;
-  Array shape_;
-  Array strides_;
+  const array_t shape_;
+  const array_t strides_;
   std::shared_ptr<TensorData> data_;
 
-  inline size_t toIndex(const Array &mIdx) const {
+  inline size_t toIndex(const array_t &mIdx) const {
     return sumProd(mIdx, strides_);
   }
   inline size_t toIndex(const MultiIndex &mIdx) const {
-    return sumProd(mIdx, strides_);
+    return sumProd(mIdx.data(), strides_);
   }
 
-  Array toMultiIndex(size_t) const;
   void checkCompatibleShape(const Tensor &) const;
 
 public:
   Tensor(const Tensor &);
-  explicit Tensor(const Array &shape, const Array &strides, const Tensor &,
+  explicit Tensor(const array_t &shape, const array_t &strides, const Tensor &,
                   size_t offset = 0);
 
-  Tensor(const Array &shape);
+  Tensor(const array_t &shape);
 
-  Tensor(const Array &shape, const Array &strides,
+  Tensor(const array_t &shape, const array_t &strides,
          std::initializer_list<double> data);
-  Tensor(const Array &shape, std::initializer_list<double> data);
+  Tensor(const array_t &shape, std::initializer_list<double> data);
   Tensor(double);
 
   Tensor &operator=(const Tensor &);
   double operator[](size_t) const;
   double &operator[](size_t);
-  double operator[](const Array &) const;
-  double &operator[](const Array &);
+  double operator[](const array_t &) const;
+  double &operator[](const array_t &);
   double operator[](const MultiIndex &mIdx) const;
   double &operator[](const MultiIndex &mIdx);
   Tensor operator+(const Tensor &) const;
@@ -55,12 +53,12 @@ public:
 
   MultiIndexIter multiIndexRange() const;
 
-  Tensor slice(const Array &mIdx);
+  Tensor slice(const array_t &mIdx);
 
   size_t size() const;
   size_t ndims() const;
-  const Array &shape() const;
-  const Array &strides() const;
+  const array_t &shape() const;
+  const array_t &strides() const;
 
   friend Tensor operator*(double, const Tensor &);
 };

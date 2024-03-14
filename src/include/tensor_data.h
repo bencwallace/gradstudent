@@ -1,7 +1,5 @@
 #include <memory>
 
-#include "array.h"
-
 class TensorData {
 
 protected:

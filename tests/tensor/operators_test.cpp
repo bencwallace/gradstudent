@@ -83,7 +83,7 @@ TEST(SubscriptSetTest, CustomStrides) {
 TEST(SumTest, Scalar) {
   Tensor scalar(24);
   Tensor sum = scalar + scalar;
-  EXPECT_EQ(sum.shape(), Array{});
+  EXPECT_EQ(sum.shape(), array_t{});
   EXPECT_EQ(sum.size(), 1);
   EXPECT_EQ(sum[0], 48);
 }
@@ -93,7 +93,7 @@ TEST(SumTest, Matrix) {
   Tensor matrix2({2, 2}, {1, 3, 2, 4});
   Tensor matrix3 = matrix2 + matrix1;
 
-  EXPECT_EQ(matrix3.shape(), Array({2, 2}));
+  EXPECT_EQ(matrix3.shape(), array_t({2, 2}));
   EXPECT_EQ(matrix3.size(), 4);
 
   EXPECT_EQ((matrix3[0]), 2);
@@ -107,7 +107,7 @@ TEST(SumTest, StridedMatrix) {
   Tensor matrix2({2, 2}, {1, 2}, {1, 3, 2, 4});
   Tensor matrix3 = matrix2 + matrix1;
 
-  EXPECT_EQ(matrix3.shape(), Array({2, 2}));
+  EXPECT_EQ(matrix3.shape(), array_t({2, 2}));
   EXPECT_EQ(matrix3.size(), 4);
 
   EXPECT_EQ((matrix3[0]), 2);
@@ -135,7 +135,7 @@ TEST(ScalarProdTest, Scalar) {
   Tensor scalar(24);
   Tensor multiple = 5 * scalar;
 
-  EXPECT_EQ(multiple.shape(), Array{});
+  EXPECT_EQ(multiple.shape(), array_t{});
   EXPECT_EQ(multiple.size(), 1);
   EXPECT_EQ(multiple[0], 120);
 }
@@ -144,7 +144,7 @@ TEST(ScalarProdTest, Matrix) {
   Tensor matrix({2, 2}, {1, 2, 3, 4});
   Tensor multiple = 5 * matrix;
 
-  EXPECT_EQ(multiple.shape(), Array({2, 2}));
+  EXPECT_EQ(multiple.shape(), array_t({2, 2}));
   EXPECT_EQ(multiple.size(), 4);
 
   EXPECT_EQ((multiple[0]), 5);
@@ -157,7 +157,7 @@ TEST(ScalarProdTest, StridedMatrix) {
   Tensor matrix({2, 2}, {1, 2}, {1, 3, 2, 4});
   Tensor multiple = 5 * matrix;
 
-  EXPECT_EQ(multiple.shape(), Array({2, 2}));
+  EXPECT_EQ(multiple.shape(), array_t({2, 2}));
   EXPECT_EQ(multiple.size(), 4);
 
   EXPECT_EQ((multiple[0]), 5);
@@ -169,7 +169,7 @@ TEST(ScalarProdTest, StridedMatrix) {
 TEST(DiffTest, Scalar) {
   Tensor scalar(24);
   Tensor diff = scalar - scalar;
-  EXPECT_EQ(diff.shape(), Array{});
+  EXPECT_EQ(diff.shape(), array_t{});
   EXPECT_EQ(diff.size(), 1);
   EXPECT_EQ(diff[0], 0);
 }
@@ -178,7 +178,7 @@ TEST(DiffTest, Matrix) {
   Tensor matrix({2, 2}, {1, 2, 3, 4});
   Tensor diff = matrix - matrix;
 
-  EXPECT_EQ(diff.shape(), Array({2, 2}));
+  EXPECT_EQ(diff.shape(), array_t({2, 2}));
   EXPECT_EQ(diff.size(), 4);
 
   EXPECT_EQ((diff[0]), 0);
@@ -192,7 +192,7 @@ TEST(DiffTest, StridedMatrix) {
   Tensor matrix2({2, 2}, {1, 2}, {1, 2, 3, 4});
   Tensor diff = matrix1 - matrix2;
 
-  EXPECT_EQ(diff.shape(), Array({2, 2}));
+  EXPECT_EQ(diff.shape(), array_t({2, 2}));
   EXPECT_EQ(diff.size(), 4);
 
   EXPECT_EQ((diff[0]), 0);
@@ -202,10 +202,10 @@ TEST(DiffTest, StridedMatrix) {
 }
 
 TEST(CopyTest, Vector) {
-  Tensor vector1(Array({4}));
+  Tensor vector1(array_t({4}));
   Tensor vector2({4}, {1, 2, 3, 4});
   vector1 = vector2;
-  EXPECT_EQ(vector1.shape(), Array({4}));
+  EXPECT_EQ(vector1.shape(), array_t({4}));
   EXPECT_EQ(vector1, vector2);
 }
 
@@ -213,7 +213,7 @@ TEST(CopyTest, Matrix) {
   Tensor matrix1({2, 2});
   Tensor matrix2({2, 2}, {1, 2, 3, 4});
   matrix1 = matrix2;
-  EXPECT_EQ(matrix1.shape(), Array({2, 2}));
+  EXPECT_EQ(matrix1.shape(), array_t({2, 2}));
   EXPECT_EQ(matrix1, matrix2);
 }
 
@@ -232,7 +232,7 @@ TEST(ProdTest, Matrix) {
   Tensor matrix2({2, 2}, {1, 3, 2, 4});
   Tensor matrix3 = matrix2 * matrix1;
 
-  EXPECT_EQ(matrix3.shape(), Array({2, 2}));
+  EXPECT_EQ(matrix3.shape(), array_t({2, 2}));
 
   EXPECT_EQ((matrix3[0]), 1);
   EXPECT_EQ((matrix3[1]), 6);

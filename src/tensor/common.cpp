@@ -7,16 +7,6 @@ MultiIndexIter Tensor::multiIndexRange() const {
   return MultiIndexIter(shape_, strides_, offset_);
 }
 
-Array Tensor::toMultiIndex(size_t idx) const {
-  // Not guaranteed to work for arrays with non-standard strides
-  Array result(ndims());
-  for (size_t i = 0; i < ndims(); ++i) {
-    result[i] = idx / strides_[i];
-    idx -= result[i] * strides_[i];
-  }
-  return result;
-}
-
 void Tensor::checkCompatibleShape(const Tensor &other) const {
   if (ndims() != other.ndims()) {
     std::ostringstream ss;
@@ -31,8 +21,8 @@ void Tensor::checkCompatibleShape(const Tensor &other) const {
 
 size_t Tensor::size() const { return size_; }
 
-size_t Tensor::ndims() const { return shape_.size; }
+size_t Tensor::ndims() const { return shape_.size(); }
 
-const Array &Tensor::shape() const { return shape_; }
+const array_t &Tensor::shape() const { return shape_; }
 
-const Array &Tensor::strides() const { return strides_; }
+const array_t &Tensor::strides() const { return strides_; }

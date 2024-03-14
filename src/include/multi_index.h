@@ -1,6 +1,8 @@
 #pragma once
 
-#include "array.h"
+#include <memory>
+
+#include "utils.h"
 
 class MultiIndex {
 
@@ -11,12 +13,12 @@ private:
   void increment(size_t);
 
 public:
-  const Array shape;
-  const Array strides;
+  const array_t shape;
+  const array_t strides;
   const size_t offset;
 
   MultiIndex(const MultiIndex &);
-  MultiIndex(const Array &, const Array &, const size_t);
+  MultiIndex(const array_t &, const array_t &, const size_t);
 
   MultiIndex &operator=(const MultiIndex &);
 
@@ -25,7 +27,7 @@ public:
   inline size_t toIndex() const { return toIndex(0, size()); }
   size_t toIndex(size_t, size_t) const;
 
-  inline size_t size() const { return shape.size; };
+  inline size_t size() const { return shape.size(); };
   inline const std::unique_ptr<size_t[]> &data() const { return data_; }
 
   inline size_t operator[](size_t i) const { return data_[i]; }
@@ -49,7 +51,7 @@ public:
   using reference = MultiIndex &;
 
   MultiIndexIter(const MultiIndexIter &);
-  MultiIndexIter(const Array &shape, const Array &strides, size_t offset,
+  MultiIndexIter(const array_t &shape, const array_t &strides, size_t offset,
                  bool end = false);
   ~MultiIndexIter();
 
@@ -62,8 +64,8 @@ public:
   friend bool operator==(const MultiIndexIter &, const MultiIndexIter &);
   friend bool operator!=(const MultiIndexIter &, const MultiIndexIter &);
 
-  inline const Array &shape() { return curr->shape; }
-  inline const Array &strides() { return curr->strides; }
+  inline const array_t &shape() { return curr->shape; }
+  inline const array_t &strides() { return curr->strides; }
   inline size_t offset() { return curr->offset; }
 
   MultiIndexIter begin();

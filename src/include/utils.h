@@ -1,17 +1,31 @@
 #pragma once
 
-#include "array.h"
-#include "multi_index.h"
+#include <cstddef>
+#include <memory>
+#include <ostream>
+#include <vector>
 
-Array defaultStrides(const Array &shape);
+using array_t = std::vector<size_t>;
 
-size_t sumProd(const Array &, const Array &, size_t start, size_t end);
-size_t sumProd(const MultiIndex &, const Array &, size_t start, size_t end);
+array_t defaultStrides(const array_t &shape);
 
-inline size_t sumProd(const Array &left, const Array &right) {
-  return sumProd(left, right, 0, left.size);
-}
+size_t sumProd(const array_t &left, const array_t &right, size_t start,
+               size_t end);
 
-inline size_t sumProd(const MultiIndex &left, const Array &right) {
-  return sumProd(left, right, 0, left.size());
-}
+size_t sumProd(const array_t &left, const array_t &right);
+
+size_t sumProd(const std::unique_ptr<const size_t[]> &ptr, const array_t &array,
+               size_t start, size_t end);
+
+size_t sumProd(const std::unique_ptr<const size_t[]> &ptr,
+               const array_t &array);
+
+size_t sumProd(const std::unique_ptr<size_t[]> &ptr, const array_t &array,
+               size_t start, size_t end);
+
+size_t sumProd(const std::unique_ptr<size_t[]> &ptr, const array_t &array);
+
+size_t prod(const array_t &array);
+
+template <typename T>
+std::ostream &operator<<(std::ostream &, const std::vector<T> &);

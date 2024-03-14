@@ -23,11 +23,13 @@ double Tensor::operator[](size_t i) const { return (*data_)[offset_ + i]; }
 
 double &Tensor::operator[](size_t i) { return (*data_)[offset_ + i]; }
 
-double Tensor::operator[](const Array &mIdx) const {
+double Tensor::operator[](const array_t &mIdx) const {
   return (*this)[toIndex(mIdx)];
 }
 
-double &Tensor::operator[](const Array &mIdx) { return (*this)[toIndex(mIdx)]; }
+double &Tensor::operator[](const array_t &mIdx) {
+  return (*this)[toIndex(mIdx)];
+}
 
 double Tensor::operator[](const MultiIndex &mIdx) const {
   return (*this)[toIndex(mIdx)];

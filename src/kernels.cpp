@@ -27,15 +27,15 @@ void negKernel(Tensor &result, const Tensor &tensor) {
 }
 
 void dotKernel(Tensor &result, const Tensor &left, const Tensor &right) {
-  const Array &left_strides = left.strides();
-  const Array &right_strides = right.strides();
+  const array_t &left_strides = left.strides();
+  const array_t &right_strides = right.strides();
 
   size_t i = 0;
   for (MultiIndex resultMultiIdx : result.multiIndexRange()) {
     // TODO: find a better way to do this
     size_t thisIndex =
-        sumProd(resultMultiIdx, left.strides(), 0, left.ndims() - 1);
-    size_t otherIndex = sumProd(resultMultiIdx, right.strides(),
+        sumProd(resultMultiIdx.data(), left.strides(), 0, left.ndims() - 1);
+    size_t otherIndex = sumProd(resultMultiIdx.data(), right.strides(),
                                 left.ndims() - 1, result.ndims());
 
     result[i] = 0;

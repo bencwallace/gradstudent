@@ -6,18 +6,19 @@
 
 /* MultiIndex */
 
-MultiIndex::MultiIndex(const Array &shape, const Array &strides, size_t offset)
-    : data_(std::make_unique<size_t[]>(shape.size)), shape(shape),
+MultiIndex::MultiIndex(const array_t &shape, const array_t &strides,
+                       size_t offset)
+    : data_(std::make_unique<size_t[]>(shape.size())), shape(shape),
       strides(strides), offset(offset) {
-  for (size_t i = 0; i < shape.size; ++i) {
+  for (size_t i = 0; i < shape.size(); ++i) {
     data_[i] = 0;
   }
 }
 
 MultiIndex::MultiIndex(const MultiIndex &other)
-    : data_(std::make_unique<size_t[]>(other.shape.size)), shape(other.shape),
+    : data_(std::make_unique<size_t[]>(other.size())), shape(other.shape),
       strides(other.strides), offset(other.offset) {
-  for (size_t i = 0; i < shape.size; ++i) {
+  for (size_t i = 0; i < size(); ++i) {
     data_[i] = other.data_[i];
   }
 }
@@ -26,7 +27,7 @@ bool MultiIndex::operator==(const MultiIndex &other) const {
   if (size() != other.size()) {
     return false;
   }
-  for (size_t i = 0; i < shape.size; ++i) {
+  for (size_t i = 0; i < size(); ++i) {
     if ((*this)[i] != other[i]) {
       return false;
     }
@@ -51,14 +52,14 @@ MultiIndex &MultiIndex::operator=(const MultiIndex &other) {
     ss << "Expected multi-indices of equal shape, got shapes " << shape
        << "and " << other.shape;
   }
-  for (size_t i = 0; i < shape.size; ++i) {
+  for (size_t i = 0; i < size(); ++i) {
     data_[i] = other.data_[i];
   }
   return *this;
 }
 
 void MultiIndex::setToEnd() {
-  for (size_t i = 0; i < shape.size; ++i) {
+  for (size_t i = 0; i < size(); ++i) {
     (*this)[i] = -1;
   }
   isEnd_ = true;
@@ -76,12 +77,12 @@ size_t MultiIndex::toIndex(size_t start, size_t end) const {
     throw std::invalid_argument(ss.str());
   }
 
-  return offset + sumProd(*this, strides, start, end);
+  return offset + sumProd(this->data(), strides, start, end);
 }
 
 MultiIndex MultiIndex::operator++() {
-  if (shape.size > 0) {
-    increment(shape.size - 1);
+  if (size() > 0) {
+    increment(size() - 1);
   }
   return *this;
 }
@@ -97,7 +98,7 @@ MultiIndexIter MultiIndexIter::end() {
 MultiIndexIter::MultiIndexIter(const MultiIndexIter &other)
     : curr(new value_type(*other.curr)) {}
 
-MultiIndexIter::MultiIndexIter(const Array &shape, const Array &strides,
+MultiIndexIter::MultiIndexIter(const array_t &shape, const array_t &strides,
                                size_t offset, bool end)
     : curr(new MultiIndex(shape, strides, offset)) {
   if (end) {
