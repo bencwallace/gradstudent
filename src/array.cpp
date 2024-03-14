@@ -17,8 +17,6 @@ Array::Array(std::initializer_list<size_t> data)
   std::copy(data.begin(), data.end(), this->data.get());
 }
 
-Array::Array(const MultiIndex &mIdx) : Array(mIdx.data()) {}
-
 Array Array::operator=(const Array &other) {
   if (size != other.size) {
     std::stringstream ss;

@@ -37,6 +37,12 @@ public:
   double &operator[](size_t);
   double operator[](const Array &) const;
   double &operator[](const Array &);
+  inline double operator[](const MultiIndex &mIdx) const {
+    return (*this)[mIdx.data()];
+  }
+  inline double &operator[](const MultiIndex &mIdx) {
+    return (*this)[mIdx.data()];
+  }
   Tensor operator+(const Tensor &) const;
   Tensor operator-() const;
   Tensor operator-(const Tensor &) const;

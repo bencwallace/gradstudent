@@ -16,7 +16,6 @@ public:
   Array(const Array &);
   Array(size_t size);
   Array(std::initializer_list<size_t>);
-  Array(const MultiIndex &mIdx);
 
   Array operator=(const Array &);
   size_t operator[](size_t) const;
