@@ -44,7 +44,7 @@ public:
   bool operator==(const Tensor &) const;
   explicit operator double() const;
 
-  MultiIndexRange multiIndexRange() const;
+  MultiIndexIter multiIndexRange() const;
 
   Tensor slice(const Array &mIdx);
 

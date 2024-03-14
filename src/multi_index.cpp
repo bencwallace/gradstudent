@@ -81,33 +81,22 @@ MultiIndex MultiIndex::operator++() {
   return *this;
 }
 
-/* MultiIndexRange */
+/* MultiIndexIter */
 
-MultiIndexRange::MultiIndexRange(const Array &shape, const Array &strides,
-                                 size_t offset)
-    : shape(shape), strides(strides), offset(offset) {}
+MultiIndexIter MultiIndexIter::begin() { return *this; }
 
-using MultiIndexIter = MultiIndexRange::MultiIndexIter;
-
-MultiIndexIter MultiIndexRange::begin() {
-  return MultiIndexIter(shape, strides, offset);
-}
-
-MultiIndexIter MultiIndexRange::end() {
+MultiIndexIter MultiIndexIter::end() {
   return MultiIndexIter(shape, strides, offset, true);
 }
 
-/* MultiIndexIter */
-
-MultiIndexIter::MultiIndexIter(value_type start)
-    : curr(new value_type(start)) {}
-
 MultiIndexIter::MultiIndexIter(const MultiIndexIter &other)
-    : MultiIndexIter(*other.curr) {}
+    : shape(other.shape), strides(other.strides), offset(other.offset),
+      curr(new value_type(*other.curr)) {}
 
 MultiIndexIter::MultiIndexIter(const Array &shape, const Array &strides,
                                size_t offset, bool end)
-    : curr(new MultiIndex(shape, strides, offset)) {
+    : shape(shape), strides(strides), offset(offset),
+      curr(new MultiIndex(shape, strides, offset)) {
   if (end) {
     if (shape.size > 0) {
       curr->setToEnd();

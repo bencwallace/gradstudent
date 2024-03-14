@@ -4,12 +4,11 @@
 #include "utils.h"
 
 size_t Tensor::toIndex(const Array &mIdx) const {
-  // return toIndex(mIdx, 0, mIdx.size);
   return sumProd(mIdx, strides_);
 }
 
-MultiIndexRange Tensor::multiIndexRange() const {
-  return MultiIndexRange(shape_, strides_, offset_);
+MultiIndexIter Tensor::multiIndexRange() const {
+  return MultiIndexIter(shape_, strides_, offset_);
 }
 
 Array Tensor::toMultiIndex(size_t idx) const {
