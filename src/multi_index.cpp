@@ -6,18 +6,15 @@
 
 /* MultiIndex */
 
-MultiIndex::MultiIndex(const array_t &shape, const array_t &strides,
-                       size_t offset)
-    : data_(std::make_unique<size_t[]>(shape.size())), shape(shape),
-      strides(strides), offset(offset) {
+MultiIndex::MultiIndex(const array_t &shape)
+    : data_(std::make_unique<size_t[]>(shape.size())), shape(shape) {
   for (size_t i = 0; i < shape.size(); ++i) {
     data_[i] = 0;
   }
 }
 
 MultiIndex::MultiIndex(const MultiIndex &other)
-    : data_(std::make_unique<size_t[]>(other.size())), shape(other.shape),
-      strides(other.strides), offset(other.offset) {
+    : data_(std::make_unique<size_t[]>(other.size())), shape(other.shape) {
   for (size_t i = 0; i < size(); ++i) {
     data_[i] = other.data_[i];
   }
@@ -65,21 +62,6 @@ void MultiIndex::setToEnd() {
   isEnd_ = true;
 }
 
-size_t MultiIndex::toIndex(size_t start, size_t end) const {
-  if (start < 0) {
-    std::stringstream ss;
-    ss << "Multi-index start point must be non-negative, got " << start;
-    throw std::invalid_argument(ss.str());
-  }
-  if (end > size()) {
-    std::stringstream ss;
-    ss << "Invalid end point " << end << " for multi-index of size " << size();
-    throw std::invalid_argument(ss.str());
-  }
-
-  return offset + sumProd(this->data(), strides, start, end);
-}
-
 MultiIndex MultiIndex::operator++() {
   if (size() > 0) {
     increment(size() - 1);
@@ -91,16 +73,13 @@ MultiIndex MultiIndex::operator++() {
 
 MultiIndexIter MultiIndexIter::begin() { return *this; }
 
-MultiIndexIter MultiIndexIter::end() {
-  return MultiIndexIter(shape(), strides(), offset(), true);
-}
+MultiIndexIter MultiIndexIter::end() { return MultiIndexIter(shape(), true); }
 
 MultiIndexIter::MultiIndexIter(const MultiIndexIter &other)
     : curr(new value_type(*other.curr)) {}
 
-MultiIndexIter::MultiIndexIter(const array_t &shape, const array_t &strides,
-                               size_t offset, bool end)
-    : curr(new MultiIndex(shape, strides, offset)) {
+MultiIndexIter::MultiIndexIter(const array_t &shape, bool end)
+    : curr(new MultiIndex(shape)) {
   if (end) {
     curr->setToEnd();
   }

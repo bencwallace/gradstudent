@@ -4,7 +4,7 @@
 #include "utils.h"
 
 MultiIndexIter Tensor::multiIndexRange() const {
-  return MultiIndexIter(shape_, strides_, offset_);
+  return MultiIndexIter(shape_);
 }
 
 void Tensor::checkCompatibleShape(const Tensor &other) const {
