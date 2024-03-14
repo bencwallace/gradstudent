@@ -55,6 +55,7 @@ void MultiIndex::setToEnd() {
   for (size_t i = 0; i < shape.size; ++i) {
     (*this)[i] = -1;
   }
+  isEnd = true;
 }
 
 size_t MultiIndex::toIndex(size_t start, size_t end) const {
@@ -98,12 +99,7 @@ MultiIndexIter::MultiIndexIter(const Array &shape, const Array &strides,
     : shape(shape), strides(strides), offset(offset),
       curr(new MultiIndex(shape, strides, offset)) {
   if (end) {
-    if (shape.size > 0) {
-      curr->setToEnd();
-    } else {
-      delete curr;
-      curr = nullptr;
-    }
+    curr->setToEnd();
   }
 }
 
@@ -114,16 +110,7 @@ MultiIndexIter::~MultiIndexIter() {
 }
 
 MultiIndexIter &MultiIndexIter::operator=(const MultiIndexIter &other) {
-  if (other.curr == nullptr && curr != nullptr) {
-    delete curr;
-    curr = nullptr;
-  } else if (other.curr != nullptr) {
-    if (curr == nullptr) {
-      curr = new MultiIndex(*other.curr);
-    } else {
-      *curr = *other.curr;
-    }
-  }
+  *curr = *other.curr;
   return *this;
 }
 
@@ -140,8 +127,7 @@ MultiIndexIter &MultiIndexIter::operator++() {
   if (curr->size() > 0) {
     ++(*curr);
   } else {
-    delete curr;
-    curr = nullptr;
+    curr->isEnd = true;
   }
   return *this;
 }
@@ -153,15 +139,15 @@ MultiIndexIter MultiIndexIter::operator++(int) {
 }
 
 bool operator==(const MultiIndexIter &a, const MultiIndexIter &b) {
-  if (a.curr == nullptr || b.curr == nullptr) {
-    return a.curr == b.curr;
+  if (a.curr->size() == 0 || b.curr->size() == 0) {
+    if (a.curr->size() > 0 || b.curr->size() > 0) {
+      return false;
+    }
+    return a.curr->isEnd == b.curr->isEnd;
   }
   return *a.curr == *b.curr;
 };
 
 bool operator!=(const MultiIndexIter &a, const MultiIndexIter &b) {
-  if (a.curr == nullptr || b.curr == nullptr) {
-    return a.curr != b.curr;
-  }
-  return *a.curr != *b.curr;
+  return !(a == b);
 };

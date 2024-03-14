@@ -13,6 +13,8 @@ private:
   void increment(size_t);
 
 public:
+  bool isEnd;
+
   MultiIndex(const MultiIndex &);
   MultiIndex(const Array &, const Array &, const size_t);
 
