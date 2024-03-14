@@ -18,8 +18,10 @@ public:
   Array(std::initializer_list<size_t>);
 
   Array operator=(const Array &);
-  size_t operator[](size_t) const;
-  size_t &operator[](size_t);
+
+  size_t operator[](size_t i) const { return data[i]; }
+  size_t &operator[](size_t i) { return data[i]; }
+
   bool operator==(const Array &) const;
   bool operator!=(const Array &) const;
 

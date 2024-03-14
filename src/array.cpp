@@ -28,10 +28,6 @@ Array Array::operator=(const Array &other) {
   return *this;
 }
 
-size_t Array::operator[](size_t i) const { return data[i]; }
-
-size_t &Array::operator[](size_t i) { return data[i]; }
-
 bool Array::operator==(const Array &other) const {
   if (size != other.size) {
     return false;

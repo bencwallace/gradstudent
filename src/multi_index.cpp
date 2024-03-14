@@ -26,10 +26,6 @@ bool MultiIndex::operator==(const MultiIndex &other) const {
   return true;
 }
 
-bool MultiIndex::operator!=(const MultiIndex &other) const {
-  return !((*this) == other);
-}
-
 void MultiIndex::increment(size_t currDim) {
   if ((*this)[currDim] < shape[currDim] - 1) {
     ++(*this)[currDim];
@@ -72,8 +68,6 @@ size_t MultiIndex::toIndex(size_t start, size_t end) const {
 
   return offset + sumProd(this->data_, strides, start, end);
 }
-
-size_t MultiIndex::toIndex() const { return toIndex(0, size()); }
 
 MultiIndex MultiIndex::operator++() {
   if (shape.size > 0) {
@@ -119,8 +113,6 @@ MultiIndexIter::reference MultiIndexIter::operator*() const {
   throw std::out_of_range("Iteration complete.");
 }
 
-MultiIndexIter::pointer MultiIndexIter::operator->() { return curr; }
-
 MultiIndexIter &MultiIndexIter::operator++() {
   if (curr->size() > 0) {
     ++(*curr);
@@ -144,8 +136,4 @@ bool operator==(const MultiIndexIter &a, const MultiIndexIter &b) {
     return a.curr->isEnd() == b.curr->isEnd();
   }
   return *a.curr == *b.curr;
-};
-
-bool operator!=(const MultiIndexIter &a, const MultiIndexIter &b) {
-  return !(a == b);
 };

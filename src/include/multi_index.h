@@ -19,17 +19,23 @@ public:
   MultiIndex(const Array &, const Array &, const size_t);
 
   MultiIndex &operator=(const MultiIndex &);
+
   inline bool isEnd() const { return isEnd_; }
   void setToEnd();
-  size_t toIndex() const;
+  inline size_t toIndex() const { return toIndex(0, size()); }
   size_t toIndex(size_t, size_t) const;
 
   inline size_t size() const { return data_.size; };
   inline const Array &data() const { return data_; }
-  size_t operator[](size_t i) const { return data_[i]; }
-  size_t &operator[](size_t i) { return data_[i]; }
+
+  inline size_t operator[](size_t i) const { return data_[i]; }
+  inline size_t &operator[](size_t i) { return data_[i]; }
+
   bool operator==(const MultiIndex &) const;
-  bool operator!=(const MultiIndex &) const;
+  inline bool operator!=(const MultiIndex &other) const {
+    return !((*this) == other);
+  }
+
   MultiIndex operator++();
 };
 
@@ -48,8 +54,9 @@ public:
   ~MultiIndexIter();
 
   MultiIndexIter &operator=(const MultiIndexIter &);
+
   reference operator*() const;
-  pointer operator->();
+  inline pointer operator->() { return curr; }
   MultiIndexIter &operator++();
   MultiIndexIter operator++(int);
   friend bool operator==(const MultiIndexIter &, const MultiIndexIter &);
@@ -64,4 +71,8 @@ public:
 
 private:
   pointer curr;
+};
+
+inline bool operator!=(const MultiIndexIter &a, const MultiIndexIter &b) {
+  return !(a == b);
 };
