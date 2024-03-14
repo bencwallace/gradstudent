@@ -7,14 +7,14 @@
 /* MultiIndex */
 
 MultiIndex::MultiIndex(const array_t &shape)
-    : data_(std::make_unique<size_t[]>(shape.size())), shape(shape) {
+    : data_(std::make_unique<size_t[]>(shape.size())), shape_(shape) {
   for (size_t i = 0; i < shape.size(); ++i) {
     data_[i] = 0;
   }
 }
 
 MultiIndex::MultiIndex(const MultiIndex &other)
-    : data_(std::make_unique<size_t[]>(other.size())), shape(other.shape) {
+    : data_(std::make_unique<size_t[]>(other.size())), shape_(other.shape_) {
   for (size_t i = 0; i < size(); ++i) {
     data_[i] = other.data_[i];
   }
@@ -33,7 +33,7 @@ bool MultiIndex::operator==(const MultiIndex &other) const {
 }
 
 void MultiIndex::increment(size_t currDim) {
-  if ((*this)[currDim] < shape[currDim] - 1) {
+  if ((*this)[currDim] < shape_[currDim] - 1) {
     ++(*this)[currDim];
   } else if (currDim > 0) {
     (*this)[currDim] = 0;
@@ -44,10 +44,10 @@ void MultiIndex::increment(size_t currDim) {
 }
 
 MultiIndex &MultiIndex::operator=(const MultiIndex &other) {
-  if (shape != other.shape) {
+  if (shape_ != other.shape_) {
     std::stringstream ss;
-    ss << "Expected multi-indices of equal shape, got shapes " << shape
-       << "and " << other.shape;
+    ss << "Expected multi-indices of equal shape, got shapes " << shape_
+       << "and " << other.shape_;
   }
   for (size_t i = 0; i < size(); ++i) {
     data_[i] = other.data_[i];

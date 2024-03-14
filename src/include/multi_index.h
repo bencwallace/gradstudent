@@ -9,12 +9,11 @@ class MultiIndex {
 private:
   const std::unique_ptr<size_t[]> data_;
   bool isEnd_;
+  const array_t shape_;
 
   void increment(size_t);
 
 public:
-  const array_t shape;
-
   MultiIndex(const MultiIndex &);
   MultiIndex(const array_t &);
 
@@ -23,8 +22,8 @@ public:
   inline bool isEnd() const { return isEnd_; }
   void setToEnd();
 
-  inline size_t size() const { return shape.size(); };
-  inline const std::unique_ptr<size_t[]> &data() const { return data_; }
+  inline const array_t &shape() const { return shape_; }
+  inline size_t size() const { return shape_.size(); };
 
   inline size_t operator[](size_t i) const { return data_[i]; }
   inline size_t &operator[](size_t i) { return data_[i]; }
@@ -59,7 +58,7 @@ public:
   friend bool operator==(const MultiIndexIter &, const MultiIndexIter &);
   friend bool operator!=(const MultiIndexIter &, const MultiIndexIter &);
 
-  inline const array_t &shape() { return curr->shape; }
+  inline const array_t &shape() { return curr->shape(); }
 
   MultiIndexIter begin();
   MultiIndexIter end();

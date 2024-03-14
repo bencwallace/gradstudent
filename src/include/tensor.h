@@ -31,19 +31,28 @@ public:
                   size_t offset = 0);
 
   Tensor(const array_t &shape);
-
   Tensor(const array_t &shape, const array_t &strides,
          std::initializer_list<double> data);
   Tensor(const array_t &shape, std::initializer_list<double> data);
   Tensor(double);
 
   Tensor &operator=(const Tensor &);
-  double operator[](size_t) const;
-  double &operator[](size_t);
-  double operator[](const array_t &) const;
-  double &operator[](const array_t &);
-  double operator[](const MultiIndex &mIdx) const;
-  double &operator[](const MultiIndex &mIdx);
+
+  inline double operator[](size_t i) const { return (*data_)[offset_ + i]; }
+  inline double &operator[](size_t i) { return (*data_)[offset_ + i]; }
+  inline double operator[](const array_t &mIdx) const {
+    return (*this)[toIndex(mIdx)];
+  }
+  inline double &operator[](const array_t &mIdx) {
+    return (*this)[toIndex(mIdx)];
+  }
+  inline double operator[](const MultiIndex &mIdx) const {
+    return (*this)[toIndex(mIdx)];
+  }
+  inline double &operator[](const MultiIndex &mIdx) {
+    return (*this)[toIndex(mIdx)];
+  }
+
   Tensor operator+(const Tensor &) const;
   Tensor operator-() const;
   Tensor operator-(const Tensor &) const;
@@ -51,14 +60,16 @@ public:
   bool operator==(const Tensor &) const;
   explicit operator double() const;
 
-  MultiIndexIter multiIndexRange() const;
+  inline MultiIndexIter multiIndexRange() const {
+    return MultiIndexIter(shape_);
+  }
 
   Tensor slice(const array_t &mIdx);
 
-  size_t size() const;
-  size_t ndims() const;
-  const array_t &shape() const;
-  const array_t &strides() const;
+  inline size_t size() const { return size_; }
+  inline size_t ndims() const { return shape_.size(); }
+  inline const array_t &shape() const { return shape_; }
+  inline const array_t &strides() const { return strides_; }
 
   friend Tensor operator*(double, const Tensor &);
 };
