@@ -20,7 +20,7 @@ private:
     return sumProd(mIdx, strides_);
   }
   inline size_t toIndex(const MultiIndex &mIdx) const {
-    return sumProd(mIdx.data(), strides_);
+    return sumProd(mIdx, strides_);
   }
 
   void checkCompatibleShape(const Tensor &) const;
