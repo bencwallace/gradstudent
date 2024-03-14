@@ -55,7 +55,7 @@ void MultiIndex::setToEnd() {
   for (size_t i = 0; i < shape.size; ++i) {
     (*this)[i] = -1;
   }
-  isEnd = true;
+  isEnd_ = true;
 }
 
 size_t MultiIndex::toIndex(size_t start, size_t end) const {
@@ -125,7 +125,7 @@ MultiIndexIter &MultiIndexIter::operator++() {
   if (curr->size() > 0) {
     ++(*curr);
   } else {
-    curr->isEnd = true;
+    curr->setToEnd();
   }
   return *this;
 }
@@ -141,7 +141,7 @@ bool operator==(const MultiIndexIter &a, const MultiIndexIter &b) {
     if (a.curr->size() > 0 || b.curr->size() > 0) {
       return false;
     }
-    return a.curr->isEnd == b.curr->isEnd;
+    return a.curr->isEnd() == b.curr->isEnd();
   }
   return *a.curr == *b.curr;
 };

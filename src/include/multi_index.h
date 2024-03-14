@@ -6,6 +6,7 @@ class MultiIndex {
 
 private:
   Array data_;
+  bool isEnd_;
 
   void increment(size_t);
 
@@ -13,12 +14,12 @@ public:
   const Array shape;
   const Array strides;
   const size_t offset;
-  bool isEnd;
 
   MultiIndex(const MultiIndex &);
   MultiIndex(const Array &, const Array &, const size_t);
 
   MultiIndex &operator=(const MultiIndex &);
+  inline bool isEnd() const { return isEnd_; }
   void setToEnd();
   size_t toIndex() const;
   size_t toIndex(size_t, size_t) const;
