@@ -5,7 +5,7 @@
 class MultiIndex {
 
 private:
-  Array data_;
+  std::unique_ptr<size_t[]> data_;
   bool isEnd_;
 
   void increment(size_t);
@@ -25,8 +25,8 @@ public:
   inline size_t toIndex() const { return toIndex(0, size()); }
   size_t toIndex(size_t, size_t) const;
 
-  inline size_t size() const { return data_.size; };
-  inline const Array &data() const { return data_; }
+  inline size_t size() const { return shape.size; };
+  inline const std::unique_ptr<size_t[]> &data() const { return data_; }
 
   inline size_t operator[](size_t i) const { return data_[i]; }
   inline size_t &operator[](size_t i) { return data_[i]; }

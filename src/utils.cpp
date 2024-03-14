@@ -19,3 +19,12 @@ size_t sumProd(const Array &left, const Array &right, size_t start,
   }
   return result;
 }
+
+size_t sumProd(const MultiIndex &left, const Array &right, size_t start,
+               size_t end) {
+  size_t result = 0;
+  for (size_t i = start; i < end; ++i) {
+    result += left[i] * right[i];
+  }
+  return result;
+}

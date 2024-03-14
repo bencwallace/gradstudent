@@ -34,8 +34,8 @@ void dotKernel(Tensor &result, const Tensor &left, const Tensor &right) {
   for (MultiIndex resultMultiIdx : result.multiIndexRange()) {
     // TODO: find a better way to do this
     size_t thisIndex =
-        sumProd(resultMultiIdx.data(), left.strides(), 0, left.ndims() - 1);
-    size_t otherIndex = sumProd(resultMultiIdx.data(), right.strides(),
+        sumProd(resultMultiIdx, left.strides(), 0, left.ndims() - 1);
+    size_t otherIndex = sumProd(resultMultiIdx, right.strides(),
                                 left.ndims() - 1, result.ndims());
 
     result[i] = 0;

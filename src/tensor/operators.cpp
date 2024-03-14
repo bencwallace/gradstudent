@@ -29,6 +29,14 @@ double Tensor::operator[](const Array &mIdx) const {
 
 double &Tensor::operator[](const Array &mIdx) { return (*this)[toIndex(mIdx)]; }
 
+double Tensor::operator[](const MultiIndex &mIdx) const {
+  return (*this)[toIndex(mIdx)];
+}
+
+double &Tensor::operator[](const MultiIndex &mIdx) {
+  return (*this)[toIndex(mIdx)];
+}
+
 Tensor Tensor::operator+(const Tensor &other) const {
   checkCompatibleShape(other);
   Tensor result(shape_);

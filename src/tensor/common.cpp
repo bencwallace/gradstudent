@@ -3,10 +3,6 @@
 #include "tensor.h"
 #include "utils.h"
 
-size_t Tensor::toIndex(const Array &mIdx) const {
-  return sumProd(mIdx, strides_);
-}
-
 MultiIndexIter Tensor::multiIndexRange() const {
   return MultiIndexIter(shape_, strides_, offset_);
 }

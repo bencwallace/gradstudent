@@ -6,6 +6,7 @@
 #include "array.h"
 #include "multi_index.h"
 #include "tensor_data.h"
+#include "utils.h"
 
 class Tensor {
 
@@ -16,7 +17,13 @@ private:
   Array strides_;
   std::shared_ptr<TensorData> data_;
 
-  size_t toIndex(const Array &) const;
+  inline size_t toIndex(const Array &mIdx) const {
+    return sumProd(mIdx, strides_);
+  }
+  inline size_t toIndex(const MultiIndex &mIdx) const {
+    return sumProd(mIdx, strides_);
+  }
+
   Array toMultiIndex(size_t) const;
   void checkCompatibleShape(const Tensor &) const;
 
@@ -37,12 +44,8 @@ public:
   double &operator[](size_t);
   double operator[](const Array &) const;
   double &operator[](const Array &);
-  inline double operator[](const MultiIndex &mIdx) const {
-    return (*this)[mIdx.data()];
-  }
-  inline double &operator[](const MultiIndex &mIdx) {
-    return (*this)[mIdx.data()];
-  }
+  double operator[](const MultiIndex &mIdx) const;
+  double &operator[](const MultiIndex &mIdx);
   Tensor operator+(const Tensor &) const;
   Tensor operator-() const;
   Tensor operator-(const Tensor &) const;

@@ -7,12 +7,20 @@
 /* MultiIndex */
 
 MultiIndex::MultiIndex(const Array &shape, const Array &strides, size_t offset)
-    : data_(zerosArray(shape.size)), shape(shape), strides(strides),
-      offset(offset) {}
+    : data_(std::make_unique<size_t[]>(shape.size)), shape(shape),
+      strides(strides), offset(offset) {
+  for (size_t i = 0; i < shape.size; ++i) {
+    data_[i] = 0;
+  }
+}
 
 MultiIndex::MultiIndex(const MultiIndex &other)
-    : data_(other.data_), shape(other.shape), strides(other.strides),
-      offset(other.offset) {}
+    : data_(std::make_unique<size_t[]>(other.shape.size)), shape(other.shape),
+      strides(other.strides), offset(other.offset) {
+  for (size_t i = 0; i < shape.size; ++i) {
+    data_[i] = other.data_[i];
+  }
+}
 
 bool MultiIndex::operator==(const MultiIndex &other) const {
   if (size() != other.size()) {
@@ -43,7 +51,9 @@ MultiIndex &MultiIndex::operator=(const MultiIndex &other) {
     ss << "Expected multi-indices of equal shape, got shapes " << shape
        << "and " << other.shape;
   }
-  data_ = other.data_;
+  for (size_t i = 0; i < shape.size; ++i) {
+    data_[i] = other.data_[i];
+  }
   return *this;
 }
 
@@ -66,7 +76,7 @@ size_t MultiIndex::toIndex(size_t start, size_t end) const {
     throw std::invalid_argument(ss.str());
   }
 
-  return offset + sumProd(this->data_, strides, start, end);
+  return offset + sumProd(*this, strides, start, end);
 }
 
 MultiIndex MultiIndex::operator++() {
