@@ -87,17 +87,15 @@ MultiIndex MultiIndex::operator++() {
 MultiIndexIter MultiIndexIter::begin() { return *this; }
 
 MultiIndexIter MultiIndexIter::end() {
-  return MultiIndexIter(shape, strides, offset, true);
+  return MultiIndexIter(shape(), strides(), offset(), true);
 }
 
 MultiIndexIter::MultiIndexIter(const MultiIndexIter &other)
-    : shape(other.shape), strides(other.strides), offset(other.offset),
-      curr(new value_type(*other.curr)) {}
+    : curr(new value_type(*other.curr)) {}
 
 MultiIndexIter::MultiIndexIter(const Array &shape, const Array &strides,
                                size_t offset, bool end)
-    : shape(shape), strides(strides), offset(offset),
-      curr(new MultiIndex(shape, strides, offset)) {
+    : curr(new MultiIndex(shape, strides, offset)) {
   if (end) {
     curr->setToEnd();
   }

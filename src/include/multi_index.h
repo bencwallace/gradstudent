@@ -6,13 +6,13 @@ class MultiIndex {
 
 private:
   Array data_;
-  const Array shape;
-  const Array strides;
-  const size_t offset;
 
   void increment(size_t);
 
 public:
+  const Array shape;
+  const Array strides;
+  const size_t offset;
   bool isEnd;
 
   MultiIndex(const MultiIndex &);
@@ -54,13 +54,13 @@ public:
   friend bool operator==(const MultiIndexIter &, const MultiIndexIter &);
   friend bool operator!=(const MultiIndexIter &, const MultiIndexIter &);
 
+  inline const Array &shape() { return curr->shape; }
+  inline const Array &strides() { return curr->strides; }
+  inline size_t offset() { return curr->offset; }
+
   MultiIndexIter begin();
   MultiIndexIter end();
 
 private:
-  Array shape;
-  Array strides;
-  size_t offset;
-
   pointer curr;
 };
