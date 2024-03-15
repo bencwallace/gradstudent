@@ -9,16 +9,12 @@
 
 MultiIndex::MultiIndex(const array_t &shape)
     : data_(std::make_unique<size_t[]>(shape.size())), shape_(shape) {
-  for (size_t i = 0; i < shape.size(); ++i) {
-    data_[i] = 0;
-  }
+  std::fill_n(data_.get(), size(), 0);
 }
 
 MultiIndex::MultiIndex(const MultiIndex &other)
     : data_(std::make_unique<size_t[]>(other.size())), shape_(other.shape_) {
-  for (size_t i = 0; i < size(); ++i) {
-    data_[i] = other.data_[i];
-  }
+  std::memcpy(data_.get(), other.data_.get(), size() * sizeof(size_t));
 }
 
 bool MultiIndex::operator==(const MultiIndex &other) const {
@@ -50,18 +46,14 @@ MultiIndex &MultiIndex::operator=(const MultiIndex &other) {
     ss << "Expected multi-indices of equal shape, got shapes " << shape_
        << "and " << other.shape_;
   }
-  for (size_t i = 0; i < size(); ++i) {
-    data_[i] = other.data_[i];
-  }
+  std::memcpy(data_.get(), other.data_.get(), size() * sizeof(size_t));
   return *this;
 }
 
 void MultiIndex::setToEnd() {
   if (size() > 0) {
     data_[0] = shape_[0];
-    for (size_t i = 1; i < size(); ++i) {
-      data_[i] = 0;
-    }
+    std::fill_n(&data_[1], size() - 1, 0);
   }
   isEnd_ = true;
 }
