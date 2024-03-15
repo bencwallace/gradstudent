@@ -28,6 +28,8 @@ public:
   inline size_t operator[](size_t i) const { return data_[i]; }
   inline size_t &operator[](size_t i) { return data_[i]; }
 
+  operator array_t() const;
+
   bool operator==(const MultiIndex &) const;
   inline bool operator!=(const MultiIndex &other) const {
     return !((*this) == other);

@@ -1,3 +1,4 @@
+#include <cstring>
 #include <sstream>
 #include <stdexcept>
 
@@ -60,6 +61,12 @@ void MultiIndex::setToEnd() {
     (*this)[i] = -1;
   }
   isEnd_ = true;
+}
+
+MultiIndex::operator array_t() const {
+  array_t result(size());
+  std::memcpy(&result[0], data_.get(), size());
+  return result;
 }
 
 MultiIndex MultiIndex::operator++() {
