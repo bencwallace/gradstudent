@@ -57,8 +57,11 @@ MultiIndex &MultiIndex::operator=(const MultiIndex &other) {
 }
 
 void MultiIndex::setToEnd() {
-  for (size_t i = 0; i < size(); ++i) {
-    (*this)[i] = -1;
+  if (size() > 0) {
+    data_[0] = shape_[0];
+    for (size_t i = 1; i < size(); ++i) {
+      data_[i] = 0;
+    }
   }
   isEnd_ = true;
 }
