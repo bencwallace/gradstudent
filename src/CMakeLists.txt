@@ -1,4 +1,4 @@
-file(GLOB tensor_SRC "*.cpp" "tensor/*.cpp")
+file(GLOB tensor_SRC "*.cpp" "ops/*.cpp" "tensor/*.cpp")
 set(SOURCE_FILES ${tensor_SRC})
 
 add_library(tensor ${SOURCE_FILES})
