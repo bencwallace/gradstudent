@@ -2,6 +2,7 @@
 
 #include "kernels.h"
 #include "multi_index.h"
+#include "ops.h"
 #include "tensor.h"
 
 Tensor &Tensor::operator=(const Tensor &other) {
@@ -19,45 +20,6 @@ Tensor &Tensor::operator=(const Tensor &other) {
   return *this;
 }
 
-Tensor Tensor::operator+(const Tensor &other) const {
-  checkCompatibleShape(other);
-  Tensor result(shape_);
-  addKernel(result, *this, other);
-  return result;
-}
-
-Tensor Tensor::operator*(const Tensor &other) const {
-  checkCompatibleShape(other);
-  Tensor result(shape_);
-  multKernel(result, *this, other);
-  return result;
-}
-
-Tensor Tensor::operator-() const {
-  Tensor result(shape_);
-  negKernel(result, *this);
-  return result;
-}
-
-Tensor Tensor::operator-(const Tensor &other) const {
-  return (*this) + (-other);
-}
-
-bool Tensor::operator==(const Tensor &other) const {
-  if (size() != other.size() || ndims() != other.ndims() ||
-      shape_ != other.shape_) {
-    return false;
-  }
-
-  for (MultiIndex mIdx : multiIndexRange()) {
-    if ((*this)[mIdx] != other[mIdx]) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
 Tensor::operator double() const {
   if (size() != 1) {
     std::stringstream ss;
@@ -65,12 +27,4 @@ Tensor::operator double() const {
     throw std::invalid_argument(ss.str());
   }
   return (*this)[0];
-}
-
-/* FRIEND FUNCTIONS */
-
-Tensor operator*(double scalar, const Tensor &tensor) {
-  Tensor result(tensor.shape_);
-  multKernel(result, scalar, tensor);
-  return result;
 }

@@ -22,8 +22,6 @@ private:
     return sumProd(mIdx, strides_);
   }
 
-  void checkCompatibleShape(const Tensor &) const;
-
 public:
   Tensor(const Tensor &);
   explicit Tensor(const array_t &shape, const array_t &strides, const Tensor &,
@@ -52,11 +50,6 @@ public:
     return (*this)[toIndex(mIdx)];
   }
 
-  Tensor operator+(const Tensor &) const;
-  Tensor operator-() const;
-  Tensor operator-(const Tensor &) const;
-  Tensor operator*(const Tensor &) const;
-  bool operator==(const Tensor &) const;
   explicit operator double() const;
 
   inline MultiIndexIter multiIndexRange() const {
@@ -70,6 +63,11 @@ public:
   inline const array_t &shape() const { return shape_; }
   inline const array_t &strides() const { return strides_; }
 
+  friend Tensor operator+(const Tensor &, const Tensor &);
+  friend Tensor operator-(const Tensor &);
+  friend Tensor operator-(const Tensor &, const Tensor &);
+  friend Tensor operator*(const Tensor &, const Tensor &);
+  friend bool operator==(const Tensor &, const Tensor &);
   friend Tensor operator*(double, const Tensor &);
 };
 
