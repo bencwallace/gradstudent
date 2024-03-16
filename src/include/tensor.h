@@ -4,7 +4,6 @@
 #include <memory>
 
 #include "multi_index.h"
-#include "tensor_data.h"
 #include "utils.h"
 
 class Tensor {
@@ -14,7 +13,7 @@ private:
   const size_t size_;
   const array_t shape_;
   const array_t strides_;
-  const std::shared_ptr<TensorData> data_;
+  const std::shared_ptr<double[]> data_;
 
   inline size_t toIndex(const array_t &mIdx) const {
     return sumProd(mIdx, strides_);
@@ -38,8 +37,8 @@ public:
 
   Tensor &operator=(const Tensor &);
 
-  inline double operator[](size_t i) const { return (*data_)[offset_ + i]; }
-  inline double &operator[](size_t i) { return (*data_)[offset_ + i]; }
+  inline double operator[](size_t i) const { return data_[offset_ + i]; }
+  inline double &operator[](size_t i) { return data_[offset_ + i]; }
   inline double operator[](const array_t &mIdx) const {
     return (*this)[toIndex(mIdx)];
   }

@@ -20,22 +20,23 @@ Tensor::Tensor(const array_t &shape, const array_t &strides,
 // empty tensor constructor (default strides)
 Tensor::Tensor(const array_t &shape)
     : offset_(0), size_(prod(shape)), shape_(shape),
-      strides_(defaultStrides(shape)), data_(new TensorDataCpu(size_)) {}
+      strides_(defaultStrides(shape)),
+      data_(std::shared_ptr<double[]>(new double[size_])) {}
 
 // non-empty tensor constructor
 Tensor::Tensor(const array_t &shape, const array_t &strides,
                std::initializer_list<double> data)
     : offset_(0), size_(prod(shape)), shape_(shape), strides_(strides),
-      data_(new TensorDataCpu(size_)) {
-  if (data.size() > 0 && data.size() != this->data_->size()) {
+      data_(std::shared_ptr<double[]>(new double[size_])) {
+  if (data.size() > 0 && data.size() != size_) {
     std::stringstream ss;
-    ss << "Data should be empty or of size " << this->data_->size()
-       << ", got size " << data.size();
+    ss << "Data should be empty or of size " << size_ << ", got size "
+       << data.size();
     throw std::invalid_argument(ss.str());
   }
   size_t i = 0;
   for (double val : data) {
-    (*this->data_)[i++] = val;
+    (this->data_)[i++] = val;
   }
 }
 
