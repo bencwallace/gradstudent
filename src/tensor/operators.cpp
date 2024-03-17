@@ -8,6 +8,8 @@
 // TODO: special care required when both tensors shared same buffer (e.g.
 // copying to self in reversed order)
 Tensor &Tensor::operator=(const Tensor &other) {
+  ensureWritable();
+
   if (size_ != other.size_ || shape_ != other.shape_) {
     std::stringstream ss;
     ss << "Can't copy tensor of shape " << other.shape_
@@ -16,7 +18,7 @@ Tensor &Tensor::operator=(const Tensor &other) {
   }
 
   for (MultiIndex mIdx : multiIndexRange()) {
-    (*this)[mIdx] = other[mIdx];
+    data_[toIndex(mIdx)] = other[mIdx];
   }
 
   return *this;

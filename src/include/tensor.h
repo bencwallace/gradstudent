@@ -54,18 +54,18 @@ public:
     return data_[offset_ + i];
   }
   inline double operator[](const array_t &mIdx) const {
-    return (*this)[toIndex(mIdx)];
+    return data_[toIndex(mIdx)];
   }
   inline double &operator[](const array_t &mIdx) {
     ensureWritable();
-    return (*this)[toIndex(mIdx)];
+    return data_[toIndex(mIdx)];
   }
   inline double operator[](const MultiIndex &mIdx) const {
-    return (*this)[toIndex(mIdx)];
+    return data_[toIndex(mIdx)];
   }
   inline double &operator[](const MultiIndex &mIdx) {
     ensureWritable();
-    return (*this)[toIndex(mIdx)];
+    return data_[toIndex(mIdx)];
   }
 
   explicit operator double() const;
