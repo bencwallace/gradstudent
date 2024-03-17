@@ -16,8 +16,8 @@ bool operator==(const Tensor &, const Tensor &);
 
 Tensor dot(const Tensor &, const Tensor &);
 
-Tensor flatten(const Tensor &);
+Tensor flatten(Tensor &);
 
-Tensor permute(const Tensor &, std::initializer_list<size_t> axes);
+Tensor permute(Tensor &, std::initializer_list<size_t> axes);
 
 double norm2(const Tensor &);

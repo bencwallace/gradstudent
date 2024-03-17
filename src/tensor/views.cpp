@@ -2,11 +2,11 @@
 
 #include "tensor.h"
 
-Tensor flatten(const Tensor &tensor) {
+Tensor flatten(Tensor &tensor) {
   return Tensor(array_t{tensor.size()}, array_t{1}, tensor);
 }
 
-Tensor permute(const Tensor &tensor, std::initializer_list<size_t> axes) {
+Tensor permute(Tensor &tensor, std::initializer_list<size_t> axes) {
   if (axes.size() != tensor.ndims()) {
     std::stringstream ss;
     ss << "Expected axis list of length " << tensor.ndims() << ", got "
