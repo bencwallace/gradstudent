@@ -5,6 +5,8 @@
 #include "ops.h"
 #include "tensor.h"
 
+// TODO: special care required when both tensors shared same buffer (e.g.
+// copying to self in reversed order)
 Tensor &Tensor::operator=(const Tensor &other) {
   if (size_ != other.size_ || shape_ != other.shape_) {
     std::stringstream ss;
