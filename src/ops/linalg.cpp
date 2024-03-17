@@ -27,6 +27,6 @@ Tensor dot(const Tensor &left, const Tensor &right) {
 }
 
 double norm2(const Tensor &tensor) {
-  Tensor flat = flatten(*const_cast<Tensor *>(&tensor));
+  Tensor flat = flatten(tensor);
   return static_cast<double>(dot(flat, flat));
 }
