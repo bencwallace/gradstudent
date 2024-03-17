@@ -22,4 +22,4 @@ const Tensor flatten(const Tensor &);
 Tensor permute(Tensor &, std::initializer_list<size_t> axes);
 const Tensor permute(const Tensor &, std::initializer_list<size_t> axes);
 
-double norm2(const Tensor &);
+Tensor norm2(const Tensor &);

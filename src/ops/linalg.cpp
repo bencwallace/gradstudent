@@ -26,7 +26,7 @@ Tensor dot(const Tensor &left, const Tensor &right) {
   return result;
 }
 
-double norm2(const Tensor &tensor) {
+Tensor norm2(const Tensor &tensor) {
   Tensor flat = flatten(tensor);
-  return static_cast<double>(dot(flat, flat));
+  return dot(flat, flat);
 }
