@@ -13,9 +13,9 @@ Tensor::Tensor(const Tensor &other) : Tensor(other.shape_) {
 
 // tensor view constructor
 Tensor::Tensor(const array_t &shape, const array_t &strides,
-               const Tensor &tensor, size_t offset)
-    : offset_(offset), size_(prod(shape)), shape_(shape), strides_(strides),
-      data_(tensor.data_) {}
+               const Tensor &tensor, size_t offset, bool ro)
+    : ro_(ro), offset_(offset), size_(prod(shape)), shape_(shape),
+      strides_(strides), data_(tensor.data_) {}
 
 // empty tensor constructor (default strides)
 Tensor::Tensor(const array_t &shape)
