@@ -25,6 +25,22 @@ TEST(SliceTest, SetSlice) {
   EXPECT_EQ(matrix1[3], 4);
 }
 
+TEST(SliceTest, GetSliceConst) {
+  const Tensor matrix1({2, 2}, {1, 2, 3, 4});
+  Tensor slice = matrix1.slice(array_t{0});
+  slice[0] = 0;
+  EXPECT_EQ(matrix1[0], 1);
+}
+
+TEST(SliceTest, SetSliceConst) {
+  const Tensor matrix1({2, 2}, {1, 2, 3, 4});
+  Tensor vector1({2}, {1}, {5, 6});
+  Tensor slice = matrix1.slice(array_t{0});
+  slice = vector1;
+  EXPECT_EQ(matrix1[0], 1);
+  EXPECT_EQ(matrix1[1], 2);
+}
+
 TEST(FlattenTest, Subscript) {
   Tensor matrix({2, 2}, {1, 2, 3, 4});
   Tensor flat = flatten(matrix);
@@ -50,6 +66,29 @@ TEST(FlattenTest, Assign) {
   EXPECT_EQ(matrix[1], 3);
   EXPECT_EQ(matrix[2], 2);
   EXPECT_EQ(matrix[3], 1);
+}
+
+TEST(FlattenTest, SubscriptConst) {
+  const Tensor matrix({2, 2}, {1, 2, 3, 4});
+
+  // const tensor returned by flatten can be assigned to non-const tensor...
+  Tensor flat = flatten(matrix);
+  // ...but on wrote this non-const tensor detaches itself (internally: makes a
+  // copy)
+  flat[0] = 0;
+  // original tensor is unchanged
+  EXPECT_EQ(matrix[0], 1);
+}
+
+TEST(FlattenTest, AssignConst) {
+  const Tensor matrix({2, 2}, {1, 2, 3, 4});
+  Tensor vector({4}, {4, 3, 2, 1});
+  Tensor flat = flatten(matrix);
+  flat = vector;
+  EXPECT_EQ(matrix[0], 1);
+  EXPECT_EQ(matrix[1], 2);
+  EXPECT_EQ(matrix[2], 3);
+  EXPECT_EQ(matrix[3], 4);
 }
 
 TEST(PermuteTest, Subscript) {
@@ -78,4 +117,22 @@ TEST(PermuteTest, Assign) {
   EXPECT_EQ((matrix1[{0, 1}]), 7);
   EXPECT_EQ((matrix1[{1, 0}]), 6);
   EXPECT_EQ((matrix1[{1, 1}]), 8);
+}
+
+TEST(PermuteTest, SubscriptConst) {
+  const Tensor matrix({2, 3}, {1, 2, 3, 4, 5, 6});
+  Tensor perm = permute(matrix, {1, 0});
+  perm[0] = 0;
+  EXPECT_EQ(matrix[0], 1);
+}
+
+TEST(PermuteTest, AssignConst) {
+  const Tensor matrix1({2, 2}, {1, 2, 3, 4});
+  Tensor matrix2({2, 2}, {5, 6, 7, 8});
+  Tensor perm = permute(matrix1, {1, 0});
+  perm = matrix2;
+  EXPECT_EQ((matrix1[{0, 0}]), 1);
+  EXPECT_EQ((matrix1[{0, 1}]), 2);
+  EXPECT_EQ((matrix1[{1, 0}]), 3);
+  EXPECT_EQ((matrix1[{1, 1}]), 4);
 }

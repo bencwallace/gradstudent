@@ -1,12 +1,22 @@
 #include <sstream>
 
+#include "ops.h"
 #include "tensor.h"
+
+// FLATTEN
 
 Tensor flatten(Tensor &tensor) {
   return Tensor(array_t{tensor.size()}, array_t{1}, tensor);
 }
 
-Tensor permute(Tensor &tensor, std::initializer_list<size_t> axes) {
+const Tensor flatten(const Tensor &tensor) {
+  return Tensor(array_t{tensor.size()}, array_t{1}, tensor, 0, true);
+}
+
+// PERMUTE
+
+std::tuple<array_t, array_t> permuteCommon(const Tensor &tensor,
+                                           std::initializer_list<size_t> axes) {
   if (axes.size() != tensor.ndims()) {
     std::stringstream ss;
     ss << "Expected axis list of length " << tensor.ndims() << ", got "
@@ -26,24 +36,54 @@ Tensor permute(Tensor &tensor, std::initializer_list<size_t> axes) {
     ++i;
   }
 
-  return Tensor(result_shape, result_strides, tensor);
+  return {result_shape, result_strides};
 }
 
-Tensor Tensor::slice(const array_t &mIdx) {
-  if (mIdx.size() > ndims()) {
+Tensor permute(Tensor &tensor, std::initializer_list<size_t> axes) {
+  auto permuteArgs = permuteCommon(tensor, axes);
+  return Tensor(std::get<0>(permuteArgs), std::get<1>(permuteArgs), tensor);
+}
+
+const Tensor permute(const Tensor &tensor, std::initializer_list<size_t> axes) {
+  auto permuteArgs = permuteCommon(tensor, axes);
+  return Tensor(std::get<0>(permuteArgs), std::get<1>(permuteArgs), tensor, 0,
+                true);
+}
+
+// SLICE
+
+std::tuple<array_t, array_t> sliceCommon(const Tensor &tensor,
+                                         const array_t &mIdx) {
+  size_t ndims = tensor.ndims();
+  if (mIdx.size() > ndims) {
     std::stringstream ss;
     ss << "Multi-index of size " << mIdx.size()
-       << " too large for tensor of rank " << ndims();
+       << " too large for tensor of rank " << ndims;
     throw std::invalid_argument(ss.str());
   }
 
-  size_t result_ndims = ndims() - mIdx.size();
+  array_t shape = tensor.shape();
+  array_t strides = tensor.strides();
+
+  size_t result_ndims = ndims - mIdx.size();
   array_t result_shape(result_ndims);
   array_t result_strides(result_ndims);
-  for (size_t i = mIdx.size(); i < ndims(); ++i) {
-    result_shape[i - mIdx.size()] = shape_[i];
-    result_strides[i - mIdx.size()] = strides_[i];
+  for (size_t i = mIdx.size(); i < ndims; ++i) {
+    result_shape[i - mIdx.size()] = shape[i];
+    result_strides[i - mIdx.size()] = strides[i];
   }
 
-  return Tensor(result_shape, result_strides, *this, toIndex(mIdx));
+  return {result_shape, result_strides};
+}
+
+Tensor Tensor::slice(const array_t &mIdx) {
+  auto sliceArgs = sliceCommon(*this, mIdx);
+  return Tensor(std::get<0>(sliceArgs), std::get<1>(sliceArgs), *this,
+                toIndex(mIdx));
+}
+
+const Tensor Tensor::slice(const array_t &mIdx) const {
+  auto sliceArgs = sliceCommon(*this, mIdx);
+  return Tensor(std::get<0>(sliceArgs), std::get<1>(sliceArgs), *this,
+                toIndex(mIdx), true);
 }

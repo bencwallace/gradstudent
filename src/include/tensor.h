@@ -75,6 +75,7 @@ public:
   }
 
   Tensor slice(const array_t &);
+  const Tensor slice(const array_t &) const;
 
   inline size_t size() const { return size_; }
   inline size_t ndims() const { return shape_.size(); }
