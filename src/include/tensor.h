@@ -35,6 +35,9 @@ private:
     }
   }
 
+  void assignOther(const Tensor &);
+  void assignSelf(const Tensor &);
+
 public:
   Tensor(const Tensor &);
   explicit Tensor(const array_t &shape, const array_t &strides, const Tensor &,

@@ -267,3 +267,36 @@ TEST(IsEqualTest, EqualMatrix) {
   Tensor matrix2({2, 2}, {1, 2}, {1, 3, 2, 4});
   EXPECT_TRUE(matrix1 == matrix2);
 }
+
+TEST(AssignTest, DifferentShapes) {
+  Tensor matrix1({2, 2}, {1, 2, 3, 4});
+  Tensor matrix2({4}, {1, 2, 3, 4});
+  EXPECT_THROW(matrix1 = matrix2, std::invalid_argument);
+}
+
+TEST(AssignTest, SameShape) {
+  Tensor matrix1({2, 2}, {1, 2, 3, 4});
+  Tensor matrix2({2, 2}, {4, 3, 2, 1});
+  matrix1 = matrix2;
+  EXPECT_EQ(matrix1[0], 4);
+  EXPECT_EQ(matrix1[1], 3);
+  EXPECT_EQ(matrix1[2], 2);
+  EXPECT_EQ(matrix1[3], 1);
+  matrix1[0] = 0;
+  EXPECT_EQ(matrix2[0], 4);
+}
+
+TEST(AssignTest, SameBuffer) {
+  Tensor matrix1({2, 2}, {2, 1}, {1, 2, 3, 4});
+
+  Tensor matrix2 = Tensor(matrix1.shape(), {1, 2}, matrix1);
+  // EXPECT_EQ((matrix2[{0, 0}]), 1);
+  // EXPECT_EQ((matrix2[{0, 1}]), 3);
+  // EXPECT_EQ((matrix2[{1, 0}]), 2);
+  // EXPECT_EQ((matrix2[{1, 1}]), 4);
+  matrix1 = matrix2;
+  EXPECT_EQ((matrix1[{0, 0}]), 1);
+  EXPECT_EQ((matrix1[{0, 1}]), 3);
+  EXPECT_EQ((matrix1[{1, 0}]), 2);
+  EXPECT_EQ((matrix1[{1, 1}]), 4);
+}

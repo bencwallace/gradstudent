@@ -5,8 +5,24 @@
 #include "ops.h"
 #include "tensor.h"
 
-// TODO: special care required when both tensors shared same buffer (e.g.
-// copying to self in reversed order)
+void Tensor::assignSelf(const Tensor &other) {
+  auto temp(std::make_unique<double[]>(size_));
+  size_t i = 0;
+  for (MultiIndex mIdx : multiIndexRange()) {
+    temp[i++] = other[mIdx];
+  }
+  i = 0;
+  for (MultiIndex mIdx : multiIndexRange()) {
+    data_[toIndex(mIdx)] = temp[i++];
+  }
+}
+
+void Tensor::assignOther(const Tensor &other) {
+  for (MultiIndex mIdx : multiIndexRange()) {
+    data_[toIndex(mIdx)] = other[mIdx];
+  }
+}
+
 Tensor &Tensor::operator=(const Tensor &other) {
   ensureWritable();
 
@@ -17,8 +33,10 @@ Tensor &Tensor::operator=(const Tensor &other) {
     throw std::invalid_argument(ss.str());
   }
 
-  for (MultiIndex mIdx : multiIndexRange()) {
-    data_[toIndex(mIdx)] = other[mIdx];
+  if (data_ != other.data_) {
+    assignOther(other);
+  } else {
+    assignSelf(other);
   }
 
   return *this;
