@@ -5,10 +5,10 @@
 
 TEST(SliceTest, GetSlice) {
   Tensor matrix1({2, 2}, {1, 2, 3, 4});
-  Tensor slice = matrix1.slice(array_t{0});
-  EXPECT_EQ(slice.shape(), array_t({2}));
-  EXPECT_EQ(slice, Tensor({2}, {1, 2}));
-  slice[0] = 0;
+  Tensor sliced = slice(matrix1, array_t{0});
+  EXPECT_EQ(sliced.shape(), array_t({2}));
+  EXPECT_EQ(sliced, Tensor({2}, {1, 2}));
+  sliced[0] = 0;
   EXPECT_EQ(matrix1[0], 0);
   EXPECT_EQ(matrix1[1], 2);
   EXPECT_EQ(matrix1[2], 3);
@@ -18,7 +18,7 @@ TEST(SliceTest, GetSlice) {
 TEST(SliceTest, SetSlice) {
   Tensor matrix1({2, 2}, {1, 2, 3, 4});
   Tensor vector1({2}, {1}, {5, 6});
-  matrix1.slice(array_t{0}) = vector1;
+  slice(matrix1, array_t{0}) = vector1;
   EXPECT_EQ(matrix1[0], 5);
   EXPECT_EQ(matrix1[1], 6);
   EXPECT_EQ(matrix1[2], 3);
@@ -27,16 +27,16 @@ TEST(SliceTest, SetSlice) {
 
 TEST(SliceTest, GetSliceConst) {
   const Tensor matrix1({2, 2}, {1, 2, 3, 4});
-  Tensor slice = matrix1.slice(array_t{0});
-  slice[0] = 0;
+  Tensor sliced = slice(matrix1, array_t{0});
+  sliced[0] = 0;
   EXPECT_EQ(matrix1[0], 1);
 }
 
 TEST(SliceTest, SetSliceConst) {
   const Tensor matrix1({2, 2}, {1, 2, 3, 4});
   Tensor vector1({2}, {1}, {5, 6});
-  Tensor slice = matrix1.slice(array_t{0});
-  slice = vector1;
+  Tensor sliced = slice(matrix1, array_t{0});
+  sliced = vector1;
   EXPECT_EQ(matrix1[0], 1);
   EXPECT_EQ(matrix1[1], 2);
 }

@@ -17,13 +17,6 @@ private:
   const array_t strides_;
   std::shared_ptr<double[]> data_;
 
-  inline size_t toIndex(const array_t &mIdx) const {
-    return sumProd(mIdx, strides_);
-  }
-  inline size_t toIndex(const MultiIndex &mIdx) const {
-    return sumProd(mIdx, strides_);
-  }
-
   void ensureWritable() {
     // implements copy-on-write
     // should be called prior to any write operation
@@ -73,12 +66,16 @@ public:
 
   explicit operator double() const;
 
+  inline size_t toIndex(const array_t &mIdx) const {
+    return sumProd(mIdx, strides_);
+  }
+  inline size_t toIndex(const MultiIndex &mIdx) const {
+    return sumProd(mIdx, strides_);
+  }
+
   inline MultiIndexIter multiIndexRange() const {
     return MultiIndexIter(shape_);
   }
-
-  Tensor slice(const array_t &);
-  const Tensor slice(const array_t &) const;
 
   inline size_t size() const { return size_; }
   inline size_t ndims() const { return shape_.size(); }

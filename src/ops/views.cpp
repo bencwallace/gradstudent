@@ -76,14 +76,14 @@ std::tuple<array_t, array_t> sliceCommon(const Tensor &tensor,
   return {result_shape, result_strides};
 }
 
-Tensor Tensor::slice(const array_t &mIdx) {
-  auto sliceArgs = sliceCommon(*this, mIdx);
-  return Tensor(std::get<0>(sliceArgs), std::get<1>(sliceArgs), *this,
-                toIndex(mIdx));
+Tensor slice(Tensor &tensor, const array_t &mIdx) {
+  auto sliceArgs = sliceCommon(tensor, mIdx);
+  return Tensor(std::get<0>(sliceArgs), std::get<1>(sliceArgs), tensor,
+                tensor.toIndex(mIdx));
 }
 
-const Tensor Tensor::slice(const array_t &mIdx) const {
-  auto sliceArgs = sliceCommon(*this, mIdx);
-  return Tensor(std::get<0>(sliceArgs), std::get<1>(sliceArgs), *this,
-                toIndex(mIdx), true);
+const Tensor slice(const Tensor &tensor, const array_t &mIdx) {
+  auto sliceArgs = sliceCommon(tensor, mIdx);
+  return Tensor(std::get<0>(sliceArgs), std::get<1>(sliceArgs), tensor,
+                tensor.toIndex(mIdx), true);
 }
