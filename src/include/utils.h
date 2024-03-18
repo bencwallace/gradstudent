@@ -8,6 +8,8 @@
 #include "multi_index.h"
 #include "types.h"
 
+namespace gradstudent {
+
 /* ARITHMETIC */
 
 array_t defaultStrides(const array_t &shape);
@@ -51,3 +53,5 @@ std::ostream &operator<<(std::ostream &os, const std::vector<T> &array) {
   result << ")";
   return result;
 }
+
+} // namespace gradstudent

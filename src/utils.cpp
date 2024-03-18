@@ -1,5 +1,7 @@
 #include "utils.h"
 
+namespace gradstudent {
+
 array_t defaultStrides(const array_t &shape) {
   array_t strides(shape.size());
   if (shape.size() > 0) {
@@ -10,3 +12,5 @@ array_t defaultStrides(const array_t &shape) {
   }
   return strides;
 }
+
+} // namespace gradstudent

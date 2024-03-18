@@ -4,6 +4,8 @@
 #include "tensor.h"
 #include "utils.h"
 
+namespace gradstudent {
+
 // tensor copy constructor
 Tensor::Tensor(const Tensor &other) : Tensor(other.shape_) {
   for (MultiIndex mIdx : multiIndexRange()) {
@@ -46,3 +48,5 @@ Tensor::Tensor(const array_t &shape, std::initializer_list<double> data)
 
 // scalar tensor constructor
 Tensor::Tensor(double value) : Tensor({}, {value}) {}
+
+} // namespace gradstudent

@@ -3,6 +3,8 @@
 
 #include <gtest/gtest.h>
 
+using namespace gradstudent;
+
 TEST(DotTest, MatrixVector) {
   Tensor matrix({2, 2}, {1, 2, 3, 4});
   Tensor vector1({2, 1}, {5, 6});

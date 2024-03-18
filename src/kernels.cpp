@@ -2,6 +2,8 @@
 #include "multi_index.h"
 #include "utils.h"
 
+namespace gradstudent {
+
 void addKernel(Tensor &result, const Tensor &left, const Tensor &right) {
   for (auto mIdx : result.multiIndexRange()) {
     result[mIdx] = left[mIdx] + right[mIdx];
@@ -48,3 +50,5 @@ void dotKernel(Tensor &result, const Tensor &left, const Tensor &right) {
     ++i;
   }
 }
+
+} // namespace gradstudent

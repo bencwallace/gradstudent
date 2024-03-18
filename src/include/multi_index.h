@@ -4,6 +4,8 @@
 
 #include "types.h"
 
+namespace gradstudent {
+
 class MultiIndex {
 
 private:
@@ -85,3 +87,5 @@ private:
 inline bool operator!=(const MultiIndexIter &a, const MultiIndexIter &b) {
   return !(a == b);
 };
+
+} // namespace gradstudent

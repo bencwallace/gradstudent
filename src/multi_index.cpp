@@ -5,6 +5,8 @@
 #include "multi_index.h"
 #include "utils.h"
 
+namespace gradstudent {
+
 /* MultiIndex */
 
 // CONSTRUCTORS
@@ -139,3 +141,5 @@ bool operator==(const MultiIndexIter &a, const MultiIndexIter &b) {
   }
   return *a.curr == *b.curr;
 };
+
+} // namespace gradstudent

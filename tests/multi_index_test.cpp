@@ -2,6 +2,8 @@
 
 #include "multi_index.h"
 
+using namespace gradstudent;
+
 TEST(ToArrayTest, Dim1) {
   MultiIndex mIdx({5});
   mIdx[0] = 13;

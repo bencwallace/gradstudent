@@ -3,6 +3,8 @@
 #include "ops.h"
 #include "tensor.h"
 
+using namespace gradstudent;
+
 TEST(SliceTest, GetSlice) {
   Tensor matrix1({2, 2}, {1, 2, 3, 4});
   Tensor sliced = slice(matrix1, array_t{0});

@@ -1,5 +1,7 @@
 #include "tensor.h"
 
+namespace gradstudent {
+
 void Tensor::ensureWritable() {
   // implements copy-on-write
   // should be called prior to any write operation
@@ -10,3 +12,5 @@ void Tensor::ensureWritable() {
     ro_ = false;
   }
 }
+
+} // namespace gradstudent

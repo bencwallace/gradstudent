@@ -2,6 +2,8 @@
 
 #include "tensor.h"
 
+using namespace gradstudent;
+
 TEST(CastTest, Scalar) {
   Tensor scalar(24);
   EXPECT_EQ(static_cast<double>(scalar), 24);

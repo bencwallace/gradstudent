@@ -2,6 +2,8 @@
 
 #include "tensor.h"
 
+namespace gradstudent {
+
 // TODO: move this
 void checkCompatibleShape(const Tensor &, const Tensor &);
 
@@ -33,3 +35,5 @@ const Tensor permute(const Tensor &, std::initializer_list<size_t> axes);
 
 Tensor slice(Tensor &, const array_t &);
 const Tensor slice(const Tensor &, const array_t &);
+
+} // namespace gradstudent

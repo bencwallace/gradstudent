@@ -3,6 +3,8 @@
 #include "ops.h"
 #include "tensor.h"
 
+namespace gradstudent {
+
 // FLATTEN
 
 Tensor flatten(Tensor &tensor) {
@@ -87,3 +89,5 @@ const Tensor slice(const Tensor &tensor, const array_t &mIdx) {
   return Tensor(std::get<0>(sliceArgs), std::get<1>(sliceArgs), tensor,
                 tensor.toIndex(mIdx), true);
 }
+
+} // namespace gradstudent

@@ -5,6 +5,8 @@
 #include "ops.h"
 #include "tensor.h"
 
+namespace gradstudent {
+
 void Tensor::assignSelf(const Tensor &other) {
   auto temp(std::make_unique<double[]>(size_));
   size_t i = 0;
@@ -50,3 +52,5 @@ Tensor::operator double() const {
   }
   return (*this)[0];
 }
+
+} // namespace gradstudent

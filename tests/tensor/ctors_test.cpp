@@ -2,6 +2,8 @@
 
 #include "tensor.h"
 
+using namespace gradstudent;
+
 TEST(CtorsTest, Empty) {
   Tensor t1({3, 4, 5});
   EXPECT_EQ(t1.ndims(), 3);

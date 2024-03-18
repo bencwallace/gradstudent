@@ -2,6 +2,8 @@
 #include "multi_index.h"
 #include "ops.h"
 
+namespace gradstudent {
+
 Tensor operator+(const Tensor &left, const Tensor &right) {
   checkCompatibleShape(left, right);
   Tensor result(left.shape());
@@ -42,3 +44,5 @@ Tensor operator*(double scalar, const Tensor &tensor) {
   multKernel(result, scalar, tensor);
   return result;
 }
+
+} // namespace gradstudent

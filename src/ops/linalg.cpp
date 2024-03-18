@@ -3,6 +3,8 @@
 #include "kernels.h"
 #include "ops.h"
 
+namespace gradstudent {
+
 Tensor dot(const Tensor &left, const Tensor &right) {
   const array_t &left_shape = left.shape();
   const array_t &right_shape = right.shape();
@@ -30,3 +32,5 @@ Tensor norm2(const Tensor &tensor) {
   Tensor flat = flatten(tensor);
   return dot(flat, flat);
 }
+
+} // namespace gradstudent

@@ -3,6 +3,8 @@
 #include "tensor.h"
 #include "utils.h"
 
+namespace gradstudent {
+
 void checkCompatibleShape(const Tensor &left, const Tensor &right) {
   if (left.ndims() != right.ndims()) {
     std::ostringstream ss;
@@ -14,3 +16,5 @@ void checkCompatibleShape(const Tensor &left, const Tensor &right) {
     ss << "Incompatible shapes: " << left.shape() << " and " << right.shape();
   }
 }
+
+} // namespace gradstudent

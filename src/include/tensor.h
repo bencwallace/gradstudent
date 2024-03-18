@@ -7,6 +7,8 @@
 #include "multi_index.h"
 #include "utils.h"
 
+namespace gradstudent {
+
 class Tensor {
 
 private:
@@ -91,3 +93,5 @@ public:
 };
 
 Tensor operator*(double, const Tensor &);
+
+} // namespace gradstudent
