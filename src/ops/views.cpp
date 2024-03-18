@@ -42,20 +42,19 @@ std::tuple<array_t, array_t> permuteCommon(const Tensor &tensor,
 }
 
 Tensor permute(Tensor &tensor, std::initializer_list<size_t> axes) {
-  auto permuteArgs = permuteCommon(tensor, axes);
-  return Tensor(std::get<0>(permuteArgs), std::get<1>(permuteArgs), tensor);
+  auto [result_shape, result_strides] = permuteCommon(tensor, axes);
+  return Tensor(result_shape, result_strides, tensor);
 }
 
 const Tensor permute(const Tensor &tensor, std::initializer_list<size_t> axes) {
-  auto permuteArgs = permuteCommon(tensor, axes);
-  return Tensor(std::get<0>(permuteArgs), std::get<1>(permuteArgs), tensor, 0,
-                true);
+  auto [result_shape, result_strides] = permuteCommon(tensor, axes);
+  return Tensor(result_shape, result_strides, tensor, 0, true);
 }
 
 // SLICE
 
-std::tuple<array_t, array_t> sliceCommon(const Tensor &tensor,
-                                         const array_t &mIdx) {
+std::pair<array_t, array_t> sliceCommon(const Tensor &tensor,
+                                        const array_t &mIdx) {
   size_t ndims = tensor.ndims();
   if (mIdx.size() > ndims) {
     std::stringstream ss;
@@ -79,15 +78,14 @@ std::tuple<array_t, array_t> sliceCommon(const Tensor &tensor,
 }
 
 Tensor slice(Tensor &tensor, const array_t &mIdx) {
-  auto sliceArgs = sliceCommon(tensor, mIdx);
-  return Tensor(std::get<0>(sliceArgs), std::get<1>(sliceArgs), tensor,
-                tensor.toIndex(mIdx));
+  auto [result_shape, result_strides] = sliceCommon(tensor, mIdx);
+  return Tensor(result_shape, result_strides, tensor, tensor.toIndex(mIdx));
 }
 
 const Tensor slice(const Tensor &tensor, const array_t &mIdx) {
-  auto sliceArgs = sliceCommon(tensor, mIdx);
-  return Tensor(std::get<0>(sliceArgs), std::get<1>(sliceArgs), tensor,
-                tensor.toIndex(mIdx), true);
+  auto [result_shape, result_strides] = sliceCommon(tensor, mIdx);
+  return Tensor(result_shape, result_strides, tensor, tensor.toIndex(mIdx),
+                true);
 }
 
 } // namespace gradstudent
