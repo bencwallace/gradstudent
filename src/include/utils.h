@@ -10,6 +10,8 @@
 
 namespace gradstudent {
 
+class Tensor;
+
 /* ARITHMETIC */
 
 array_t defaultStrides(const array_t &shape);
@@ -35,6 +37,8 @@ template <typename T> size_t prod(const T &array) {
   }
   return result;
 }
+
+void checkCompatibleShape(const Tensor &, const Tensor &);
 
 /* STREAMS */
 

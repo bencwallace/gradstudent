@@ -4,9 +4,6 @@
 
 namespace gradstudent {
 
-// TODO: move this
-void checkCompatibleShape(const Tensor &, const Tensor &);
-
 /* OPERATORS */
 
 Tensor operator+(const Tensor &, const Tensor &);
