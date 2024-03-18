@@ -1,4 +1,3 @@
-#include "kernels.h"
 #include "multi_index.h"
 #include "ops.h"
 
@@ -7,20 +6,26 @@ namespace gradstudent {
 Tensor operator+(const Tensor &left, const Tensor &right) {
   checkCompatibleShape(left, right);
   Tensor result(left.shape());
-  addKernel(result, left, right);
+  for (auto mIdx : result.multiIndexRange()) {
+    result[mIdx] = left[mIdx] + right[mIdx];
+  }
   return result;
 }
 
 Tensor operator*(const Tensor &left, const Tensor &right) {
   checkCompatibleShape(left, right);
   Tensor result(left.shape());
-  multKernel(result, left, right);
+  for (MultiIndex resultIdx : result.multiIndexRange()) {
+    result[resultIdx] = left[resultIdx] * right[resultIdx];
+  }
   return result;
 }
 
 Tensor operator-(const Tensor &tensor) {
   Tensor result(tensor.shape());
-  negKernel(result, tensor);
+  for (size_t i = 0; i < tensor.size(); ++i) {
+    result[i] = -tensor[i];
+  }
   return result;
 }
 
@@ -41,7 +46,9 @@ bool operator==(const Tensor &left, const Tensor &right) {
 
 Tensor operator*(double scalar, const Tensor &tensor) {
   Tensor result(tensor.shape_);
-  multKernel(result, scalar, tensor);
+  for (auto mIdx : result.multiIndexRange()) {
+    result[mIdx] = scalar * tensor[mIdx];
+  }
   return result;
 }
 

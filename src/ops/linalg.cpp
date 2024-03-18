@@ -1,6 +1,5 @@
 #include <sstream>
 
-#include "kernels.h"
 #include "ops.h"
 
 namespace gradstudent {
@@ -24,7 +23,26 @@ Tensor dot(const Tensor &left, const Tensor &right) {
   }
 
   Tensor result(result_shape);
-  dotKernel(result, left, right);
+  const array_t &left_strides = left.strides();
+  const array_t &right_strides = right.strides();
+
+  size_t i = 0;
+  for (MultiIndex resultMultiIdx : result.multiIndexRange()) {
+    // TODO: find a better way to do this
+    size_t thisIndex =
+        sumProd(resultMultiIdx, left.strides(), 0, left.ndims() - 1);
+    size_t otherIndex = sumProd(resultMultiIdx, right.strides(),
+                                left.ndims() - 1, result.ndims());
+
+    result[i] = 0;
+    for (size_t j = 0; j < left.shape()[left.ndims() - 1]; ++j) {
+      result[i] += left[thisIndex] * right[otherIndex];
+      thisIndex += left_strides[left.ndims() - 1];
+      otherIndex += right_strides[0];
+    }
+
+    ++i;
+  }
   return result;
 }
 
