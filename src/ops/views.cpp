@@ -88,4 +88,33 @@ const Tensor slice(const Tensor &tensor, const array_t &mIdx) {
                 true);
 }
 
+// BROADCAST
+
+void broadcastStrides(array_t &out_left, array_t &out_right,
+                      const std::vector<int> &mask, const array_t &left,
+                      const array_t &right) {
+  out_left = left;
+  out_right = right;
+  out_right.insert(out_right.begin(), mask.size() - out_right.size(), 0);
+  out_left.insert(out_left.begin(), mask.size() - out_left.size(), 0);
+
+  for (size_t i = 0; i < mask.size(); ++i) {
+    if (mask[i] == BCAST_LEFT) {
+      out_left[i] = 0;
+    } else if (mask[i] == BCAST_RIGHT) {
+      out_right[i] = 0;
+    }
+  }
+}
+
+std::tuple<Tensor, Tensor> broadcast(const Tensor &left, const Tensor &right) {
+  array_t shape, left_strides, right_strides;
+  auto mask = broadcastShapes(shape, left.shape(), right.shape());
+  broadcastStrides(left_strides, right_strides, mask, left.strides(),
+                   right.strides());
+
+  return {Tensor(shape, left_strides, left),
+          Tensor(shape, right_strides, right)};
+}
+
 } // namespace gradstudent

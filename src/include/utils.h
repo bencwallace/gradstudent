@@ -12,6 +12,8 @@ namespace gradstudent {
 
 class Tensor;
 
+enum { BCAST_LEFT = -1, BCAST_NONE = 0, BCAST_RIGHT = 1 };
+
 /* ARITHMETIC */
 
 array_t defaultStrides(const array_t &shape);
@@ -37,6 +39,10 @@ template <typename T> size_t prod(const T &array) {
   }
   return result;
 }
+
+// returned mask entry true if left dimension broadcast
+std::vector<int> broadcastShapes(array_t &out, const array_t &left,
+                                 const array_t &right);
 
 void checkCompatibleShape(const Tensor &, const Tensor &);
 
