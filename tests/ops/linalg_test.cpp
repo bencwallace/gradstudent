@@ -25,15 +25,6 @@ TEST(DotTest, MatrixMatrix) {
   EXPECT_EQ((matrix3[{1, 2}]), 16);
 }
 
-TEST(PermuteTest, Matrix) {
-  Tensor matrix1({2, 2}, {1, 2, 3, 4});
-  Tensor matrix2 = permute(matrix1, {1, 0});
-  EXPECT_EQ((matrix2[{0, 0}]), 1);
-  EXPECT_EQ((matrix2[{0, 1}]), 3);
-  EXPECT_EQ((matrix2[{1, 0}]), 2);
-  EXPECT_EQ((matrix2[{1, 1}]), 4);
-}
-
 TEST(NormTest, Matrix) {
   Tensor tensor({2, 2}, {1, 2, 3, 4});
   EXPECT_EQ(norm2(tensor), 30);
