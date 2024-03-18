@@ -17,21 +17,13 @@ private:
   const array_t strides_;
   std::shared_ptr<double[]> data_;
 
-  void ensureWritable() {
-    // implements copy-on-write
-    // should be called prior to any write operation
-    if (ro_) {
-      double *temp = new double[size_];
-      std::memcpy(temp, data_.get(), size_ * sizeof(double));
-      data_.reset(temp);
-      ro_ = false;
-    }
-  }
+  void ensureWritable();
 
   void assignOther(const Tensor &);
   void assignSelf(const Tensor &);
 
 public:
+  /* CONSTRUCTORS */
   Tensor(const Tensor &);
   explicit Tensor(const array_t &shape, const array_t &strides, const Tensor &,
                   size_t offset = 0, bool ro = false);
@@ -41,6 +33,8 @@ public:
          std::initializer_list<double> data);
   Tensor(const array_t &shape, std::initializer_list<double> data);
   Tensor(double);
+
+  /* OPERATORS */
 
   Tensor &operator=(const Tensor &);
 
@@ -66,6 +60,8 @@ public:
 
   explicit operator double() const;
 
+  /* UTILITIES */
+
   inline size_t toIndex(const array_t &mIdx) const {
     return sumProd(mIdx, strides_);
   }
@@ -77,10 +73,14 @@ public:
     return MultiIndexIter(shape_);
   }
 
+  /* GETTERS/SETTERS */
+
   inline size_t size() const { return size_; }
   inline size_t ndims() const { return shape_.size(); }
   inline const array_t &shape() const { return shape_; }
   inline const array_t &strides() const { return strides_; }
+
+  /* FRIEND OPERATORS */
 
   friend Tensor operator+(const Tensor &, const Tensor &);
   friend Tensor operator-(const Tensor &);

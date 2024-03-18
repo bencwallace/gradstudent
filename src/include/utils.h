@@ -8,6 +8,8 @@
 #include "multi_index.h"
 #include "types.h"
 
+/* ARITHMETIC */
+
 array_t defaultStrides(const array_t &shape);
 
 template <typename P, typename Q>
@@ -31,6 +33,8 @@ template <typename T> size_t prod(const T &array) {
   }
   return result;
 }
+
+/* STREAMS */
 
 template <typename T>
 std::ostream &operator<<(std::ostream &os, const std::vector<T> &array) {

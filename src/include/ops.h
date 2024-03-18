@@ -2,7 +2,10 @@
 
 #include "tensor.h"
 
+// TODO: move this
 void checkCompatibleShape(const Tensor &, const Tensor &);
+
+/* OPERATORS */
 
 Tensor operator+(const Tensor &, const Tensor &);
 
@@ -14,7 +17,13 @@ Tensor operator*(const Tensor &, const Tensor &);
 
 bool operator==(const Tensor &, const Tensor &);
 
+/* LINEAR ALGEBRA */
+
 Tensor dot(const Tensor &, const Tensor &);
+
+Tensor norm2(const Tensor &);
+
+/* VIEWS */
 
 Tensor flatten(Tensor &);
 const Tensor flatten(const Tensor &);
@@ -24,5 +33,3 @@ const Tensor permute(const Tensor &, std::initializer_list<size_t> axes);
 
 Tensor slice(Tensor &, const array_t &);
 const Tensor slice(const Tensor &, const array_t &);
-
-Tensor norm2(const Tensor &);

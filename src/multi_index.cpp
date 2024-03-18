@@ -7,6 +7,8 @@
 
 /* MultiIndex */
 
+// CONSTRUCTORS
+
 MultiIndex::MultiIndex(const array_t &shape)
     : data_(std::make_unique<size_t[]>(shape.size())), shape_(shape) {
   std::fill_n(data_.get(), size(), 0);
@@ -16,6 +18,8 @@ MultiIndex::MultiIndex(const MultiIndex &other)
     : data_(std::make_unique<size_t[]>(other.size())), shape_(other.shape_) {
   std::memcpy(data_.get(), other.data_.get(), size() * sizeof(size_t));
 }
+
+// OPERATORS
 
 bool MultiIndex::operator==(const MultiIndex &other) const {
   if (size() != other.size()) {
@@ -40,6 +44,13 @@ void MultiIndex::increment(size_t currDim) {
   }
 }
 
+MultiIndex MultiIndex::operator++() {
+  if (size() > 0) {
+    increment(size() - 1);
+  }
+  return *this;
+}
+
 MultiIndex &MultiIndex::operator=(const MultiIndex &other) {
   if (shape_ != other.shape_) {
     std::stringstream ss;
@@ -49,6 +60,8 @@ MultiIndex &MultiIndex::operator=(const MultiIndex &other) {
   std::memcpy(data_.get(), other.data_.get(), size() * sizeof(size_t));
   return *this;
 }
+
+// GETTERS/SETTERS
 
 void MultiIndex::setToEnd() {
   if (size() > 0) {
@@ -64,14 +77,9 @@ MultiIndex::operator array_t() const {
   return result;
 }
 
-MultiIndex MultiIndex::operator++() {
-  if (size() > 0) {
-    increment(size() - 1);
-  }
-  return *this;
-}
-
 /* MultiIndexIter */
+
+// CONSTRUCTORS
 
 MultiIndexIter MultiIndexIter::begin() { return *this; }
 
@@ -92,6 +100,8 @@ MultiIndexIter::~MultiIndexIter() {
     delete curr;
   }
 }
+
+// OPERATORS
 
 MultiIndexIter &MultiIndexIter::operator=(const MultiIndexIter &other) {
   *curr = *other.curr;

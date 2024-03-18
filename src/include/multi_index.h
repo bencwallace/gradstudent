@@ -14,22 +14,27 @@ private:
   void increment(size_t);
 
 public:
+  /* CONSTRUCTORS */
+
   MultiIndex(const MultiIndex &);
   MultiIndex(const array_t &);
 
-  MultiIndex &operator=(const MultiIndex &);
+  /* GETTERS/SETTERS */
 
-  inline bool isEnd() const { return isEnd_; }
   void setToEnd();
 
+  inline bool isEnd() const { return isEnd_; }
   inline const array_t &shape() const { return shape_; }
   inline size_t size() const { return shape_.size(); };
+
+  /* OPERATORS */
 
   inline size_t operator[](size_t i) const { return data_[i]; }
   inline size_t &operator[](size_t i) { return data_[i]; }
 
   operator array_t() const;
 
+  MultiIndex &operator=(const MultiIndex &);
   bool operator==(const MultiIndex &) const;
   inline bool operator!=(const MultiIndex &other) const {
     return !((*this) == other);
@@ -47,9 +52,13 @@ public:
   using pointer = MultiIndex *;
   using reference = MultiIndex &;
 
+  /* CONSTRUCTORS */
+
   MultiIndexIter(const MultiIndexIter &);
   MultiIndexIter(const array_t &shape, bool end = false);
   ~MultiIndexIter();
+
+  /* OPERATORS */
 
   MultiIndexIter &operator=(const MultiIndexIter &);
 
@@ -60,7 +69,11 @@ public:
   friend bool operator==(const MultiIndexIter &, const MultiIndexIter &);
   friend bool operator!=(const MultiIndexIter &, const MultiIndexIter &);
 
+  /* GETTERS/SETTERS */
+
   inline const array_t &shape() { return curr->shape(); }
+
+  /* BEGIN/END */
 
   MultiIndexIter begin();
   MultiIndexIter end();
