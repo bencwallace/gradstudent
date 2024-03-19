@@ -138,3 +138,63 @@ TEST(PermuteTest, AssignConst) {
   EXPECT_EQ((matrix1[{1, 0}]), 3);
   EXPECT_EQ((matrix1[{1, 1}]), 4);
 }
+
+TEST(BroadcastTest, NonConst0) {
+  Tensor tensor({1}, {6});
+  const array_t shape{8};
+  Tensor result = broadcast(tensor, shape);
+  EXPECT_EQ(result.shape(), shape);
+  for (size_t i = 0; i < 8; ++i) {
+    EXPECT_EQ(result[array_t{i}], 6);
+  }
+
+  result[array_t{3}] = 2;
+  EXPECT_EQ(tensor[0], 2);
+}
+
+TEST(BroadcastTest, NonConst1) {
+  Tensor tensor({4}, {1, 2, 3, 4});
+  const array_t shape{{1, 4}};
+  Tensor result = broadcast(tensor, shape);
+  EXPECT_EQ(result.shape(), shape);
+  for (size_t i = 0; i < 4; ++i) {
+    EXPECT_EQ((result[{0, i}]), i + 1);
+    result[{0, i}] = -i;
+    EXPECT_EQ(tensor[i], -i);
+  }
+}
+
+TEST(BroadcastTest, NonConst2) {
+  Tensor tensor({4, 1}, {1, 2, 3, 4});
+  const array_t shape{{4, 4}};
+  Tensor result = broadcast(tensor, shape);
+  EXPECT_EQ(result.shape(), shape);
+  for (size_t i = 0; i < 4; ++i) {
+    for (size_t j = 0; j < 4; ++j) {
+      EXPECT_EQ((result[{i, j}]), i + 1);
+    }
+    result[{i, i}] = -i;
+    EXPECT_EQ(tensor[i], -i);
+  }
+}
+
+TEST(BroadcastTest, Const0) {
+  const Tensor tensor({1}, {6});
+  const array_t shape{8};
+  auto result = broadcast(tensor, shape);
+  EXPECT_EQ(result.shape(), array_t{8});
+  for (size_t i = 0; i < 8; ++i) {
+    EXPECT_EQ(result[array_t{i}], 6);
+  }
+
+  result[array_t{3}] = 2;
+  EXPECT_EQ(tensor[0], 6);
+}
+
+TEST(BroadcastTest, TwoTensors) {
+  Tensor tensor1({1, 3}, {1, 2, 3});
+  Tensor tensor2({3, 1}, {1, 2, 3});
+  auto [b1, b2] = broadcast(tensor1, tensor2);
+  EXPECT_EQ(b1.shape(), (array_t{3, 3}));
+  EXPECT_EQ(b2.shape(), (array_t{3, 3}));
+}
