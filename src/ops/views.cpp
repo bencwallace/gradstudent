@@ -90,21 +90,29 @@ const Tensor slice(const Tensor &tensor, const array_t &mIdx) {
 
 // BROADCAST
 
+void broadcastStrides(array_t &out, const std::vector<int> &mask,
+                      const array_t &in, int side) {
+  out = in;
+  out.insert(out.begin(), mask.size() - out.size(), 0);
+  for (size_t i = 0; i < mask.size(); ++i) {
+    if (mask[i] == side) {
+      out[i] = 0;
+    }
+  }
+}
+
 void broadcastStrides(array_t &out_left, array_t &out_right,
                       const std::vector<int> &mask, const array_t &left,
                       const array_t &right) {
-  out_left = left;
-  out_right = right;
-  out_right.insert(out_right.begin(), mask.size() - out_right.size(), 0);
-  out_left.insert(out_left.begin(), mask.size() - out_left.size(), 0);
+  broadcastStrides(out_left, mask, left, BCAST_LEFT);
+  broadcastStrides(out_right, mask, right, BCAST_RIGHT);
+}
 
-  for (size_t i = 0; i < mask.size(); ++i) {
-    if (mask[i] == BCAST_LEFT) {
-      out_left[i] = 0;
-    } else if (mask[i] == BCAST_RIGHT) {
-      out_right[i] = 0;
-    }
-  }
+Tensor broadcast(const Tensor &tensor, const array_t &shape) {
+  array_t out_shape, out_strides;
+  auto mask = broadcastShapes(out_shape, tensor.shape(), shape);
+  broadcastStrides(out_strides, mask, tensor.strides(), BCAST_LEFT);
+  return Tensor(out_shape, out_strides, tensor);
 }
 
 std::tuple<Tensor, Tensor> broadcast(const Tensor &left, const Tensor &right) {
