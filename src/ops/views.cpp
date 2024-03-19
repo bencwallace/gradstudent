@@ -108,14 +108,14 @@ void broadcastStrides(array_t &out_left, array_t &out_right,
   broadcastStrides(out_right, mask, right, BCAST_RIGHT);
 }
 
-Tensor broadcast(const Tensor &tensor, const array_t &shape) {
+Tensor broadcast(Tensor &tensor, const array_t &shape) {
   array_t out_shape, out_strides;
   auto mask = broadcastShapes(out_shape, tensor.shape(), shape);
   broadcastStrides(out_strides, mask, tensor.strides(), BCAST_LEFT);
   return Tensor(out_shape, out_strides, tensor);
 }
 
-std::tuple<Tensor, Tensor> broadcast(const Tensor &left, const Tensor &right) {
+std::tuple<Tensor, Tensor> broadcast(Tensor &left, Tensor &right) {
   array_t shape, left_strides, right_strides;
   auto mask = broadcastShapes(shape, left.shape(), right.shape());
   broadcastStrides(left_strides, right_strides, mask, left.strides(),
