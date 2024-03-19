@@ -108,21 +108,28 @@ void broadcastStrides(array_t &out_left, array_t &out_right,
   broadcastStrides(out_right, mask, right, BCAST_RIGHT);
 }
 
-Tensor broadcast(Tensor &tensor, const array_t &shape) {
+template <typename T> T broadcast(T &tensor, const array_t &shape) {
   array_t out_shape, out_strides;
   auto mask = broadcastShapes(out_shape, tensor.shape(), shape);
   broadcastStrides(out_strides, mask, tensor.strides(), BCAST_LEFT);
-  return Tensor(out_shape, out_strides, tensor);
+  return Tensor(out_shape, out_strides, tensor, 0, std::is_const<T>::value);
 }
+template Tensor broadcast<Tensor>(Tensor &, const array_t &);
+template const Tensor broadcast<const Tensor>(const Tensor &, const array_t &);
 
-std::tuple<Tensor, Tensor> broadcast(Tensor &left, Tensor &right) {
+template <typename S, typename T>
+std::tuple<S, T> broadcast(S &left, T &right) {
   array_t shape, left_strides, right_strides;
   auto mask = broadcastShapes(shape, left.shape(), right.shape());
   broadcastStrides(left_strides, right_strides, mask, left.strides(),
                    right.strides());
 
-  return {Tensor(shape, left_strides, left),
-          Tensor(shape, right_strides, right)};
+  return {S(shape, left_strides, left), T(shape, right_strides, right)};
 }
+template std::tuple<Tensor, Tensor> broadcast(Tensor &, Tensor &);
+template std::tuple<const Tensor, Tensor> broadcast(const Tensor &, Tensor &);
+template std::tuple<Tensor, const Tensor> broadcast(Tensor &, const Tensor &);
+template std::tuple<const Tensor, const Tensor> broadcast(const Tensor &,
+                                                          const Tensor &);
 
 } // namespace gradstudent

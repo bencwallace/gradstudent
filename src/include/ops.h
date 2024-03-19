@@ -33,7 +33,8 @@ const Tensor permute(const Tensor &, std::initializer_list<size_t> axes);
 Tensor slice(Tensor &, const array_t &);
 const Tensor slice(const Tensor &, const array_t &);
 
-Tensor broadcast(Tensor &, const array_t &);
-std::tuple<Tensor, Tensor> broadcast(Tensor &, Tensor &);
+template <typename T> T broadcast(T &tensor, const array_t &shape);
+
+template <typename S, typename T> std::tuple<S, T> broadcast(S &, T &);
 
 } // namespace gradstudent
