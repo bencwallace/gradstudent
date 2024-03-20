@@ -89,9 +89,6 @@ public:
   friend Tensor operator-(const Tensor &, const Tensor &);
   friend Tensor operator*(const Tensor &, const Tensor &);
   friend bool operator==(const Tensor &, const Tensor &);
-  friend Tensor operator*(double, const Tensor &);
 };
-
-Tensor operator*(double, const Tensor &);
 
 } // namespace gradstudent

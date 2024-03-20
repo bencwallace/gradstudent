@@ -40,19 +40,16 @@ TEST(SumTest, StridedMatrix) {
   EXPECT_EQ((matrix3[3]), 8);
 }
 
-TEST(SumTest, RankMismatch) {
-  Tensor scalar(24);
-  Tensor matrix({2, 2}, {1, 2, 3, 4});
-  EXPECT_THROW(
-      {
-        try {
-          matrix + scalar;
-        } catch (const std::invalid_argument &e) {
-          EXPECT_STREQ(e.what(), "Incompatible ranks: 2 and 0");
-          throw;
-        }
-      },
-      std::invalid_argument);
+TEST(SumTest, Broadcast) {
+  Tensor vector1({1, 3}, {0, 1, 2});
+  Tensor vector2({3, 1}, {0, 1, 2});
+  Tensor vector3 = vector1 + vector2;
+  EXPECT_EQ(vector3.shape(), (array_t{3, 3}));
+  for (size_t i = 0; i < 3; ++i) {
+    for (size_t j = 0; j < 3; ++j) {
+      EXPECT_EQ((vector3[{i, j}]), i + j) << "i, j == " << i << ", " << j;
+    }
+  }
 }
 
 TEST(ScalarProdTest, Scalar) {
@@ -125,6 +122,19 @@ TEST(DiffTest, StridedMatrix) {
   EXPECT_EQ((diff[3]), 0);
 }
 
+TEST(DiffTest, Broadcast) {
+  Tensor vector1({1, 3}, {0, 1, 2});
+  Tensor vector2({3, 1}, {0, 1, 2});
+  Tensor vector3 = vector1 - vector2;
+  EXPECT_EQ(vector3.shape(), (array_t{3, 3}));
+  for (int i = 0; i < 3; ++i) {
+    for (int j = 0; j < 3; ++j) {
+      EXPECT_EQ((vector3[{(size_t)i, (size_t)j}]), j - i)
+          << "i, j == " << i << ", " << j;
+    }
+  }
+}
+
 TEST(ProdTest, Matrix) {
   Tensor matrix1({2, 2}, {1, 2, 3, 4});
   Tensor matrix2({2, 2}, {1, 3, 2, 4});
@@ -146,6 +156,18 @@ TEST(ProdTest, StridedMatrix) {
   EXPECT_EQ((matrix3[1]), 4);
   EXPECT_EQ((matrix3[2]), 9);
   EXPECT_EQ((matrix3[3]), 16);
+}
+
+TEST(ProdTest, Broadcast) {
+  Tensor vector1({1, 3}, {0, 1, 2});
+  Tensor vector2({3, 1}, {0, 1, 2});
+  Tensor vector3 = vector1 * vector2;
+  EXPECT_EQ(vector3.shape(), (array_t{3, 3}));
+  for (size_t i = 0; i < 3; ++i) {
+    for (size_t j = 0; j < 3; ++j) {
+      EXPECT_EQ((vector3[{i, j}]), i * j) << "i, j == " << i << ", " << j;
+    }
+  }
 }
 
 TEST(IsEqualTest, EqualScalar) {

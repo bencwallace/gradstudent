@@ -4,19 +4,19 @@
 namespace gradstudent {
 
 Tensor operator+(const Tensor &left, const Tensor &right) {
-  checkCompatibleShape(left, right);
-  Tensor result(left.shape());
+  auto [x, y] = broadcast(left, right);
+  Tensor result(x.shape());
   for (auto mIdx : result.multiIndexRange()) {
-    result[mIdx] = left[mIdx] + right[mIdx];
+    result[mIdx] = x[mIdx] + y[mIdx];
   }
   return result;
 }
 
 Tensor operator*(const Tensor &left, const Tensor &right) {
-  checkCompatibleShape(left, right);
-  Tensor result(left.shape());
+  auto [x, y] = broadcast(left, right);
+  Tensor result(x.shape());
   for (MultiIndex resultIdx : result.multiIndexRange()) {
-    result[resultIdx] = left[resultIdx] * right[resultIdx];
+    result[resultIdx] = x[resultIdx] * y[resultIdx];
   }
   return result;
 }
@@ -42,14 +42,6 @@ bool operator==(const Tensor &left, const Tensor &right) {
   }
 
   return true;
-}
-
-Tensor operator*(double scalar, const Tensor &tensor) {
-  Tensor result(tensor.shape_);
-  for (auto mIdx : result.multiIndexRange()) {
-    result[mIdx] = scalar * tensor[mIdx];
-  }
-  return result;
 }
 
 } // namespace gradstudent
