@@ -21,7 +21,7 @@ TEST(CastTest, Matrix) {
 
 TEST(CastTest, NonScalar) {
   Tensor vector({2}, {24, 24});
-  EXPECT_THROW((void)static_cast<double>(vector);, std::invalid_argument);
+  EXPECT_THROW((void)static_cast<double>(vector), std::invalid_argument);
 }
 
 TEST(SubscriptGetTest, Empty) {
