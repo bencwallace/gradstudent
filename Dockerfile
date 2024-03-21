@@ -19,5 +19,7 @@ RUN wget ${CLANG_URL} -O /tmp/clang.tar.xz \
     && tar -xvkf /tmp/clang.tar.xz -C /usr/local --strip-components=1 \
     && rm /tmp/clang.tar.xz
 
+RUN ln -s /usr/local/bin/clang /usr/bin/clang
+
 RUN useradd -m -s /bin/bash -G sudo vscode \
     && passwd -d vscode
