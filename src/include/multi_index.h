@@ -9,7 +9,8 @@ namespace gradstudent {
 class MultiIndex {
 
 private:
-  const std::unique_ptr<size_t[]> data_;
+  const std::unique_ptr<size_t[]> // NOLINT(cppcoreguidelines-avoid-c-arrays)
+      data_;
   bool isEnd_;
   const array_t shape_;
 
@@ -20,6 +21,8 @@ public:
 
   MultiIndex(const MultiIndex &);
   MultiIndex(const array_t &);
+
+  ~MultiIndex() = default;
 
   /* GETTERS/SETTERS */
 

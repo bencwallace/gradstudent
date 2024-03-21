@@ -17,7 +17,7 @@ private:
   const size_t size_;
   const array_t shape_;
   const array_t strides_;
-  std::shared_ptr<double[]> data_;
+  std::shared_ptr<double[]> data_; // NOLINT(cppcoreguidelines-avoid-c-arrays)
 
   void ensureWritable();
 
@@ -35,6 +35,8 @@ public:
          std::initializer_list<double> data);
   Tensor(const array_t &shape, std::initializer_list<double> data);
   Tensor(double);
+
+  ~Tensor() = default;
 
   /* OPERATORS */
 
