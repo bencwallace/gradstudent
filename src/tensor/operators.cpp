@@ -25,8 +25,6 @@ void Tensor::assignOther(const Tensor &other) {
 }
 
 Tensor &Tensor::operator=(const Tensor &other) {
-  ensureWritable();
-
   if (size_ != other.size_ || shape_ != other.shape_) {
     std::stringstream ss;
     ss << "Can't copy tensor of shape " << other.shape_
@@ -34,6 +32,7 @@ Tensor &Tensor::operator=(const Tensor &other) {
     throw std::invalid_argument(ss.str());
   }
 
+  ensureWritable();
   if (data_ != other.data_) {
     assignOther(other);
   } else {
