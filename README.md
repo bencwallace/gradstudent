@@ -6,6 +6,44 @@ A gradient learner.
 and computing the derivatives of these manipulations via (reverse-mode) autograd. Emphasis is placed on accomplishing these
 goals with modern C++. Performance alone is not the main objective.
 
+## Requirements
+
+This project uses [CMake](CMakeLists.txt). clang is the assumed compiler. [Doxygen](Doxyfile) is used to build documentation.
+Tools used to help ensure code quality and consistency include ASan, GoogleTest, [clang-format](scripts/format.sh), and [clang-tidy](.clang-tidy).
+
+An example [Dockerfile](./Dockerfile) containing the requirements used by this project is given. For the convenience
+of VSCode users, a [devcontainer](./devcontainer.json) configuration is given as well.
+
+In the future, the following would be nice to have: Test coverage (gcov/lcov), CI/CD (GitHub workflows), simple benchmarking scripts.
+
+## Build and test
+
+```
+git clone https://github.com/bencwallace/gradstudent.git
+cd gradstudent
+mkdir build
+cd build
+cmake ..
+make -j
+ctest -j8
+```
+
+**Linting and documentation**
+
+Git hooks can be found in the `./hooks` directory. From the repository root, they can be installed as follows:
+
+```
+git config core.hooksPath hooks
+```
+
+Scripts for linting and generating documentation can be found in the `./scripts` directory. They can be used as follows:
+
+```
+./scripts/format.sh     # run formatter
+./scripts/makedocs.sh   # build docs
+./scripts/tidy.sh       # run linter
+```
+
 ## Features
 
 Presently, `gradstudent` implements a `Tensor` [class](src/include/tensor.h) that acts as a container for (strided) multidimensional arrays.
@@ -22,13 +60,3 @@ Some things that could be interesting to explore:
 * parallelization of the operations mentioned above
 * lazy evaluation
 * support for different backends (e.g. OpenBLAS, CUDA)
-
-## Project structure and code quality
-
-This project uses [CMake](CMakeLists.txt) and compiled with clang (using ASan). GoogleTest, [clang-format](scripts/format.sh),
-and [clang-tidy](.clang-tidy) are employed as well.
-
-An example [Docker image](./Dockerfile) containing the requirements used by this project is given. For the convenience
-of VSCode users, a [devcontainer](./devcontainer.json) configuration is given.
-
-Additionally, the following would be nice to have: Test coverage (gcov/lcov), CI/CD (GitHub workflows), simple benchmarking scripts.
