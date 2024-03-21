@@ -1,11 +1,8 @@
 #pragma once
 
-#include <cstddef>
-#include <memory>
 #include <ostream>
 #include <vector>
 
-#include "multi_index.h"
 #include "types.h"
 
 namespace gradstudent {

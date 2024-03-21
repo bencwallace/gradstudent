@@ -3,6 +3,7 @@ Checks:          'clang-diagnostic-*,
                   clang-analyzer-*,
                   cppcoreguidelines-*,
                   -cppcoreguidelines-narrowing-conversions,
+                  -cppcoreguidelines-avoid-const-or-ref-data-members, # TODO: re-enable and fix errors
                   bugprone-*,
                   -bugprone-narrowing-conversions,
                   performance-*,

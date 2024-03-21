@@ -1,6 +1,10 @@
 #pragma once
 
+#include <initializer_list>
+#include <tuple>
+
 #include "tensor.h"
+#include "types.h"
 
 namespace gradstudent {
 

@@ -1,10 +1,10 @@
 #pragma once
 
-#include <cstring>
 #include <initializer_list>
 #include <memory>
 
 #include "multi_index.h"
+#include "types.h"
 #include "utils.h"
 
 namespace gradstudent {
