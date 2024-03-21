@@ -6,8 +6,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -Werror -Wpedantic")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -g -fno-omit-frame-pointer -fsanitize=address")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror -Wpedantic")
+set(DEBUG_FLAGS "-Og -g")
+set(SANITIZE_FLAGS "-fsanitize=address,leak,undefined -fno-omit-frame-pointer")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${DEBUG_FLAGS} ${SANITIZE_FLAGS}")
 
 include(FetchContent)
 FetchContent_Declare(
@@ -19,6 +21,7 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 
 include(GoogleTest)
+include(CTest)
 
 add_subdirectory(src)
 add_subdirectory(tests)
