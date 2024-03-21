@@ -54,7 +54,7 @@ std::ostream &operator<<(std::ostream &os, const std::vector<T> &array) {
   for (int i = 0; i < (int)array.size() - 1; ++i) {
     result << array[i] << ", ";
   }
-  if (array.size() > 0) {
+  if (!array.empty()) {
     result << array[array.size() - 1];
   }
   if (array.size() == 1) {

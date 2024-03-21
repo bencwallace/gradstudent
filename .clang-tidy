@@ -2,7 +2,14 @@
 Checks:          'clang-diagnostic-*,
                   clang-analyzer-*,
                   cppcoreguidelines-*,
-                  -cppcoreguidelines-narrowing-conversions'
+                  -cppcoreguidelines-narrowing-conversions,
+                  bugprone-*,
+                  -bugprone-narrowing-conversions,
+                  performance-*,
+                  readability-*,
+                  -readability-identifier-length,
+                  -readability-named-parameter,
+                  misc-*'
 WarningsAsErrors: ''
 HeaderFilterRegex: ''
 AnalyzeTemporaryDtors: false
