@@ -3,3 +3,7 @@ build/*
 Testing/*
 **/html
 **/latex
+
+*.png
+*.jpg
+*.pgm

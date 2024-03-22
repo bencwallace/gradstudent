@@ -5,13 +5,37 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(gdb) Launch",
+            "name": "Tests",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/tests/runtests",
             "args": ["--gtest_filter=${input:test_suite}.${input:test_case}"],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "Examples",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/examples/${input:example}/${input:example}",
+            "args": ["${input:args}"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/examples/${input:example}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
@@ -38,5 +62,14 @@
         "id": "test_case",
         "type": "promptString",
         "description": "Test Case"
+    }, {
+        "id": "example",
+        "type": "pickString",
+        "options": ["image-processing"],
+        "description": "Example Name"
+    }, {
+        "id": "args",
+        "type": "promptString",
+        "description": "Arguments"
     }]
 }

@@ -2,7 +2,7 @@
 
 set -e
 
-for FILE in $(find src tests -name *.cpp -o -name *.h)
+for FILE in $(find examples src tests -name *.cpp -o -name *.h)
 do
     clang-format -i $FILE
 done
