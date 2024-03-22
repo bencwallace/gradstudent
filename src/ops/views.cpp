@@ -124,7 +124,8 @@ std::tuple<S, T> broadcast(S &left, T &right) {
   broadcastStrides(left_strides, right_strides, mask, left.strides(),
                    right.strides());
 
-  return {S(shape, left_strides, left), T(shape, right_strides, right)};
+  return {S(shape, left_strides, left, 0, std::is_const<S>::value),
+          T(shape, right_strides, right, 0, std::is_const<T>::value)};
 }
 template std::tuple<Tensor, Tensor> broadcast(Tensor &, Tensor &);
 template std::tuple<const Tensor, Tensor> broadcast(const Tensor &, Tensor &);
