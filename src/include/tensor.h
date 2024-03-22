@@ -30,10 +30,10 @@ class Tensor {
 
 private:
   bool ro_ = false; // read-only (for views of const tensors)
-  const size_t offset_;
+  size_t offset_;
   const size_t size_;
   const array_t shape_;
-  const array_t strides_;
+  array_t strides_;
   std::shared_ptr<double[]> data_; // NOLINT(cppcoreguidelines-avoid-c-arrays)
 
   void ensureWritable();
@@ -153,7 +153,7 @@ public:
 
   // @cond
   inline size_t toIndex(const array_t &mIdx) const {
-    return sumProd(mIdx, strides_);
+    return offset_ + sumProd(mIdx, strides_);
   }
 
   inline MultiIndexIter multiIndexRange() const {

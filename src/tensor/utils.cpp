@@ -13,6 +13,8 @@ void Tensor::ensureWritable() {
     }
     data_.reset(temp);
     ro_ = false;
+    offset_ = 0;
+    strides_ = defaultStrides(shape_);
   }
 }
 
