@@ -1,1 +1,3 @@
-!titus.pgm
+!titus.*
+!titus_out.png
+titus.*.out.*

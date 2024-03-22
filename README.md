@@ -6,6 +6,10 @@ A gradient learner.
 and computing the derivatives of these manipulations via (reverse-mode) autograd. Emphasis is placed on accomplishing these
 goals with modern C++. Performance alone is not the main objective.
 
+## Applications
+
+See the [examples](examples/README.md) directory.
+
 ## Requirements
 
 This project uses [CMake](CMakeLists.txt). clang is the assumed compiler. [Doxygen](Doxyfile) is used to build documentation.
