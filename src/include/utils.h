@@ -10,10 +10,9 @@
  */
 #pragma once
 
-#include <ostream>
 #include <vector>
 
-#include "types.h"
+#include "array.h"
 
 namespace gradstudent {
 
@@ -80,24 +79,6 @@ std::vector<int> broadcastShapes(array_t &out, const array_t &left,
 
 // @cond
 void checkCompatibleShape(const Tensor &, const Tensor &);
-
-/* STREAMS */
-
-template <typename T>
-std::ostream &operator<<(std::ostream &os, const std::vector<T> &array) {
-  std::ostream &result = os << "(";
-  for (int i = 0; i < (int)array.size() - 1; ++i) {
-    result << array[i] << ", ";
-  }
-  if (!array.empty()) {
-    result << array[array.size() - 1];
-  }
-  if (array.size() == 1) {
-    result << ",";
-  }
-  result << ")";
-  return result;
-}
 // @endcond
 
 } // namespace gradstudent

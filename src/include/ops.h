@@ -13,8 +13,8 @@
 #include <initializer_list>
 #include <tuple>
 
+#include "array.h"
 #include "tensor.h"
-#include "types.h"
 
 namespace gradstudent {
 

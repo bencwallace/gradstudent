@@ -14,7 +14,7 @@
 #include <iterator>
 #include <memory>
 
-#include "types.h"
+#include "array.h"
 
 namespace gradstudent {
 

@@ -13,8 +13,8 @@
 #include <initializer_list>
 #include <memory>
 
+#include "array.h"
 #include "multi_index.h"
-#include "types.h"
 #include "utils.h"
 
 namespace gradstudent {
