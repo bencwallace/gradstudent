@@ -25,12 +25,16 @@ void MultiIndexIter::setToEnd() {
   isEnd_ = true;
 }
 
-MultiIndexIter::MultiIndexIter(const array_t &shape, bool end)
-    : curr_(new value_type(shape.size(), 0)), shape_(shape), isEnd_(end) {
+MultiIndexIter::MultiIndexIter(const array_t &shape, const array_t &start,
+                               bool end)
+    : curr_(new value_type(start)), shape_(shape), isEnd_(end) {
   if (end) {
     setToEnd();
   }
 }
+
+MultiIndexIter::MultiIndexIter(const array_t &shape, bool end)
+    : MultiIndexIter(shape, array_t(shape.size(), 0), end) {}
 
 MultiIndexIter::~MultiIndexIter() {
   if (curr_) {

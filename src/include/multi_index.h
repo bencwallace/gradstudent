@@ -35,6 +35,7 @@ public:
   /* CONSTRUCTORS */
 
   MultiIndexIter(const MultiIndexIter &);
+  MultiIndexIter(const array_t &shape, const array_t &start, bool end = false);
   MultiIndexIter(const array_t &shape, bool end = false);
   ~MultiIndexIter();
 
