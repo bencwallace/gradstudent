@@ -7,121 +7,80 @@
 
 namespace gradstudent {
 
-/* MultiIndex */
-
-// CONSTRUCTORS
-
-MultiIndex::MultiIndex(const array_t &shape)
-    : data_(std::make_unique<size_t[]>(shape.size())), shape_(shape) {
-  std::fill_n(data_.get(), size(), 0);
-}
-
-MultiIndex::MultiIndex(const MultiIndex &other)
-    : data_(std::make_unique<size_t[]>(other.size())), shape_(other.shape_) {
-  std::memcpy(data_.get(), other.data_.get(), size() * sizeof(size_t));
-}
-
-// OPERATORS
-
-bool MultiIndex::operator==(const MultiIndex &other) const {
-  if (size() != other.size()) {
-    return false;
-  }
-  for (size_t i = 0; i < size(); ++i) {
-    if ((*this)[i] != other[i]) {
-      return false;
-    }
-  }
-  return true;
-}
-
-void MultiIndex::increment(size_t currDim) {
-  if ((*this)[currDim] < shape_[currDim] - 1) {
-    ++(*this)[currDim];
-  } else if (currDim > 0) {
-    (*this)[currDim] = 0;
-    return increment(currDim - 1);
-  } else {
-    setToEnd();
-  }
-}
-
-MultiIndex MultiIndex::operator++() {
-  if (size() > 0) {
-    increment(size() - 1);
-  }
-  return *this;
-}
-
-MultiIndex &MultiIndex::operator=(const MultiIndex &other) {
-  if (shape_ != other.shape_) {
-    std::stringstream ss;
-    ss << "Expected multi-indices of equal shape, got shapes " << shape_
-       << "and " << other.shape_;
-  }
-  std::memcpy(data_.get(), other.data_.get(), size() * sizeof(size_t));
-  return *this;
-}
-
-// GETTERS/SETTERS
-
-void MultiIndex::setToEnd() {
-  if (size() > 0) {
-    data_[0] = shape_[0];
-    std::fill_n(&data_[1], size() - 1, 0);
-  }
-  isEnd_ = true;
-}
-
-MultiIndex::operator array_t() const {
-  array_t result(size());
-  std::memcpy(&result[0], data_.get(), size());
-  return result;
-}
-
-/* MultiIndexIter */
-
-// CONSTRUCTORS
+/* CONSTRUCTORS */
 
 MultiIndexIter MultiIndexIter::begin() { return *this; }
 
 MultiIndexIter MultiIndexIter::end() { return MultiIndexIter(shape(), true); }
 
 MultiIndexIter::MultiIndexIter(const MultiIndexIter &other)
-    : curr(new value_type(*other.curr)) {}
+    : curr_(new value_type(*other.curr_)), shape_(other.shape_),
+      isEnd_(other.isEnd_) {}
+
+void MultiIndexIter::setToEnd() {
+  if (curr_->size() > 0) {
+    (*curr_)[0] = shape_[0];
+    std::fill_n(&(*curr_)[1], curr_->size() - 1, 0);
+  }
+  isEnd_ = true;
+}
 
 MultiIndexIter::MultiIndexIter(const array_t &shape, bool end)
-    : curr(new MultiIndex(shape)) {
+    : curr_(new value_type(shape.size(), 0)), shape_(shape), isEnd_(end) {
   if (end) {
-    curr->setToEnd();
+    setToEnd();
   }
 }
 
 MultiIndexIter::~MultiIndexIter() {
-  if (curr) {
-    delete curr;
+  if (curr_) {
+    delete curr_;
   }
 }
 
-// OPERATORS
+/* OPERATORS */
 
 MultiIndexIter &MultiIndexIter::operator=(const MultiIndexIter &other) {
-  *curr = *other.curr;
+  if (shape_ != other.shape_) {
+    std::stringstream ss;
+    ss << "Expected multi-indices of equal shape, got shapes " << shape_
+       << "and " << other.shape_;
+    throw std::invalid_argument(ss.str());
+  }
+  *curr_ = *other.curr_;
+  isEnd_ = other.isEnd_;
   return *this;
 }
 
 MultiIndexIter::reference MultiIndexIter::operator*() const {
-  if (curr) {
-    return *curr;
+  if (curr_) {
+    return *curr_;
   }
   throw std::out_of_range("Iteration complete.");
 }
 
-MultiIndexIter &MultiIndexIter::operator++() {
-  if (curr->size() > 0) {
-    ++(*curr);
+void MultiIndexIter::increment(size_t currDim) {
+  if ((*curr_)[currDim] < shape_[currDim] - 1) {
+    ++(*curr_)[currDim];
+  } else if (currDim > 0) {
+    (*curr_)[currDim] = 0;
+    return increment(currDim - 1);
   } else {
-    curr->setToEnd();
+    setToEnd();
+  }
+}
+
+void MultiIndexIter::increment() {
+  if (shape_.size() > 0) {
+    increment(shape_.size() - 1);
+  }
+}
+
+MultiIndexIter &MultiIndexIter::operator++() {
+  if (curr_->size() > 0) {
+    increment();
+  } else {
+    isEnd_ = true;
   }
   return *this;
 }
@@ -133,13 +92,13 @@ MultiIndexIter MultiIndexIter::operator++(int) {
 }
 
 bool operator==(const MultiIndexIter &a, const MultiIndexIter &b) {
-  if (a.curr->size() == 0 || b.curr->size() == 0) {
-    if (a.curr->size() > 0 || b.curr->size() > 0) {
+  if (a.curr_->size() == 0 || b.curr_->size() == 0) {
+    if (a.curr_->size() > 0 || b.curr_->size() > 0) {
       return false;
     }
-    return a.curr->isEnd() == b.curr->isEnd();
+    return a.isEnd_ == b.isEnd_;
   }
-  return *a.curr == *b.curr;
+  return *a.curr_ == *b.curr_;
 };
 
 } // namespace gradstudent

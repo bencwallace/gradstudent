@@ -143,21 +143,6 @@ public:
   }
 
   /**
-   * @overload
-   */
-  inline double operator[](const MultiIndex &mIdx) const {
-    return data_[toIndex(mIdx)];
-  }
-
-  /**
-   * @overload
-   */
-  inline double &operator[](const MultiIndex &mIdx) {
-    ensureWritable();
-    return data_[toIndex(mIdx)];
-  }
-
-  /**
    * @brief Scalar cast operator.
    *
    * Can be used to cast a scalar tensor to its single value.
@@ -168,9 +153,6 @@ public:
 
   // @cond
   inline size_t toIndex(const array_t &mIdx) const {
-    return sumProd(mIdx, strides_);
-  }
-  inline size_t toIndex(const MultiIndex &mIdx) const {
     return sumProd(mIdx, strides_);
   }
 

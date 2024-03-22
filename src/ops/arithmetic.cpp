@@ -15,7 +15,7 @@ Tensor operator+(const Tensor &left, const Tensor &right) {
 Tensor operator*(const Tensor &left, const Tensor &right) {
   auto [x, y] = broadcast(left, right);
   Tensor result(x.shape());
-  for (MultiIndex resultIdx : result.multiIndexRange()) {
+  for (auto &resultIdx : result.multiIndexRange()) {
     result[resultIdx] = x[resultIdx] * y[resultIdx];
   }
   return result;
@@ -35,7 +35,7 @@ Tensor operator-(const Tensor &left, const Tensor &right) {
 
 bool operator==(const Tensor &left, const Tensor &right) {
   checkCompatibleShape(left, right);
-  for (MultiIndex mIdx : MultiIndexIter(left.shape())) {
+  for (auto &mIdx : MultiIndexIter(left.shape())) {
     if (left[mIdx] != right[mIdx]) {
       return false;
     }
