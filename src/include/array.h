@@ -33,6 +33,8 @@ array_t operator+(const array_t &lhs, const array_t &rhs);
 
 array_t operator-(const array_t &lhs, const array_t &rhs);
 
+array_t operator/(const array_t &lhs, size_t rhs);
+
 template <typename T>
 std::ostream &operator<<(std::ostream &os, const std::vector<T> &array) {
   std::ostream &result = os << "(";

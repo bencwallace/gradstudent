@@ -159,6 +159,10 @@ public:
   inline MultiIndexIter multiIndexRange() const {
     return MultiIndexIter(shape_);
   }
+
+  inline MultiIndexIter multiIndexRange(const array_t &start) const {
+    return MultiIndexIter(shape_, start);
+  }
   // @endcond
 
   /* GETTERS/SETTERS */

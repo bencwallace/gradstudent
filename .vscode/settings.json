@@ -90,5 +90,6 @@
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
         "**/*.o": true
-    }
+    },
+    "editor.indentSize": 2
 }

@@ -85,6 +85,21 @@ Tensor dot(const Tensor &tensor1, const Tensor &tensor2);
  */
 Tensor norm2(const Tensor &tensor);
 
+/* CONVOLUTIONS */
+
+/**
+ * @brief Computes the convolution of an input tensor with a kernel.
+ *
+ * The input tensor and kernel must have the same rank.
+ *
+ * @param input The input tensor
+ * @param kernel The kernel tensor
+ * @return Tensor
+ * @todo Support broadcasting
+ * @todo Support padding
+ */
+Tensor conv(const Tensor &input, const Tensor &kernel);
+
 /* VIEWS */
 
 /**
