@@ -12,6 +12,7 @@
 
 #include <initializer_list>
 #include <memory>
+#include <numeric>
 
 #include "array.h"
 #include "multi_index.h"
@@ -166,7 +167,8 @@ public:
 
   // @cond
   inline size_t toIndex(const array_t &mIdx) const {
-    return offset_ + sumProd(mIdx, strides_);
+    return offset_ +
+           std::inner_product(mIdx.begin(), mIdx.end(), strides_.begin(), 0);
   }
   // @endcond
 

@@ -1,3 +1,4 @@
+#include <numeric>
 #include <sstream>
 
 #include "ops.h"
@@ -28,11 +29,12 @@ Tensor dot(const Tensor &left, const Tensor &right) {
 
   size_t i = 0;
   for (auto &resultMultiIdx : MultiIndexIter(result.shape())) {
-    // TODO: find a better way to do this
-    size_t thisIndex =
-        sumProd(resultMultiIdx, left.strides(), 0, left.ndims() - 1);
-    size_t otherIndex = sumProd(resultMultiIdx, right.strides(),
-                                left.ndims() - 1, result.ndims());
+    size_t thisIndex = std::inner_product(
+        resultMultiIdx.begin(), resultMultiIdx.end() - right.ndims() + 1,
+        left_strides.begin(), 0);
+    size_t otherIndex = std::inner_product(
+        resultMultiIdx.rbegin(), resultMultiIdx.rend() - left.ndims() + 1,
+        right_strides.rbegin(), 0);
 
     result[i] = 0;
     for (size_t j = 0; j < left.shape()[left.ndims() - 1]; ++j) {

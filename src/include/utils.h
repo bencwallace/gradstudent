@@ -31,21 +31,6 @@ enum { BCAST_LEFT = -1, BCAST_NONE = 0, BCAST_RIGHT = 1 };
  */
 array_t defaultStrides(const array_t &shape);
 
-// @cond
-template <typename P, typename Q>
-size_t sumProd(const P &left, const Q &right, size_t start, size_t end) {
-  size_t sum = 0;
-  for (size_t i = start; i < end; ++i) {
-    sum += left[i] * right[i];
-  }
-  return sum;
-}
-
-template <typename P, typename Q>
-size_t sumProd(const P &left, const Q &right) {
-  return sumProd(left, right, 0, std::min(left.size(), right.size()));
-}
-
 template <typename T> size_t prod(const T &array) {
   size_t result = 1;
   for (size_t i = 0; i < array.size(); ++i) {
