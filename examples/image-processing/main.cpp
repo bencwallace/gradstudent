@@ -25,11 +25,9 @@ gradstudent::Tensor read_image(const std::string &filename) {
 
   gradstudent::Tensor result(gradstudent::array_t{height, width});
   unsigned char x;
-  for (size_t i = 0; i < height; ++i) {
-    for (size_t j = 0; j < width; ++j) {
-      ss.read(reinterpret_cast<char *>(&x), sizeof(x));
-      result[{i, j}] = static_cast<double>(x);
-    }
+  for (auto &mIdx : gradstudent::MultiIndexIter(result.shape())) {
+    ss.read(reinterpret_cast<char *>(&x), sizeof(x));
+    result[mIdx] = static_cast<double>(x);
   }
 
   return result;
@@ -49,11 +47,9 @@ void write_image(const std::string &filename,
   file << "P5" << std::endl;
   file << width << " " << height << std::endl;
   file << "255" << std::endl;
-  for (size_t i = 0; i < height; ++i) {
-    for (size_t j = 0; j < width; ++j) {
-      auto temp = static_cast<unsigned char>(image[{i, j}]);
-      file.write(reinterpret_cast<const char *>(&temp), sizeof(char));
-    }
+  for (auto &mIdx : gradstudent::MultiIndexIter(image.shape())) {
+    auto temp = static_cast<unsigned char>(image[mIdx]);
+    file.write(reinterpret_cast<const char *>(&temp), sizeof(char));
   }
 }
 
