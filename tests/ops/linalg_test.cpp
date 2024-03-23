@@ -25,6 +25,20 @@ TEST(DotTest, MatrixMatrix) {
   EXPECT_EQ((matrix3[{1, 2}]), 16);
 }
 
+TEST(DotTest, MatrixTensor) {
+  Tensor matrix({2, 3});
+  Tensor tensor({3, 2, 2});
+  Tensor result = dot(matrix, tensor);
+  EXPECT_EQ(result.shape(), (array_t{2, 2, 2}));
+}
+
+TEST(DotTest, TensorMatrix) {
+  Tensor tensor({4, 5, 2, 3});
+  Tensor matrix({3, 2});
+  Tensor result = dot(tensor, matrix);
+  EXPECT_EQ(result.shape(), (array_t{4, 5, 2, 2}));
+}
+
 TEST(NormTest, Matrix) {
   Tensor tensor({2, 2}, {1, 2, 3, 4});
   EXPECT_EQ(norm2(tensor), 30);
