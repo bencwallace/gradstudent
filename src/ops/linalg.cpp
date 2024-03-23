@@ -27,7 +27,7 @@ Tensor dot(const Tensor &left, const Tensor &right) {
   const array_t &right_strides = right.strides();
 
   size_t i = 0;
-  for (auto &resultMultiIdx : result.multiIndexRange()) {
+  for (auto &resultMultiIdx : MultiIndexIter(result.shape())) {
     // TODO: find a better way to do this
     size_t thisIndex =
         sumProd(resultMultiIdx, left.strides(), 0, left.ndims() - 1);

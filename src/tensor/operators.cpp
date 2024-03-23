@@ -9,17 +9,17 @@ namespace gradstudent {
 void Tensor::assignSelf(const Tensor &other) {
   auto temp(std::make_unique<double[]>(size_));
   size_t i = 0;
-  for (auto &mIdx : multiIndexRange()) {
+  for (auto &mIdx : MultiIndexIter(shape_)) {
     temp[i++] = other[mIdx];
   }
   i = 0;
-  for (auto &mIdx : multiIndexRange()) {
+  for (auto &mIdx : MultiIndexIter(shape_)) {
     data_[toIndex(mIdx)] = temp[i++];
   }
 }
 
 void Tensor::assignOther(const Tensor &other) {
-  for (auto &mIdx : multiIndexRange()) {
+  for (auto &mIdx : MultiIndexIter(shape_)) {
     data_[toIndex(mIdx)] = other[mIdx];
   }
 }

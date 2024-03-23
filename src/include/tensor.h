@@ -168,14 +168,6 @@ public:
   inline size_t toIndex(const array_t &mIdx) const {
     return offset_ + sumProd(mIdx, strides_);
   }
-
-  inline MultiIndexIter multiIndexRange() const {
-    return MultiIndexIter(shape_);
-  }
-
-  inline MultiIndexIter multiIndexRange(const array_t &start) const {
-    return MultiIndexIter(shape_, start);
-  }
   // @endcond
 
   /* GETTERS/SETTERS */

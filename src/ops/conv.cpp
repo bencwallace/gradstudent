@@ -20,9 +20,9 @@ Tensor conv(const Tensor &input, const Tensor &kernel) {
       input_shape - kernel_shape + array_t(kernel_shape.size(), 1);
 
   Tensor result(result_shape);
-  for (auto &rIdx : result.multiIndexRange()) {
+  for (auto &rIdx : MultiIndexIter(result.shape())) {
     result[rIdx] = 0;
-    for (auto &kIdx : kernel.multiIndexRange()) {
+    for (auto &kIdx : MultiIndexIter(kernel.shape())) {
       result[rIdx] += input[rIdx + kIdx] * kernel[kIdx];
     }
   }

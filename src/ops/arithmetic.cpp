@@ -6,7 +6,7 @@ namespace gradstudent {
 Tensor operator+(const Tensor &left, const Tensor &right) {
   auto [x, y] = broadcast(left, right);
   Tensor result(x.shape());
-  for (auto mIdx : result.multiIndexRange()) {
+  for (auto mIdx : MultiIndexIter(result.shape())) {
     result[mIdx] = x[mIdx] + y[mIdx];
   }
   return result;
@@ -15,7 +15,7 @@ Tensor operator+(const Tensor &left, const Tensor &right) {
 Tensor operator*(const Tensor &left, const Tensor &right) {
   auto [x, y] = broadcast(left, right);
   Tensor result(x.shape());
-  for (auto &resultIdx : result.multiIndexRange()) {
+  for (auto &resultIdx : MultiIndexIter(result.shape())) {
     result[resultIdx] = x[resultIdx] * y[resultIdx];
   }
   return result;

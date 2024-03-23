@@ -8,7 +8,7 @@ void Tensor::ensureWritable() {
   if (ro_) {
     double *temp = new double[size_];
     size_t i = 0;
-    for (auto mIdx : multiIndexRange()) {
+    for (auto mIdx : MultiIndexIter(shape_)) {
       temp[i++] = data_[toIndex(mIdx)];
     }
     data_.reset(temp);

@@ -8,7 +8,7 @@ namespace gradstudent {
 
 // tensor copy constructor
 Tensor::Tensor(const Tensor &other) : Tensor(other.shape_) {
-  for (auto &mIdx : multiIndexRange()) {
+  for (auto &mIdx : MultiIndexIter(shape_)) {
     (*this)[mIdx] = other[mIdx];
   }
 }
