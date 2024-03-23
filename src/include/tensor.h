@@ -77,7 +77,7 @@ public:
    * Constructs a tensor with the given shape, strides, and data contents.
    */
   Tensor(const array_t &shape, const array_t &strides,
-         std::initializer_list<double> data);
+         std::vector<double> data);
 
   /**
    * @brief Tensor convenience constructor.
@@ -85,7 +85,7 @@ public:
    * Constructs a tensor with the given shape and data contents and default
    * strides.
    */
-  Tensor(const array_t &shape, std::initializer_list<double> data);
+  Tensor(const array_t &shape, std::vector<double> data);
 
   /**
    * @brief Scalar tensor constructor.
