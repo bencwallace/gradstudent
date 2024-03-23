@@ -10,6 +10,7 @@
  */
 #pragma once
 
+#include <numeric>
 #include <vector>
 
 #include "array.h"
@@ -31,12 +32,10 @@ enum { BCAST_LEFT = -1, BCAST_NONE = 0, BCAST_RIGHT = 1 };
  */
 array_t defaultStrides(const array_t &shape);
 
-template <typename T> size_t prod(const T &array) {
-  size_t result = 1;
-  for (size_t i = 0; i < array.size(); ++i) {
-    result *= array[i];
-  }
-  return result;
+// @cond
+template <typename Iterable> size_t prod(const Iterable &iterable) {
+  return std::reduce(iterable.begin(), iterable.end(), 1,
+                     std::multiplies<typename Iterable::value_type>());
 }
 // @endcond
 
