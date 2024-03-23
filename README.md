@@ -10,6 +10,10 @@ goals with modern C++. Performance alone is not the main objective.
 
 See the [examples](examples/README.md) directory.
 
+![Image 1](examples/image-processing/titus.png) | ![Image 2](examples/image-processing/titus_out.png)
+:-------------------------:|:-------------------------:
+Input image | Image convolved with edge detection filter
+
 ## Requirements
 
 This project uses [CMake](CMakeLists.txt). clang is the assumed compiler. [Doxygen](Doxyfile) is used to build documentation.
@@ -55,12 +59,14 @@ Several simple [operations](src/include/ops.h) on `Tensor` objects are supported
 
 * [arithmetic](src/ops/arithmetic.cpp)
 * [linear algebra](src/ops/linalg.cpp) (just dot product for now)
-* [views](src/ops/views.cpp), including *broadcasting* and a copy-on-write mechanism for views of `const Tensor`s.
+* [views](src/ops/views.cpp), including *broadcasting* and a copy-on-write mechanism for views of `const Tensor`s
+* [convolution](src/ops/conv.cpp)
 
 The next hurdle is the implementation of automatic differentiation.
 
-Some things that could be interesting to explore:
+Other things that could be interesting to explore:
 
 * parallelization of the operations mentioned above
+* SIMD
 * lazy evaluation
 * support for different backends (e.g. OpenBLAS, CUDA)
