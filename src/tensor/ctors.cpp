@@ -49,4 +49,13 @@ Tensor::Tensor(const array_t &shape, std::vector<double> data)
 // scalar tensor constructor
 Tensor::Tensor(double value) : Tensor({}, {value}) {}
 
+Tensor Tensor::fill(const array_t &shape, const array_t &strides,
+                    double value) {
+  return Tensor(shape, strides, std::vector<double>(prod(shape), value));
+}
+
+Tensor Tensor::fill(const array_t &shape, double value) {
+  return Tensor::fill(shape, defaultStrides(shape), value);
+}
+
 } // namespace gradstudent

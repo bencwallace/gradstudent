@@ -94,6 +94,19 @@ public:
    */
   Tensor(double);
 
+  /**
+   * @brief Tensor fill constructor.
+   *
+   * Constructs a tensor filled with the given value.
+   */
+  static Tensor fill(const array_t &shape, const array_t &strides,
+                     double value);
+
+  /**
+   * @overload
+   */
+  static Tensor fill(const array_t &shape, double value);
+
   ~Tensor() = default;
 
   /* OPERATORS */
