@@ -43,6 +43,8 @@ private:
   void assignSelf(const Tensor &);
 
 public:
+  template <typename T1, typename T2> friend class TensorTuple;
+
   /* CONSTRUCTORS */
 
   /**
