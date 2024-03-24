@@ -64,7 +64,6 @@ private:
   const array_t shape_;
   bool isEnd_; // used for the unique scalar multi-index
 
-  void setToEnd();
   void increment(size_t currDim);
   void increment();
 };

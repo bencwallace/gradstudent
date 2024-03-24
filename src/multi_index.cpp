@@ -17,21 +17,17 @@ MultiIndexIter::MultiIndexIter(const MultiIndexIter &other)
     : curr_(new value_type(*other.curr_)), shape_(other.shape_),
       isEnd_(other.isEnd_) {}
 
-void MultiIndexIter::setToEnd() {
-  if (curr_->size() > 0) {
-    (*curr_)[0] = shape_[0];
-    if (curr_->size() > 1) {
-      std::fill_n(&(*curr_)[1], curr_->size() - 1, 0);
-    }
-  }
-  isEnd_ = true;
-}
-
 MultiIndexIter::MultiIndexIter(const array_t &shape, const array_t &start,
                                bool end)
     : curr_(new value_type(start)), shape_(shape), isEnd_(end) {
   if (end) {
-    setToEnd();
+    if (curr_->size() > 0) {
+      (*curr_)[0] = shape_[0];
+      if (curr_->size() > 1) {
+        std::fill_n(&(*curr_)[1], curr_->size() - 1, 0);
+      }
+    }
+    isEnd_ = true;
   }
 }
 
@@ -66,13 +62,13 @@ MultiIndexIter::reference MultiIndexIter::operator*() const {
 }
 
 void MultiIndexIter::increment(size_t currDim) {
-  if ((*curr_)[currDim] < shape_[currDim] - 1) {
-    ++(*curr_)[currDim];
-  } else if (currDim > 0) {
-    (*curr_)[currDim] = 0;
-    return increment(currDim - 1);
-  } else {
-    setToEnd();
+  if (++(*curr_)[currDim] == shape_[currDim]) {
+    if (currDim == 0) {
+      isEnd_ = true;
+    } else {
+      (*curr_)[currDim] = 0;
+      increment(currDim - 1);
+    }
   }
 }
 
