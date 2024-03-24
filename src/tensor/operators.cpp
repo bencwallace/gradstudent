@@ -3,6 +3,7 @@
 #include "multi_index.h"
 #include "ops.h"
 #include "tensor.h"
+#include "tensor_iter.h"
 
 namespace gradstudent {
 
@@ -19,8 +20,8 @@ void Tensor::assignSelf(const Tensor &other) {
 }
 
 void Tensor::assignOther(const Tensor &other) {
-  for (auto &mIdx : MultiIndexIter(shape_)) {
-    data_[toIndex(mIdx)] = other[mIdx];
+  for (auto vals : TensorTuple(*this, other)) {
+    std::get<0>(vals) = std::get<1>(vals);
   }
 }
 

@@ -110,12 +110,13 @@ TEST(DiffTest, Matrix) {
 
 TEST(DiffTest, StridedMatrix) {
   Tensor matrix1({2, 2}, {2, 1}, {1, 2, 3, 4});
-  Tensor matrix2({2, 2}, {1, 2}, {1, 2, 3, 4});
-  Tensor diff = matrix1 - matrix2;
+  Tensor matrix2({2, 2}, {1, 2}, {1, 3, 2, 4});
 
+  Tensor diff = matrix1 - matrix2;
   EXPECT_EQ(diff.shape(), array_t({2, 2}));
   EXPECT_EQ(diff.size(), 4);
 
+  ASSERT_EQ(matrix1, matrix2);
   EXPECT_EQ((diff[0]), 0);
   EXPECT_EQ((diff[1]), 0);
   EXPECT_EQ((diff[2]), 0);

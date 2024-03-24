@@ -2,14 +2,15 @@
 
 #include "multi_index.h"
 #include "tensor.h"
+#include "tensor_iter.h"
 #include "utils.h"
 
 namespace gradstudent {
 
 // tensor copy constructor
 Tensor::Tensor(const Tensor &other) : Tensor(other.shape_) {
-  for (auto &mIdx : MultiIndexIter(shape_)) {
-    (*this)[mIdx] = other[mIdx];
+  for (auto vals : TensorTuple(*this, other)) {
+    std::get<0>(vals) = std::get<1>(vals);
   }
 }
 
@@ -38,7 +39,7 @@ Tensor::Tensor(const array_t &shape, const array_t &strides,
   }
   size_t i = 0;
   for (double val : data) {
-    (this->data_)[i++] = val;
+    data_[i++] = val;
   }
 }
 
