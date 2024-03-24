@@ -20,7 +20,9 @@ MultiIndexIter::MultiIndexIter(const MultiIndexIter &other)
 void MultiIndexIter::setToEnd() {
   if (curr_->size() > 0) {
     (*curr_)[0] = shape_[0];
-    std::fill_n(&(*curr_)[1], curr_->size() - 1, 0);
+    if (curr_->size() > 1) {
+      std::fill_n(&(*curr_)[1], curr_->size() - 1, 0);
+    }
   }
   isEnd_ = true;
 }

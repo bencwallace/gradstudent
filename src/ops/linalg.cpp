@@ -30,10 +30,10 @@ Tensor dot(const Tensor &left, const Tensor &right) {
   size_t i = 0;
   for (auto &resultMultiIdx : MultiIndexIter(result.shape())) {
     size_t thisIndex = std::inner_product(
-        resultMultiIdx.begin(), resultMultiIdx.end() - right.ndims() + 1,
+        resultMultiIdx.begin(), resultMultiIdx.begin() + (left.ndims() - 1),
         left_strides.begin(), 0);
     size_t otherIndex = std::inner_product(
-        resultMultiIdx.rbegin(), resultMultiIdx.rend() - left.ndims() + 1,
+        resultMultiIdx.rbegin(), resultMultiIdx.rbegin() + (right.ndims() - 1),
         right_strides.rbegin(), 0);
 
     result[i] = 0;
