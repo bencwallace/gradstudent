@@ -27,7 +27,7 @@ Tensor::Tensor(const array_t &shape)
 
 // non-empty tensor constructor
 Tensor::Tensor(const array_t &shape, const array_t &strides,
-               std::vector<double> data)
+               const std::vector<double> &data)
     : offset_(0), size_(prod(shape)), shape_(shape), strides_(strides),
       data_(std::shared_ptr<double[]>(new double[size_])) {
   if (data.size() > 0 && data.size() != size_) {
@@ -43,7 +43,7 @@ Tensor::Tensor(const array_t &shape, const array_t &strides,
 }
 
 // non-empty tensor constructor (default strides)
-Tensor::Tensor(const array_t &shape, std::vector<double> data)
+Tensor::Tensor(const array_t &shape, const std::vector<double> &data)
     : Tensor(shape, defaultStrides(shape), data) {}
 
 // scalar tensor constructor
