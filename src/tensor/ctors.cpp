@@ -9,7 +9,7 @@ namespace gradstudent {
 
 // tensor copy constructor
 Tensor::Tensor(const Tensor &other) : Tensor(other.shape_) {
-  for (auto vals : TensorTuple(*this, other)) {
+  for (auto vals : TensorIter(*this, other)) {
     std::get<0>(vals) = std::get<1>(vals);
   }
 }

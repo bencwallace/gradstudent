@@ -20,7 +20,7 @@ void Tensor::assignSelf(const Tensor &other) {
 }
 
 void Tensor::assignOther(const Tensor &other) {
-  for (auto vals : TensorTuple(*this, other)) {
+  for (auto vals : TensorIter(*this, other)) {
     std::get<0>(vals) = std::get<1>(vals);
   }
 }
