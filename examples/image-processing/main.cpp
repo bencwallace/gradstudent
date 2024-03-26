@@ -25,9 +25,10 @@ gradstudent::Tensor read_image(const std::string &filename) {
 
   gradstudent::Tensor result(gradstudent::array_t{height, width});
   unsigned char x;
-  for (auto &mIdx : gradstudent::MultiIndexIter(result.shape())) {
+  for (const auto &[val] : gradstudent::TensorIter(result)) {
+    // TODO: cast directly
     ss.read(reinterpret_cast<char *>(&x), sizeof(x));
-    result[mIdx] = static_cast<double>(x);
+    val = static_cast<double>(x);
   }
 
   return result;
@@ -47,8 +48,9 @@ void write_image(const std::string &filename,
   file << "P5" << std::endl;
   file << width << " " << height << std::endl;
   file << "255" << std::endl;
-  for (auto &mIdx : gradstudent::MultiIndexIter(image.shape())) {
-    auto temp = static_cast<unsigned char>(image[mIdx]);
+  for (const auto &[val] : gradstudent::TensorIter(image)) {
+    // TODO: cast directly
+    auto temp = static_cast<unsigned char>(val);
     file.write(reinterpret_cast<const char *>(&temp), sizeof(char));
   }
 }
@@ -61,16 +63,18 @@ int main(int argc, char **argv) {
   std::string filename(argv[1]);
   auto image = read_image(filename);
   gradstudent::Tensor kernel(gradstudent::array_t{3, 3});
-  for (size_t i = 0; i < 9; ++i) {
-    if (i == 4) {
-      kernel[i] = 8;
+  for (auto it = gradstudent::TensorIter(kernel).begin(); it != it.end();
+       ++it) {
+    const auto [x] = *it;
+    if (it.index() == gradstudent::array_t{1, 1}) {
+      x = 8;
     } else {
-      kernel[i] = -1;
+      x = -1;
     }
   }
   gradstudent::Tensor out(gradstudent::conv(image, kernel));
-  for (size_t i = 0; i < out.size(); ++i) {
-    out[i] = std::max(0.0, std::min(255.0, out[i]));
+  for (const auto &[val] : gradstudent::TensorIter(out)) {
+    val = std::max(0.0, std::min(255.0, val));
   }
   write_image(filename + ".out.pgm", out);
 

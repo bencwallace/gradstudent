@@ -2,6 +2,7 @@
 #include <sstream>
 
 #include "ops.h"
+#include "tensor_iter.h"
 
 namespace gradstudent {
 
@@ -27,24 +28,24 @@ Tensor dot(const Tensor &left, const Tensor &right) {
   const array_t &left_strides = left.strides();
   const array_t &right_strides = right.strides();
 
-  size_t i = 0;
-  for (auto &resultMultiIdx : MultiIndexIter(result.shape())) {
-    size_t thisIndex = std::inner_product(
-        resultMultiIdx.begin(), resultMultiIdx.begin() + (left.ndims() - 1),
-        left_strides.begin(), 0);
+  for (auto res_it = TensorIter(result); res_it != res_it.end(); ++res_it) {
+    auto res_idx = res_it.index();
+    size_t thisIndex = std::inner_product(res_idx.begin(),
+                                          res_idx.begin() + (left.ndims() - 1),
+                                          left_strides.begin(), 0);
     size_t otherIndex = std::inner_product(
-        resultMultiIdx.rbegin(), resultMultiIdx.rbegin() + (right.ndims() - 1),
+        res_idx.rbegin(), res_idx.rbegin() + (right.ndims() - 1),
         right_strides.rbegin(), 0);
 
-    result[i] = 0;
+    auto [res_val] = *res_it;
+    res_val = 0;
     for (size_t j = 0; j < left.shape()[left.ndims() - 1]; ++j) {
-      result[i] += left[thisIndex] * right[otherIndex];
+      res_val += left[thisIndex] * right[otherIndex];
       thisIndex += left_strides[left.ndims() - 1];
       otherIndex += right_strides[0];
     }
-
-    ++i;
   }
+
   return result;
 }
 

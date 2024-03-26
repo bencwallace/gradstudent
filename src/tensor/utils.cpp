@@ -1,4 +1,5 @@
 #include "tensor.h"
+#include "tensor_iter.h"
 
 namespace gradstudent {
 
@@ -8,8 +9,8 @@ void Tensor::ensureWritable() {
   if (ro_) {
     double *temp = new double[size_];
     size_t i = 0;
-    for (auto mIdx : MultiIndexIter(shape_)) {
-      temp[i++] = data_[toIndex(mIdx)];
+    for (const auto &[val] : TensorIter(*this)) {
+      temp[i++] = val;
     }
     data_.reset(temp);
     ro_ = false;
