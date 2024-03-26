@@ -42,7 +42,7 @@ private:
   void assignSelf(const Tensor &);
 
 public:
-  template <typename... Ts> friend class TensorIter;
+  template <bool... Const> friend class TensorIter;
 
   /* CONSTRUCTORS */
 

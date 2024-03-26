@@ -17,22 +17,21 @@ template <typename T, typename... Ts> struct ntuple<0, T, Ts...> {
 
 template <int N, typename T> using ntuple_t = typename ntuple<N, T>::type;
 
-/* CONST CONVERTER */
+/* BOOLEAN TO CONST */
 
-template <typename NewType, typename...> struct const_convert {
+template <typename NewType, bool...> struct bool_to_const {
   using type = std::tuple<>;
 };
 
-template <typename NewType, typename T, typename... Types>
-struct const_convert<NewType, T, Types...> {
+template <typename NewType, bool C, bool... Const>
+struct bool_to_const<NewType, C, Const...> {
   using type = decltype(std::tuple_cat(
-      std::tuple<typename std::conditional_t<std::is_const_v<T>, const NewType,
-                                             NewType>>{},
-      typename const_convert<NewType, Types...>::type{}));
+      std::tuple<typename std::conditional_t<C, const NewType, NewType>>{},
+      typename bool_to_const<NewType, Const...>::type{}));
 };
 
-template <typename NewType, typename... Types>
-using const_convert_t = typename const_convert<NewType, Types...>::type;
+template <typename NewType, bool... Const>
+using bool_to_const_t = typename bool_to_const<NewType, Const...>::type;
 
 /* REFERENCE ADDER */
 

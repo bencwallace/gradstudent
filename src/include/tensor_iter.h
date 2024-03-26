@@ -4,20 +4,21 @@
 
 #include "array.h"
 #include "meta.h"
+#include "tensor.h"
 
 namespace gradstudent {
 
 /* ITERATOR */
 
-template <typename... Ts> class TensorIter {
+template <bool... Const> class TensorIter {
 
 public:
-  using value_type = const_convert_t<double, Ts...>;
+  using value_type = bool_to_const_t<double, Const...>;
   using reference = add_ref_t<value_type>;
   using difference_type = std::ptrdiff_t;
   using iterator_category = std::forward_iterator_tag;
 
-  TensorIter(Ts &...tensors)
+  TensorIter(std::conditional_t<Const, const Tensor, Tensor> &...tensors)
       : tensors_(tensors...), shape_(std::get<0>(tensors_).shape()),
         mIdx_(shape_.size(), 0), isEnd_(false) {
     std::apply([](auto &...indices) { ((indices = 0), ...); }, indices_);
@@ -41,7 +42,7 @@ public:
   }
 
   reference operator*() const {
-    return derefHelper(std::index_sequence_for<Ts...>{});
+    return derefHelper(std::make_index_sequence<sizeof...(Const)>{});
   }
 
   bool operator==(const TensorIter &other) const {
@@ -61,14 +62,14 @@ public:
         std::fill(it.mIdx_.begin() + 1, it.mIdx_.end(), 0);
       }
     }
-    it.syncIndicesHelper(std::index_sequence_for<Ts...>{});
+    it.syncIndicesHelper(std::make_index_sequence<sizeof...(Const)>{});
     it.isEnd_ = true;
     return it;
   }
 
 private:
-  std::tuple<Ts &...> tensors_;
-  ntuple_t<sizeof...(Ts), size_t> indices_;
+  std::tuple<std::conditional_t<Const, const Tensor &, Tensor &>...> tensors_;
+  ntuple_t<sizeof...(Const), size_t> indices_;
   array_t shape_;
   array_t mIdx_;
   bool isEnd_;
@@ -120,7 +121,14 @@ private:
 
   /* RECURSION HELPERS */
 
-  void increment() { return incrementHelper(std::index_sequence_for<Ts...>{}); }
+  void increment() {
+    return incrementHelper(std::make_index_sequence<sizeof...(Const)>{});
+  }
 };
+
+/* DEDUCTION GUIDES */
+
+template <typename... Args>
+TensorIter(Args &...) -> TensorIter<std::is_const_v<Args>...>;
 
 } // namespace gradstudent
