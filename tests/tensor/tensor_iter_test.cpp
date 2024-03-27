@@ -13,6 +13,7 @@ TEST(TensorIterTest, DefaultStrides) {
   for (auto vals : TensorIter(t1, t2)) {
     static_assert(std::tuple_size_v<decltype(vals)> == 2);
     auto [x, y] = vals;
+    static_assert(std::is_const_v<std::remove_reference_t<decltype(y)>>);
     EXPECT_EQ(x + y, 5);
   }
 
@@ -32,6 +33,7 @@ TEST(TensorIterTest, Strided) {
   for (auto vals : TensorIter(t1, t2)) {
     static_assert(std::tuple_size_v<decltype(vals)> == 2);
     auto [x, y] = vals;
+    static_assert(std::is_const_v<std::remove_reference_t<decltype(y)>>);
     EXPECT_EQ(x + y, 5);
   }
 
