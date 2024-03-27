@@ -41,5 +41,5 @@ TEST(BoolToConstTest, Rec2) {
 TEST(RefAdderTest, RefTest) {
   using T2 = add_ref_t<std::tuple<double, const double, double>>;
   static_assert(
-      std::is_same_v<T2, std::tuple<double &, const double &, double &>>);
+      std::is_same_v<T2, std::tuple<double &, const double, double &>>);
 }

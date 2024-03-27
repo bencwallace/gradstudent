@@ -38,7 +38,9 @@ using bool_to_const_t = typename bool_to_const<NewType, Const...>::type;
 template <typename...> struct add_ref;
 
 template <typename... Ts> struct add_ref<std::tuple<Ts...>> {
-  using type = std::tuple<typename std::add_lvalue_reference_t<Ts>...>;
+  using type =
+      std::tuple<std::conditional_t<std::is_const_v<Ts>, Ts,
+                                    std::add_lvalue_reference_t<Ts>>...>;
 };
 
 template <typename... Types> using add_ref_t = typename add_ref<Types...>::type;
