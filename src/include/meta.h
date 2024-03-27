@@ -15,6 +15,9 @@ template <typename T, typename... Ts> struct ntuple<0, T, Ts...> {
   using type = std::tuple<Ts...>;
 };
 
+/**
+ * @brief Tuple type with N elements of type T
+ */
 template <int N, typename T> using ntuple_t = typename ntuple<N, T>::type;
 
 /* BOOLEAN TO CONST */
@@ -30,6 +33,12 @@ struct bool_to_const<NewType, C, Const...> {
       typename bool_to_const<NewType, Const...>::type{}));
 };
 
+/**
+ * @brief Tuple type with mixed const and non-const elements of type NewType
+ *
+ * Whether each element is const is determined by the corresponding boolean
+ * value in the Const parameter pack.
+ */
 template <typename NewType, bool... Const>
 using bool_to_const_t = typename bool_to_const<NewType, Const...>::type;
 
@@ -43,6 +52,13 @@ template <typename... Ts> struct add_ref<std::tuple<Ts...>> {
                                     std::add_lvalue_reference_t<Ts>>...>;
 };
 
+/**
+ * @brief Tuple type with mixed reference and non-reference elements
+ *
+ * An elemenet is either a value type or a non-const reference, depending on
+ * whether the corresponding element in the Types parameter pack is const or
+ * not.
+ */
 template <typename... Types> using add_ref_t = typename add_ref<Types...>::type;
 
 } // namespace gradstudent
