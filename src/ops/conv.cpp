@@ -1,3 +1,4 @@
+#include <functional>
 #include <sstream>
 
 #include "ops.h"
@@ -5,16 +6,24 @@
 
 namespace gradstudent {
 
+void slidingWindowTransform(Tensor &result, const Tensor &input,
+                            const array_t &windowShape,
+                            std::function<double(Tensor)> functor) {
+  for (auto [resIdx, res] : ITensorIter(result)) {
+    Tensor window(truncate(input, resIdx, resIdx + windowShape));
+    res = functor(window);
+  }
+}
+
 Tensor singleConv(const Tensor &input, const Tensor &kernel) {
   array_t offset = kernel.shape() / 2;
   array_t result_shape =
       input.shape() - kernel.shape() + array_t(kernel.ndims(), 1);
 
   Tensor result(result_shape);
-  for (auto [resIdx, res] : ITensorIter(result)) {
-    Tensor window(truncate(input, resIdx, resIdx + kernel.shape()));
-    res = sum(window * kernel);
-  }
+  slidingWindowTransform(
+      result, input, kernel.shape(),
+      [&](const Tensor &window) { return sum(window * kernel); });
 
   return result;
 }
