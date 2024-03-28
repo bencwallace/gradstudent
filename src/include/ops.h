@@ -64,6 +64,10 @@ Tensor operator*(const Tensor &tensor1, const Tensor &tensor2);
  */
 bool operator==(const Tensor &tensor1, const Tensor &tensor2);
 
+/* REDUCTIONS */
+
+double sum(const Tensor &tensor);
+
 /* LINEAR ALGEBRA */
 
 /**
