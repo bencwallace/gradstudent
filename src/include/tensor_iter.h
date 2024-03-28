@@ -40,7 +40,7 @@ public:
   TensorIter(std::conditional_t<Const, const Tensor, Tensor> &...tensors)
       : tensors_(tensors...), shape_(std::get<0>(tensors_).shape()),
         mIdx_(shape_.size(), 0), isEnd_(false) {
-    std::apply([](auto &...indices) { ((indices = 0), ...); }, indices_);
+    syncIndicesHelper(std::make_index_sequence<sizeof...(Const)>{});
   }
 
   /**
@@ -68,7 +68,7 @@ public:
   }
 
   bool operator==(const TensorIter &other) const {
-    return indices_ == other.indices_ && isEnd_ == other.isEnd_;
+    return mIdx_ == other.mIdx_ && isEnd_ == other.isEnd_;
   }
 
   bool operator!=(const TensorIter &other) const { return !((*this) == other); }
