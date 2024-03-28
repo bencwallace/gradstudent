@@ -13,10 +13,7 @@ Tensor singleConv(const Tensor &input, const Tensor &kernel) {
   Tensor result(result_shape);
   for (auto [resIdx, res] : ITensorIter(result)) {
     Tensor window(truncate(input, resIdx, resIdx + kernel.shape()));
-    res = 0;
-    for (auto [win, ker] : TensorIter(window, kernel)) {
-      res += win * ker;
-    }
+    res = sum(window * kernel);
   }
 
   return result;
