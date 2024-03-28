@@ -32,6 +32,27 @@ array_t operator-(const array_t &lhs, const array_t &rhs) {
   return result;
 }
 
+array_t operator*(const array_t &lhs, const array_t &rhs) {
+  checkEqualSize(lhs, rhs);
+  array_t result(lhs.size());
+  for (size_t i = 0; i < lhs.size(); ++i) {
+    result[i] = lhs[i] * rhs[i];
+  }
+  return result;
+}
+
+array_t operator/(const array_t &lhs, const array_t &rhs) {
+  checkEqualSize(lhs, rhs);
+  array_t result(lhs.size());
+  for (size_t i = 0; i < lhs.size(); ++i) {
+    if (lhs[i] % rhs[i] != 0) {
+      throw std::invalid_argument("Division resulted in non-integer value");
+    }
+    result[i] = lhs[i] / rhs[i];
+  }
+  return result;
+}
+
 array_t operator/(const array_t &lhs, size_t rhs) {
   array_t result(lhs);
   for (size_t &x : result) {

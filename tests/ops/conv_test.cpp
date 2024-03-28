@@ -84,3 +84,32 @@ TEST(ConvTest, 2DOnesSquareFilters) {
     }
   }
 }
+
+TEST(MaxPoolTest, 1DRange) {
+  size_t input_size = 10;
+  Tensor input(array_t{input_size});
+  for (size_t i = 0; i < input_size; ++i) {
+    input[i] = i;
+  }
+
+  auto result = maxPool(input, array_t{2});
+  ASSERT_EQ(result.shape(), array_t{input_size / 2});
+  for (size_t i = 0; i < result.size(); ++i) {
+    EXPECT_EQ(result[i], 2 * i + 1) << "i = " << i;
+  }
+}
+
+TEST(MaxPoolTest, 2DRange) {
+  size_t input_size = 10;
+  Tensor input(array_t{input_size, input_size});
+  for (size_t i = 0; i < input_size * input_size; ++i) {
+    input[i] = i;
+  }
+
+  auto result = maxPool(input, array_t{2, 5});
+  ASSERT_EQ(result.shape(), (array_t{5, 2}));
+  for (auto [idx, val] : ITensorIter(result)) {
+    EXPECT_EQ(val, 14 + 20 * idx[0] + 5 * idx[1])
+        << "i  = " << idx[0] << ", j = " << idx[1];
+  }
+}

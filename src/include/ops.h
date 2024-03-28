@@ -66,6 +66,8 @@ bool operator==(const Tensor &tensor1, const Tensor &tensor2);
 
 /* REDUCTIONS */
 
+double max(const Tensor &tensor);
+
 double sum(const Tensor &tensor);
 
 /* LINEAR ALGEBRA */
@@ -89,7 +91,7 @@ Tensor dot(const Tensor &tensor1, const Tensor &tensor2);
  */
 Tensor norm2(const Tensor &tensor);
 
-/* CONVOLUTIONS */
+/* SLIDING WINDOW TRANSFORMS */
 
 /**
  * @brief Computes the convolution of an input tensor with a kernel.
@@ -103,6 +105,8 @@ Tensor norm2(const Tensor &tensor);
  * @todo Support padding
  */
 Tensor conv(const Tensor &input, const Tensor &kernel);
+
+Tensor maxPool(const Tensor &input, const array_t &poolShape);
 
 /* VIEWS */
 

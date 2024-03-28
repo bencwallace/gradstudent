@@ -6,13 +6,37 @@
 
 namespace gradstudent {
 
-void slidingWindowTransform(Tensor &result, const Tensor &input,
-                            const array_t &windowShape,
-                            std::function<double(Tensor)> functor) {
+void slidingWindowTransform(
+    Tensor &result, const Tensor &input,
+    std::function<Tensor(const Tensor &, const array_t &)> windowFn,
+    std::function<double(const Tensor &)> transform) {
   for (auto [resIdx, res] : ITensorIter(result)) {
-    Tensor window(truncate(input, resIdx, resIdx + windowShape));
-    res = functor(window);
+    Tensor window(windowFn(input, resIdx));
+    res = transform(window);
   }
+}
+
+void slidingWindowTransformNoStride(Tensor &result, const Tensor &input,
+                                    const array_t &windowShape,
+                                    std::function<double(Tensor)> transform) {
+  slidingWindowTransform(
+      result, input,
+      [&](const Tensor &input, const array_t &resIdx) {
+        return truncate(input, resIdx, resIdx + windowShape);
+      },
+      transform);
+}
+
+void slidingWindowTransformFullStride(Tensor &result, const Tensor &input,
+                                      const array_t &windowShape,
+                                      std::function<double(Tensor)> transform) {
+  slidingWindowTransform(
+      result, input,
+      [&](const Tensor &input, const array_t &resIdx) {
+        return truncate(input, resIdx * windowShape,
+                        resIdx * windowShape + windowShape);
+      },
+      transform);
 }
 
 Tensor singleConv(const Tensor &input, const Tensor &kernel) {
@@ -21,7 +45,7 @@ Tensor singleConv(const Tensor &input, const Tensor &kernel) {
       input.shape() - kernel.shape() + array_t(kernel.ndims(), 1);
 
   Tensor result(result_shape);
-  slidingWindowTransform(
+  slidingWindowTransformNoStride(
       result, input, kernel.shape(),
       [&](const Tensor &window) { return sum(window * kernel); });
 
@@ -59,6 +83,25 @@ Tensor conv(const Tensor &input, const Tensor &kernel) {
   for (size_t i = 0; i < kernel.shape()[0]; ++i) {
     slice(result, {i}) = singleConv(input, slice(kernel, array_t{i}));
   }
+  return result;
+}
+
+Tensor maxPool(const Tensor &input, const array_t &poolShape) {
+  array_t result_shape;
+  try {
+    result_shape = input.shape() / poolShape;
+  } catch (const std::invalid_argument &e) {
+    std::stringstream ss;
+    ss << "Pool shape " << poolShape << " does not divide input shape "
+       << input.shape();
+    throw std::invalid_argument(ss.str());
+  }
+  Tensor result(result_shape);
+
+  slidingWindowTransformFullStride(
+      result, input, poolShape,
+      [](const Tensor &window) { return max(window); });
+
   return result;
 }
 
