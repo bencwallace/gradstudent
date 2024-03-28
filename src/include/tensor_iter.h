@@ -162,9 +162,56 @@ private:
   }
 };
 
-/* DEDUCTION GUIDES */
-
 template <typename... Args>
 TensorIter(Args &...) -> TensorIter<std::is_const_v<Args>...>;
+
+template <bool... Const> class ITensorIter {
+
+public:
+  using value_type = tuple_cat_t<std::tuple<array_t>,
+                                 typename TensorIter<Const...>::value_type>;
+  using reference = tuple_cat_t<std::tuple<const array_t &>,
+                                typename TensorIter<Const...>::reference>;
+  using difference_type = std::ptrdiff_t;
+  using iterator_category = std::forward_iterator_tag;
+
+  ITensorIter(std::conditional_t<Const, const Tensor, Tensor> &...tensors)
+      : iter_(tensors...) {}
+
+  ITensorIter &operator++() {
+    ++iter_;
+    return *this;
+  }
+
+  ITensorIter operator++(int) {
+    ITensorIter tmp(*this);
+    operator++();
+    return tmp;
+  }
+
+  reference operator*() const {
+    return std::tuple_cat(std::forward_as_tuple(iter_.index()), *iter_);
+  }
+
+  bool operator==(const ITensorIter &other) const {
+    return iter_ == other.iter_;
+  }
+
+  bool operator!=(const ITensorIter &other) const {
+    return iter_ != other.iter_;
+  }
+
+  ITensorIter begin() { return *this; }
+
+  ITensorIter end() { return ITensorIter(iter_.end()); }
+
+private:
+  TensorIter<Const...> iter_;
+
+  ITensorIter(const TensorIter<Const...> &iter) : iter_(iter) {}
+};
+
+template <typename... Args>
+ITensorIter(Args &...) -> ITensorIter<std::is_const_v<Args>...>;
 
 } // namespace gradstudent
