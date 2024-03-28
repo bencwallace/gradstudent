@@ -51,6 +51,49 @@ const Tensor permute(const Tensor &tensor, std::initializer_list<size_t> axes) {
   return Tensor(result_shape, result_strides, tensor, 0, true);
 }
 
+// TRUNCATE
+
+array_t truncateShape(const Tensor &tensor, const array_t &start,
+                      const array_t &stop) {
+  if (start.size() != stop.size()) {
+    std::stringstream ss;
+    ss << "Expected start and stop arrays of equal length, got " << start.size()
+       << " and " << stop.size();
+    throw std::invalid_argument(ss.str());
+  }
+  if (start.size() != tensor.ndims()) {
+    std::stringstream ss;
+    ss << "Start and stop arrays of size " << start.size()
+       << " don't match tensor of rank " << tensor.ndims();
+    throw std::invalid_argument(ss.str());
+  }
+
+  array_t result_shape;
+  try {
+    result_shape = stop - start;
+  } catch (const std::invalid_argument &e) {
+    std::stringstream ss;
+    ss << "Start index must precede stop index. Got " << start << " and "
+       << stop;
+    throw std::invalid_argument(ss.str());
+  }
+
+  return result_shape;
+}
+
+Tensor truncate(Tensor &tensor, const array_t &start, const array_t &stop) {
+  auto result_shape = truncateShape(tensor, start, stop);
+  return Tensor(result_shape, tensor.strides(), tensor, tensor.toIndex(start),
+                false);
+}
+
+const Tensor truncate(const Tensor &tensor, const array_t &start,
+                      const array_t &stop) {
+  auto result_shape = truncateShape(tensor, start, stop);
+  return Tensor(result_shape, tensor.strides(), tensor, tensor.toIndex(start),
+                true);
+}
+
 // SLICE
 
 std::pair<array_t, array_t> sliceCommon(const Tensor &tensor,

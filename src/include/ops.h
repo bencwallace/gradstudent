@@ -138,6 +138,11 @@ Tensor permute(Tensor &tensor, std::initializer_list<size_t> axes);
  */
 const Tensor permute(const Tensor &tensor, std::initializer_list<size_t> axes);
 
+Tensor truncate(Tensor &tensor, const array_t &start, const array_t &stop);
+
+const Tensor truncate(const Tensor &tensor, const array_t &start,
+                      const array_t &stop);
+
 /**
  * @brief Slices a tensor.
  *
