@@ -63,10 +63,8 @@ int main(int argc, char **argv) {
   std::string filename(argv[1]);
   auto image = read_image(filename);
   gradstudent::Tensor kernel(gradstudent::array_t{3, 3});
-  for (auto it = gradstudent::TensorIter(kernel).begin(); it != it.end();
-       ++it) {
-    const auto [x] = *it;
-    if (it.index() == gradstudent::array_t{1, 1}) {
+  for (auto [idx, x] : gradstudent::ITensorIter(kernel)) {
+    if (idx == gradstudent::array_t{1, 1}) {
       x = 8;
     } else {
       x = -1;

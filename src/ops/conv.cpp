@@ -21,14 +21,10 @@ Tensor conv(const Tensor &input, const Tensor &kernel) {
       input_shape - kernel_shape + array_t(kernel_shape.size(), 1);
 
   Tensor result(result_shape);
-  for (auto res_it = TensorIter(result).begin(); res_it != res_it.end();
-       ++res_it) {
-    auto [res] = *res_it;
+  for (auto [resIdx, res] : ITensorIter(result)) {
     res = 0;
-    for (auto ker_it = TensorIter(kernel).begin(); ker_it != ker_it.end();
-         ++ker_it) {
-      auto [ker] = *ker_it;
-      res += input[res_it.index() + ker_it.index()] * ker;
+    for (auto [kerIdx, ker] : ITensorIter(kernel)) {
+      res += input[resIdx + kerIdx] * ker;
     }
   }
 
