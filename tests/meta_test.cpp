@@ -4,6 +4,26 @@
 
 using namespace gradstudent;
 
+TEST(TupleCatTest, Empty) {
+  static_assert(std::is_same_v<tuple_cat_t<std::tuple<>>, std::tuple<>>);
+}
+
+TEST(TupleCatTest, EmptyCatEmpty) {
+  static_assert(
+      std::is_same_v<tuple_cat_t<std::tuple<>, std::tuple<>>, std::tuple<>>);
+}
+
+TEST(TupleCatTest, EmptyCatNonempty) {
+  static_assert(std::is_same_v<tuple_cat_t<std::tuple<>, std::tuple<int>>,
+                               std::tuple<int>>);
+}
+
+TEST(TupleCatTest, NonemptyCatNonempty) {
+  static_assert(std::is_same_v<
+                tuple_cat_t<std::tuple<int, double>, std::tuple<char, char>>,
+                std::tuple<int, double, char, char>>);
+}
+
 TEST(TupleTest, BaseCase) {
   static_assert(std::is_same_v<ntuple_t<0, double>, std::tuple<>>);
 }

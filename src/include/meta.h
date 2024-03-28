@@ -5,6 +5,11 @@
 
 namespace gradstudent {
 
+/* TUPLE CONCATENATOR */
+
+template <typename... Ts>
+using tuple_cat_t = decltype(std::tuple_cat(std::declval<Ts>()...));
+
 /* TUPLE GENERATOR */
 
 template <int N, typename T, typename... Ts> struct ntuple {
