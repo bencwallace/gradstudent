@@ -37,11 +37,32 @@ public:
    * @param tensors Pack of tensors to iterate through. Must have the same
    * shape.
    */
-  TensorIter(std::conditional_t<Const, const Tensor, Tensor> &...tensors)
+  TensorIter(const array_t &skip,
+             std::conditional_t<Const, const Tensor, Tensor> &...tensors)
       : tensors_(tensors...), shape_(std::get<0>(tensors_).shape()),
-        mIdx_(shape_.size(), 0), isEnd_(false) {
+        skip_(skip), mIdx_(shape_.size(), 0), isEnd_(false) {
+    if (skip_.size() != shape_.size()) {
+      std::stringstream ss;
+      ss << "Skip array must have same size as tensor shape, got "
+         << skip_.size() << " and " << shape_.size();
+      throw std::invalid_argument(ss.str());
+    }
+    for (size_t i = 0; i < skip_.size(); ++i) {
+      if (shape_[i] % skip_[i] != 0) {
+        std::stringstream ss;
+        ss << "Skip values must divide corresponding tensor dimensions, but "
+              "got "
+           << skip_[i] << " and " << shape_[i] << " at index " << i;
+        throw std::invalid_argument(ss.str());
+      }
+    }
     syncIndicesHelper(std::make_index_sequence<sizeof...(Const)>{});
   }
+
+  TensorIter(std::conditional_t<Const, const Tensor, Tensor> &...tensors)
+      : TensorIter(
+            array_t(std::get<0>(std::forward_as_tuple(tensors...)).ndims(), 1),
+            tensors...) {}
 
   /**
    * @brief Returns the current multi-index
@@ -94,6 +115,7 @@ private:
   ntuple_t<sizeof...(Const), size_t>
       indices_;   // indices into each tensor's buffer
   array_t shape_; // common tensor shape
+  array_t skip_;  // amount to skip in each dimension
   array_t mIdx_;  // current multi-index
   bool isEnd_;    // needed for scalar case, in which there is a unique (empty)
                   // multi-index
@@ -120,11 +142,13 @@ private:
   template <size_t... Is>
   void incrementHelper(std::index_sequence<Is...> is, size_t currDim) {
     // increment the multi-index along the current dimension
-    ++mIdx_[currDim];
+    mIdx_[currDim] += skip_[currDim];
     // increment the buffer indices by the corresponding strides
     std::apply(
         [this, currDim](auto &...indices) {
-          ((indices += std::get<Is>(tensors_).strides_[currDim]), ...);
+          ((indices +=
+            skip_[currDim] * std::get<Is>(tensors_).strides_[currDim]),
+           ...);
         },
         indices_);
 
@@ -165,6 +189,9 @@ private:
 template <typename... Args>
 TensorIter(Args &...) -> TensorIter<std::is_const_v<Args>...>;
 
+template <typename... Args>
+TensorIter(const array_t &, Args &...) -> TensorIter<std::is_const_v<Args>...>;
+
 template <bool... Const> class ITensorIter {
 
 public:
@@ -177,6 +204,10 @@ public:
 
   ITensorIter(std::conditional_t<Const, const Tensor, Tensor> &...tensors)
       : iter_(tensors...) {}
+
+  ITensorIter(const array_t &skip,
+              std::conditional_t<Const, const Tensor, Tensor> &...tensors)
+      : iter_(skip, tensors...) {}
 
   ITensorIter &operator++() {
     ++iter_;
@@ -213,5 +244,9 @@ private:
 
 template <typename... Args>
 ITensorIter(Args &...) -> ITensorIter<std::is_const_v<Args>...>;
+
+template <typename... Args>
+ITensorIter(const array_t &, Args &...)
+    -> ITensorIter<std::is_const_v<Args>...>;
 
 } // namespace gradstudent
