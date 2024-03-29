@@ -9,6 +9,7 @@ RUN apt-get -qq update \
         doxygen \
         gdb \
         git \
+        libboost-all-dev \
         make \
         openssh-client \
         sudo \
