@@ -22,5 +22,12 @@ RUN wget ${CLANG_URL} -O /tmp/clang.tar.xz \
     && rm /tmp/clang.tar.xz
 RUN ln -s /usr/local/bin/clang /usr/bin/clang
 
+RUN git clone --depth 1 --branch v1.8.3 https://github.com/google/benchmark.git /tmp/benchmark \
+    && mkdir /tmp/benchmark/build \
+    && cmake -DBENCHMARK_DOWNLOAD_DEPENDENCIES=on -DCMAKE_BUILD_TYPE=Release -S /tmp/benchmark -B /tmp/benchmark/build \
+    && cmake --build /tmp/benchmark/build --config Release \
+    && cmake --build /tmp/benchmark/build --config Release --target install \
+    && rm -rf /tmp/benchmark
+
 RUN useradd -m -s /bin/bash -G sudo vscode \
     && passwd -d vscode
