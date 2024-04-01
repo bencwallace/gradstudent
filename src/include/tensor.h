@@ -43,6 +43,7 @@ private:
 
 public:
   template <bool... Const> friend class TensorIter;
+  template <bool Const> friend class TensorIterSimple;
 
   /* CONSTRUCTORS */
 
