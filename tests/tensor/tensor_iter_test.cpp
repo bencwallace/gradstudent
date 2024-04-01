@@ -43,7 +43,7 @@ TEST(TensorIterTest, Strided) {
   }
 
   TensorIter mit(t1);
-  for (auto it = mit.begin(); it != mit.end(); ++it) {
+  for (auto it = --mit.end(); it != mit.begin(); --it) {
     auto [x] = *it;
     EXPECT_EQ(x, -t2[it.index()]);
   }

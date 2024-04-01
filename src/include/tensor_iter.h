@@ -23,13 +23,15 @@ namespace gradstudent {
 template <bool... Const>
 class TensorIter : public boost::iterator_facade<
                        TensorIter<Const...>, bool_to_const_t<double, Const...>,
-                       std::forward_iterator_tag,
+                       std::bidirectional_iterator_tag,
                        add_ref_t<bool_to_const_t<double, Const...>>> {
 
 private:
-  using base_type = boost::iterator_facade<
-      TensorIter<Const...>, bool_to_const_t<double, Const...>,
-      std::forward_iterator_tag, add_ref_t<bool_to_const_t<double, Const...>>>;
+  using base_type =
+      boost::iterator_facade<TensorIter<Const...>,
+                             bool_to_const_t<double, Const...>,
+                             std::bidirectional_iterator_tag,
+                             add_ref_t<bool_to_const_t<double, Const...>>>;
 
 public:
   /**
@@ -101,6 +103,13 @@ private:
     }
   }
 
+  void decrement() {
+    isEnd_ = false;
+    if (shape_.size() > 0) {
+      decrementHelper();
+    }
+  }
+
   /* TEMPLATE HELPERS */
 
   // Computes each buffer index to match the current multi-index by taking the
@@ -118,6 +127,30 @@ private:
   template <size_t... Is> auto derefHelper(std::index_sequence<Is...>) const {
     return std::forward_as_tuple(
         std::get<Is>(tensors_).data_[std::get<Is>(indices_)]...);
+  }
+
+  template <size_t... Is>
+  void decrementHelper(std::index_sequence<Is...> is, size_t currDim) {
+    if (mIdx_[currDim] > 0) {
+      --mIdx_[currDim];
+      std::apply(
+          [this, currDim](auto &...indices) {
+            ((indices -= std::get<Is>(tensors_).strides_[currDim]), ...);
+          },
+          indices_);
+    } else {
+      mIdx_[currDim] = shape_[currDim] - 1;
+      std::apply(
+          [this, currDim](auto &...indices) {
+            ((indices +=
+              std::get<Is>(tensors_).strides_[currDim] * mIdx_[currDim]),
+             ...);
+          },
+          indices_);
+      if (currDim > 0) {
+        decrementHelper(is, currDim - 1);
+      }
+    }
   }
 
   template <size_t... Is>
@@ -152,11 +185,19 @@ private:
     }
   }
 
+  template <size_t... Is> void decrementHelper(std::index_sequence<Is...> is) {
+    decrementHelper(is, shape_.size() - 1);
+  }
+
   template <size_t... Is> void incrementHelper(std::index_sequence<Is...> is) {
     incrementHelper(is, shape_.size() - 1);
   }
 
   /* RECURSION HELPERS */
+
+  void decrementHelper() {
+    return decrementHelper(std::make_index_sequence<sizeof...(Const)>{});
+  }
 
   // Lexicographically increments the multi-index and updates the buffer indices
   // accordingly using the corresponding tensors' strides.
