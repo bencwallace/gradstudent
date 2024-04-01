@@ -23,14 +23,14 @@ namespace gradstudent {
 template <bool... Const>
 class TensorIter : public boost::iterator_facade<
                        TensorIter<Const...>, bool_to_const_t<double, Const...>,
-                       std::bidirectional_iterator_tag,
+                       std::random_access_iterator_tag,
                        add_ref_t<bool_to_const_t<double, Const...>>> {
 
 private:
   using base_type =
       boost::iterator_facade<TensorIter<Const...>,
                              bool_to_const_t<double, Const...>,
-                             std::bidirectional_iterator_tag,
+                             std::random_access_iterator_tag,
                              add_ref_t<bool_to_const_t<double, Const...>>>;
 
 public:
@@ -47,7 +47,7 @@ public:
    */
   TensorIter(std::conditional_t<Const, const Tensor, Tensor> &...tensors)
       : tensors_(tensors...), shape_(std::get<0>(tensors_).shape()),
-        mIdx_(shape_.size(), 0), isEnd_(false) {
+        mIdx_(shape_.size(), 0), endIdx_(endIndex()), isEnd_(false) {
     syncIndicesHelper(std::make_index_sequence<sizeof...(Const)>{});
   }
 
@@ -80,8 +80,9 @@ private:
       indices_;   // indices into each tensor's buffer
   array_t shape_; // common tensor shape
   array_t mIdx_;  // current multi-index
-  bool isEnd_;    // needed for scalar case, in which there is a unique (empty)
-                  // multi-index
+  array_t endIdx_;
+  bool isEnd_; // needed for scalar case, in which there is a unique (empty)
+               // multi-index
 
   /* ITERATOR FACADE REQUIREMENTS */
 
@@ -110,7 +111,52 @@ private:
     }
   }
 
+  template <size_t... Is>
+  void advance(typename base_type::difference_type n,
+               std::index_sequence<Is...> is) {
+    // handle scalar case first
+    if (shape_.size() == 0) {
+      isEnd_ = n > 0;
+      return;
+    }
+
+    auto nIdx = n > 0 ? toMultiIndex(n) : toMultiIndex(-n);
+    mIdx_ = n > 0 ? mIdx_ + nIdx : mIdx_ - nIdx;
+    auto nIndices = toBufferIndices(nIdx, is);
+    if (n > 0) {
+      std::apply(
+          [&, this]() {
+            ((std::get<Is>(indices_) += std::get<Is>(nIndices)), ...);
+          },
+          std::tuple<>{});
+    } else {
+      std::apply(
+          [&, this]() {
+            ((std::get<Is>(indices_) -= std::get<Is>(nIndices)), ...);
+          },
+          std::tuple<>{});
+    }
+
+    isEnd_ = mIdx_ >= endIdx_;
+  }
+
+  typename base_type::difference_type
+  distance_to(const TensorIter &other) const {
+    // assume compatible iterators
+    if (shape_.size() == 0) {
+      return other.isEnd_ - isEnd_;
+    }
+    return other.numSteps() - numSteps();
+  }
+
   /* TEMPLATE HELPERS */
+
+  template <size_t... Is>
+  ntuple_t<sizeof...(Const), size_t>
+  toBufferIndices(const array_t &idx, std::index_sequence<Is...>) {
+    return std::make_tuple(std::inner_product(
+        idx.begin(), idx.end(), std::get<Is>(tensors_).strides_.begin(), 0)...);
+  }
 
   // Computes each buffer index to match the current multi-index by taking the
   // dot product of the shared multi-index with each tensor's strides.
@@ -203,6 +249,41 @@ private:
   // accordingly using the corresponding tensors' strides.
   void incrementHelper() {
     return incrementHelper(std::make_index_sequence<sizeof...(Const)>{});
+  }
+
+  /* OTHER HELPERS */
+
+  void advance(typename base_type::difference_type n) {
+    advance(n, std::make_index_sequence<sizeof...(Const)>{});
+  }
+
+  array_t endIndex() const {
+    if (shape_.size() == 0) {
+      return shape_;
+    }
+    array_t result(shape_.size());
+    result[0] = shape_[0];
+    return result;
+  }
+
+  size_t numSteps() const {
+    size_t n = 0;
+    size_t runningProd = 1;
+    for (int i = shape_.size() - 1; i >= 0; --i) {
+      n += mIdx_[i] * runningProd;
+      runningProd *= shape_[i];
+    }
+    return n;
+  }
+
+  array_t toMultiIndex(size_t n) const {
+    array_t result(mIdx_.size(), 0);
+    result[shape_.size() - 1] = n % shape_[shape_.size() - 1];
+    n -= result[shape_.size() - 1];
+    for (int i = shape_.size() - 2; i >= 0; --i) {
+      result[i] = n / shape_[i + 1];
+    }
+    return result;
   }
 };
 

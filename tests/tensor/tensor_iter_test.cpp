@@ -47,6 +47,10 @@ TEST(TensorIterTest, Strided) {
     auto [x] = *it;
     EXPECT_EQ(x, -t2[it.index()]);
   }
+
+  EXPECT_EQ(mit.end() - mit.begin(), 4);
+  mit += 2;
+  EXPECT_EQ(std::get<0>(*mit), -2);
 }
 
 TEST(ITensorIterTest, DefaultStrides) {
