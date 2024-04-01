@@ -15,7 +15,7 @@
 #include <numeric>
 
 #include "array.h"
-#include "utils.h"
+#include "internal/utils.h"
 
 namespace gradstudent {
 

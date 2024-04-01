@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "utils.h"
+#include "internal/utils.h"
 
 using namespace gradstudent;
 

@@ -1,8 +1,8 @@
 #include <sstream>
 
+#include "internal/utils.h"
 #include "tensor.h"
 #include "tensor_iter.h"
-#include "utils.h"
 
 namespace gradstudent {
 

@@ -3,7 +3,7 @@
 #include <tuple>
 
 #include "array.h"
-#include "meta.h"
+#include "internal/meta.h"
 #include "tensor.h"
 
 namespace gradstudent {
