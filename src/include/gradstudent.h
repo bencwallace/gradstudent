@@ -13,3 +13,4 @@
 #include "ops.h"         // NOLINT(misc-include-cleaner)
 #include "tensor.h"      // NOLINT(misc-include-cleaner)
 #include "tensor_iter.h" // NOLINT(misc-include-cleaner)
+#include "utils.h"       // NOLINT(misc-include-cleaner)
