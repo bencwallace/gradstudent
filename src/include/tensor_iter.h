@@ -2,6 +2,8 @@
 
 #include <tuple>
 
+#include <boost/iterator/iterator_facade.hpp>
+
 #include "array.h"
 #include "meta.h"
 #include "tensor.h"
@@ -18,14 +20,18 @@ namespace gradstudent {
  * @tparam Const Pack of boolean values indicating whether the corresponding
  * tensor should be treated as constant.
  */
-template <bool... Const> class TensorIter {
+template <bool... Const>
+class TensorIter : public boost::iterator_facade<
+                       TensorIter<Const...>, bool_to_const_t<double, Const...>,
+                       std::forward_iterator_tag,
+                       add_ref_t<bool_to_const_t<double, Const...>>> {
+
+private:
+  using base_type = boost::iterator_facade<
+      TensorIter<Const...>, bool_to_const_t<double, Const...>,
+      std::forward_iterator_tag, add_ref_t<bool_to_const_t<double, Const...>>>;
 
 public:
-  using value_type = bool_to_const_t<double, Const...>;
-  using reference = add_ref_t<value_type>;
-  using difference_type = std::ptrdiff_t;
-  using iterator_category = std::forward_iterator_tag;
-
   /**
    * @brief Construct a new TensorIter object
    *
@@ -47,29 +53,6 @@ public:
    * @brief Returns the current multi-index
    */
   const array_t &index() const { return mIdx_; }
-
-  TensorIter &operator++() {
-    if (!shape_.empty()) {
-      increment();
-    } else {
-      isEnd_ = true;
-    }
-    return *this;
-  }
-
-  TensorIter operator++(int) {
-    TensorIter tmp(*this);
-    operator++();
-    return tmp;
-  }
-
-  reference operator*() const {
-    return derefHelper(std::make_index_sequence<sizeof...(Const)>{});
-  }
-
-  bool operator==(const TensorIter &other) const {
-    return mIdx_ == other.mIdx_ && isEnd_ == other.isEnd_;
-  }
 
   bool operator!=(const TensorIter &other) const { return !((*this) == other); }
 
@@ -97,6 +80,26 @@ private:
   array_t mIdx_;  // current multi-index
   bool isEnd_;    // needed for scalar case, in which there is a unique (empty)
                   // multi-index
+
+  /* ITERATOR FACADE REQUIREMENTS */
+
+  friend class boost::iterator_core_access;
+
+  typename base_type::reference dereference() const {
+    return derefHelper(std::make_index_sequence<sizeof...(Const)>{});
+  }
+
+  bool equal(const TensorIter &other) const {
+    return mIdx_ == other.mIdx_ && isEnd_ == other.isEnd_;
+  }
+
+  void increment() {
+    if (!shape_.empty()) {
+      incrementHelper();
+    } else {
+      isEnd_ = true;
+    }
+  }
 
   /* TEMPLATE HELPERS */
 
@@ -157,7 +160,7 @@ private:
 
   // Lexicographically increments the multi-index and updates the buffer indices
   // accordingly using the corresponding tensors' strides.
-  void increment() {
+  void incrementHelper() {
     return incrementHelper(std::make_index_sequence<sizeof...(Const)>{});
   }
 };
