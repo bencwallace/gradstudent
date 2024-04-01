@@ -46,7 +46,7 @@ public:
    * shape.
    */
   TensorIter(std::conditional_t<Const, const Tensor, Tensor> &...tensors)
-      : tensors_(tensors...), shape_(std::get<0>(tensors_).shape()),
+      : tensors_(&tensors...), shape_(std::get<0>(tensors_)->shape()),
         mIdx_(shape_.size(), 0), endIdx_(endIndex()), isEnd_(false) {
     syncIndicesHelper(std::make_index_sequence<sizeof...(Const)>{});
   }
@@ -62,7 +62,7 @@ public:
 
   TensorIter end() {
     auto it = std::apply(
-        [](auto &...tensors) { return TensorIter(tensors...); }, tensors_);
+        [](auto &...tensors) { return TensorIter(*tensors...); }, tensors_);
     if (!it.mIdx_.empty()) {
       it.mIdx_[0] = it.shape_[0];
       if (it.mIdx_.size() > 1) {
@@ -75,7 +75,7 @@ public:
   }
 
 private:
-  std::tuple<std::conditional_t<Const, const Tensor &, Tensor &>...> tensors_;
+  std::tuple<std::conditional_t<Const, const Tensor *, Tensor *>...> tensors_;
   ntuple_t<sizeof...(Const), size_t>
       indices_;   // indices into each tensor's buffer
   array_t shape_; // common tensor shape
@@ -154,8 +154,9 @@ private:
   template <size_t... Is>
   ntuple_t<sizeof...(Const), size_t>
   toBufferIndices(const array_t &idx, std::index_sequence<Is...>) {
-    return std::make_tuple(std::inner_product(
-        idx.begin(), idx.end(), std::get<Is>(tensors_).strides_.begin(), 0)...);
+    return std::make_tuple(
+        std::inner_product(idx.begin(), idx.end(),
+                           std::get<Is>(tensors_)->strides_.begin(), 0)...);
   }
 
   // Computes each buffer index to match the current multi-index by taking the
@@ -163,7 +164,7 @@ private:
   template <size_t... Is> auto syncIndicesHelper(std::index_sequence<Is...>) {
     std::apply(
         [this](auto &...indices) {
-          ((indices = std::get<Is>(tensors_).toIndex(mIdx_)), ...);
+          ((indices = std::get<Is>(tensors_)->toIndex(mIdx_)), ...);
         },
         indices_);
   }
@@ -172,7 +173,7 @@ private:
   // buffer index
   template <size_t... Is> auto derefHelper(std::index_sequence<Is...>) const {
     return std::forward_as_tuple(
-        std::get<Is>(tensors_).data_[std::get<Is>(indices_)]...);
+        std::get<Is>(tensors_)->data_[std::get<Is>(indices_)]...);
   }
 
   template <size_t... Is>
@@ -181,7 +182,7 @@ private:
       --mIdx_[currDim];
       std::apply(
           [this, currDim](auto &...indices) {
-            ((indices -= std::get<Is>(tensors_).strides_[currDim]), ...);
+            ((indices -= std::get<Is>(tensors_)->strides_[currDim]), ...);
           },
           indices_);
     } else {
@@ -189,7 +190,7 @@ private:
       std::apply(
           [this, currDim](auto &...indices) {
             ((indices +=
-              std::get<Is>(tensors_).strides_[currDim] * mIdx_[currDim]),
+              std::get<Is>(tensors_)->strides_[currDim] * mIdx_[currDim]),
              ...);
           },
           indices_);
@@ -206,7 +207,7 @@ private:
     // increment the buffer indices by the corresponding strides
     std::apply(
         [this, currDim](auto &...indices) {
-          ((indices += std::get<Is>(tensors_).strides_[currDim]), ...);
+          ((indices += std::get<Is>(tensors_)->strides_[currDim]), ...);
         },
         indices_);
 
@@ -221,7 +222,7 @@ private:
         std::apply(
             [this, currDim](auto &...indices) {
               ((indices -=
-                std::get<Is>(tensors_).strides_[currDim] * shape_[currDim]),
+                std::get<Is>(tensors_)->strides_[currDim] * shape_[currDim]),
                ...);
             },
             indices_);
