@@ -1,3 +1,5 @@
+#include <algorithm>
+#include <execution>
 #include <iostream>
 
 #include "ops.h"
@@ -8,9 +10,15 @@ namespace gradstudent {
 Tensor operator+(const Tensor &left, const Tensor &right) {
   auto [bleft, bright] = broadcast(left, right);
   Tensor result(bleft.shape());
-  for (const auto &[res, lt, rt] : TensorIter(result, bleft, bright)) {
+  auto it = TensorIter(result, bleft, bright);
+  for (const auto &[res, lt, rt] : it) {
     res = lt + rt;
   }
+  //   std::for_each(std::execution::seq, it.begin(), it.end(), [](const auto
+  //   &vals) {
+  //     auto &[res, lt, rt] = vals;
+  //     res = lt + rt;
+  //   });
   return result;
 }
 

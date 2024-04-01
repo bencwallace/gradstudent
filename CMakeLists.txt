@@ -11,6 +11,8 @@ set(DEBUG_FLAGS "-O0 -g -D_GLIBCXX_DEBUG")
 set(SANITIZE_FLAGS "-fsanitize=address,leak,undefined -fno-omit-frame-pointer")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${DEBUG_FLAGS} ${SANITIZE_FLAGS}")
 
+find_package(TBB REQUIRED)
+
 include(FetchContent)
 FetchContent_Declare(
     googletest
