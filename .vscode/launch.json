@@ -33,7 +33,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/examples/${input:example}/${input:example}",
-            "args": ["${input:args}"],
+            "args": ["${input:lenet_weights}", "${input:lenet_data}"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/examples/${input:example}",
             "environment": [],
@@ -65,11 +65,19 @@
     }, {
         "id": "example",
         "type": "pickString",
-        "options": ["image-processing"],
+        "options": ["image-processing", "lenet"],
         "description": "Example Name"
     }, {
         "id": "args",
         "type": "promptString",
         "description": "Arguments"
+    }, {
+        "id": "lenet_weights",
+        "type": "promptString",
+        "description": "Weights path"
+    }, {
+      "id": "lenet_data",
+      "type": "promptString",
+      "description": "Data path"
     }]
 }
