@@ -39,6 +39,8 @@ array_t operator/(const array_t &lhs, const array_t &rhs);
 
 array_t operator/(const array_t &lhs, size_t rhs);
 
+array_t slice(const array_t &array, size_t start, size_t stop);
+
 template <typename T>
 std::ostream &operator<<(std::ostream &os, const std::vector<T> &array) {
   std::ostream &result = os << "(";

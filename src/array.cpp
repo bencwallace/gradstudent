@@ -61,4 +61,8 @@ array_t operator/(const array_t &lhs, size_t rhs) {
   return result;
 }
 
+array_t slice(const array_t &array, size_t start, size_t stop) {
+  return array_t(array.begin() + start, array.begin() + stop);
+}
+
 } // namespace gradstudent
