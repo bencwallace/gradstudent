@@ -64,6 +64,10 @@ Tensor operator*(const Tensor &tensor1, const Tensor &tensor2);
  */
 bool operator==(const Tensor &tensor1, const Tensor &tensor2);
 
+/* ACTIVATIONS */
+
+Tensor relu(const Tensor &tensor);
+
 /* REDUCTIONS */
 
 double max(const Tensor &tensor);
