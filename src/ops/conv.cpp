@@ -96,7 +96,7 @@ Tensor conv(const Tensor &input, const Tensor &kernel, size_t n) {
 
 /* MAX POOLING */
 
-Tensor maxPool(const Tensor &input, const array_t &poolShape) {
+Tensor singleMaxPool(const Tensor &input, const array_t &poolShape) {
   array_t result_shape;
   try {
     result_shape = input.shape() / poolShape;
@@ -112,6 +112,36 @@ Tensor maxPool(const Tensor &input, const array_t &poolShape) {
       result, input, poolShape,
       [](const Tensor &window) { return max(window); });
 
+  return result;
+}
+
+Tensor maxPool(const Tensor &input, const array_t &poolShape) {
+  if (input.ndims() > poolShape.size() + 1) {
+    std::stringstream ss;
+    ss << "Input rank must be at most one greater than pool rank, got "
+       << input.ndims() << " and " << poolShape.size();
+    throw std::invalid_argument(ss.str());
+  }
+  if (poolShape.size() == input.ndims()) {
+    return singleMaxPool(input, poolShape);
+  }
+
+  array_t inputSliceShape = sliceFrom(input.shape(), 1);
+  array_t resultSliceShape;
+  try {
+    resultSliceShape = inputSliceShape / poolShape;
+  } catch (const std::invalid_argument &e) {
+    std::stringstream ss;
+    ss << "Pool shape " << poolShape << " does not divide input shape "
+       << input.shape();
+    throw std::invalid_argument(ss.str());
+  }
+  array_t result_shape = array_t{input.shape()[0]} | resultSliceShape;
+  Tensor result(result_shape);
+
+  for (size_t i = 0; i < input.shape()[0]; ++i) {
+    slice(result, {i}) = singleMaxPool(slice(input, {i}), poolShape);
+  }
   return result;
 }
 

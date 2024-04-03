@@ -153,3 +153,24 @@ TEST(MaxPoolTest, 2DRange) {
         << "i  = " << idx[0] << ", j = " << idx[1];
   }
 }
+
+TEST(MaxPoolTest, 2DRangeChannels) {
+  size_t input_size = 10;
+  size_t num_channels = 4;
+  Tensor input(array_t{num_channels, input_size, input_size});
+  for (size_t i = 0; i < num_channels; ++i) {
+    for (size_t j = 0; j < input_size * input_size; ++j) {
+      slice(input, {i})[j] = j;
+    }
+  }
+
+  auto result = maxPool(input, array_t{2, 5});
+  ASSERT_EQ(result.shape(), (array_t{num_channels, 5, 2}));
+  for (size_t i = 0; i < num_channels; ++i) {
+    const auto &s = slice(result, {i});
+    for (auto [idx, val] : ITensorIter(s)) {
+      EXPECT_EQ(val, 14 + 20 * idx[0] + 5 * idx[1])
+          << "i  = " << idx[0] << ", j = " << idx[1];
+    }
+  }
+}
