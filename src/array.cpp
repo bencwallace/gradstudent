@@ -11,6 +11,14 @@ void checkEqualSize(const array_t &lhs, const array_t &rhs) {
   }
 }
 
+array_t operator+(const array_t &lhs, size_t rhs) {
+  array_t result(lhs);
+  for (size_t &x : result) {
+    x += rhs;
+  }
+  return result;
+}
+
 array_t operator+(const array_t &lhs, const array_t &rhs) {
   checkEqualSize(lhs, rhs);
   array_t result(lhs.size());

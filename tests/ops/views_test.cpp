@@ -198,3 +198,25 @@ TEST(BroadcastTest, TwoTensors) {
   EXPECT_EQ(b1.shape(), (array_t{3, 3}));
   EXPECT_EQ(b2.shape(), (array_t{3, 3}));
 }
+
+TEST(TruncateTest, Vector) {
+  Tensor tensor({8}, {1, 2, 3, 4, 5, 6, 7, 8});
+  Tensor truncated = truncate(tensor, {1}, {3});
+  EXPECT_EQ(truncated.shape(), array_t{2});
+  EXPECT_EQ(truncated, Tensor({2}, {2, 3}));
+}
+
+TEST(TruncateTest, MatrixRows) {
+  Tensor tensor({4, 2}, {1, 2, 3, 4, 5, 6, 7, 8});
+  Tensor truncated = truncate(tensor, {1}, {3});
+  EXPECT_EQ(truncated.shape(), (array_t{2, 2}));
+  EXPECT_EQ(truncated, Tensor({2, 2}, {3, 4, 5, 6}));
+}
+
+TEST(TruncateTest, MatrixElems) {
+  Tensor tensor({4, 4},
+                {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16});
+  Tensor truncated = truncate(tensor, {1, 1}, {3, 3});
+  EXPECT_EQ(truncated.shape(), (array_t{2, 2}));
+  EXPECT_EQ(truncated, Tensor({2, 2}, {6, 7, 10, 11}));
+}

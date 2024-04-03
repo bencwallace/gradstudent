@@ -29,6 +29,8 @@ using array_t = std::vector<size_t>;
 // @cond
 void checkEqualSize(const array_t &lhs, const array_t &rhs);
 
+array_t operator+(const array_t &lhs, size_t rhs);
+
 array_t operator+(const array_t &lhs, const array_t &rhs);
 
 array_t operator-(const array_t &lhs, const array_t &rhs);
