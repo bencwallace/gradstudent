@@ -70,6 +70,8 @@ Tensor relu(const Tensor &tensor);
 
 /* REDUCTIONS */
 
+size_t argmax(const Tensor &tensor);
+
 double max(const Tensor &tensor);
 
 double sum(const Tensor &tensor);
