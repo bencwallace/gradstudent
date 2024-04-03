@@ -52,6 +52,22 @@ Tensor singleConv(const Tensor &input, const Tensor &kernel) {
   return result;
 }
 
+Tensor multiConv(const Tensor &input, const Tensor &kernel) {
+  array_t singleKernelShape(kernel.shape().begin() + 1, kernel.shape().end());
+  array_t singleResultShape =
+      input.shape() - singleKernelShape + array_t(input.ndims(), 1);
+  array_t resultShape(kernel.ndims());
+  resultShape[0] = kernel.shape()[0];
+  std::copy(singleResultShape.begin(), singleResultShape.end(),
+            resultShape.begin() + 1);
+
+  Tensor result(resultShape);
+  for (size_t i = 0; i < kernel.shape()[0]; ++i) {
+    slice(result, {i}) = singleConv(input, slice(kernel, array_t{i}));
+  }
+  return result;
+}
+
 Tensor conv(const Tensor &input, const Tensor &kernel) {
   if (kernel.ndims() < input.ndims()) {
     std::stringstream ss;
@@ -69,21 +85,9 @@ Tensor conv(const Tensor &input, const Tensor &kernel) {
 
   if (kernel.ndims() == input.ndims()) {
     return singleConv(input, kernel);
+  } else {
+    return multiConv(input, kernel);
   }
-
-  array_t singleKernelShape(kernel.shape().begin() + 1, kernel.shape().end());
-  array_t singleResultShape =
-      input.shape() - singleKernelShape + array_t(input.ndims(), 1);
-  array_t resultShape(kernel.ndims());
-  resultShape[0] = kernel.shape()[0];
-  std::copy(singleResultShape.begin(), singleResultShape.end(),
-            resultShape.begin() + 1);
-
-  Tensor result(resultShape);
-  for (size_t i = 0; i < kernel.shape()[0]; ++i) {
-    slice(result, {i}) = singleConv(input, slice(kernel, array_t{i}));
-  }
-  return result;
 }
 
 Tensor maxPool(const Tensor &input, const array_t &poolShape) {
