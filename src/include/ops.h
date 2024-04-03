@@ -96,15 +96,24 @@ Tensor norm2(const Tensor &tensor);
 /**
  * @brief Computes the convolution of an input tensor with a kernel.
  *
- * The input tensor and kernel must have the same rank.
+ * The kernel rank can be at most one greater than the input rank.
+ * When it is strictly one greater, the first dimension specifies the
+ * filter.
+ *
+ * Suppose the input has shape (m_1, ..., m_d) and the kernel has shape
+ * (k_0, k_1, ..., k_d). Denote the case where input and kernel rank match
+ * by allowing m_0 == 0. Then it is required that k_i == m_i for all
+ * i = d-n+1, ..., d. These dimensions are contracted and the output will
+ * have shape (k_0, p_1, ..., p_{d-n}) with p_j = m_j - k_j + 1 for each j.
  *
  * @param input The input tensor
  * @param kernel The kernel tensor
+ * @param n The number of dimensions over which to perform the convolution.
  * @return Tensor
  * @todo Support broadcasting
  * @todo Support padding
  */
-Tensor conv(const Tensor &input, const Tensor &kernel);
+Tensor conv(const Tensor &input, const Tensor &kernel, size_t n = 0);
 
 Tensor maxPool(const Tensor &input, const array_t &poolShape);
 

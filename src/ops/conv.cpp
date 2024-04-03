@@ -6,6 +6,8 @@
 
 namespace gradstudent {
 
+/* SLIDING WINDOW HELPER FUNCTIONS */
+
 void slidingWindowTransform(
     Tensor &result, const Tensor &input,
     std::function<Tensor(const Tensor &, const array_t &)> windowFn,
@@ -39,31 +41,37 @@ void slidingWindowTransformFullStride(Tensor &result, const Tensor &input,
       transform);
 }
 
-Tensor singleConv(const Tensor &input, const Tensor &kernel) {
-  array_t offset = kernel.shape() / 2;
-  array_t result_shape = input.shape() - kernel.shape() + 1;
+/* CONVOLUTION OVER ALL DIMENSIONS */
 
+Tensor singleConv(const Tensor &input, const Tensor &kernel, size_t n) {
+  array_t kernel_shape = sliceTo(kernel.shape(), n);
+  array_t result_shape = sliceTo(input.shape(), n) - kernel_shape + 1;
   Tensor result(result_shape);
   slidingWindowTransformNoStride(
-      result, input, kernel.shape(),
+      result, input, kernel_shape,
       [&](const Tensor &window) { return sum(window * kernel); });
 
   return result;
 }
 
-Tensor multiConv(const Tensor &input, const Tensor &kernel) {
-  auto singleKernelShape = sliceFrom(kernel.shape(), 1);
-  array_t singleResultShape = input.shape() - singleKernelShape + 1;
+Tensor multiConv(const Tensor &input, const Tensor &kernel, size_t n) {
+  auto singleKernelShape = slice(kernel.shape(), 1, 1 + n);
+  array_t singleResultShape = sliceTo(input.shape(), n) - singleKernelShape + 1;
   auto resultShape = array_t{kernel.shape()[0]} | singleResultShape;
 
   Tensor result(resultShape);
   for (size_t i = 0; i < kernel.shape()[0]; ++i) {
-    slice(result, {i}) = singleConv(input, slice(kernel, array_t{i}));
+    slice(result, {i}) = singleConv(input, slice(kernel, array_t{i}), n);
   }
   return result;
 }
 
-Tensor conv(const Tensor &input, const Tensor &kernel) {
+Tensor conv(const Tensor &input, const Tensor &kernel, size_t n) {
+  if (n > input.ndims()) {
+    std::stringstream ss;
+    ss << "Convolution rank " << n << " exceeds input rank " << input.ndims();
+    throw std::invalid_argument(ss.str());
+  }
   if (kernel.ndims() < input.ndims()) {
     std::stringstream ss;
     ss << "Input rank should not exceed kernel rank, got " << input.ndims()
@@ -78,12 +86,15 @@ Tensor conv(const Tensor &input, const Tensor &kernel) {
     throw std::invalid_argument(ss.str());
   }
 
+  n = n ? n : input.ndims();
   if (kernel.ndims() == input.ndims()) {
-    return singleConv(input, kernel);
+    return singleConv(input, kernel, n);
   } else {
-    return multiConv(input, kernel);
+    return multiConv(input, kernel, n);
   }
 }
+
+/* MAX POOLING */
 
 Tensor maxPool(const Tensor &input, const array_t &poolShape) {
   array_t result_shape;

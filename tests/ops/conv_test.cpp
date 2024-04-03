@@ -85,6 +85,46 @@ TEST(ConvTest, 2DOnesSquareFilters) {
   }
 }
 
+TEST(Conv2dTest, 2DOnesSquare) {
+  for (size_t depth = 1; depth < 4; ++depth) {
+    for (size_t input_size = 2; input_size < 6; ++input_size) {
+      for (size_t kernel_size = 1; kernel_size < input_size; ++kernel_size) {
+        Tensor input = Tensor::fill(array_t{input_size, input_size, depth}, 1);
+        Tensor kernel =
+            Tensor::fill(array_t{kernel_size, kernel_size, depth}, 1);
+        Tensor output = conv(input, kernel, 2);
+        ASSERT_EQ(output.shape(), (array_t{input_size - kernel_size + 1,
+                                           input_size - kernel_size + 1}));
+        for (size_t i = 0; i < output.size(); ++i) {
+          EXPECT_EQ(output[i], kernel_size * kernel_size * depth);
+        }
+      }
+    }
+  }
+}
+
+TEST(Conv2dTest, 2DOnesSquareFilters) {
+  for (size_t depth = 1; depth < 4; ++depth) {
+    for (size_t input_size = 2; input_size < 6; ++input_size) {
+      for (size_t num_filters = 1; num_filters < 4; ++num_filters) {
+        for (size_t kernel_size = 1; kernel_size < input_size; ++kernel_size) {
+          Tensor input =
+              Tensor::fill(array_t{input_size, input_size, depth}, 1);
+          Tensor kernel = Tensor::fill(
+              array_t{num_filters, kernel_size, kernel_size, depth}, 1);
+          Tensor output = conv(input, kernel, 2);
+          ASSERT_EQ(output.shape(),
+                    (array_t{num_filters, input_size - kernel_size + 1,
+                             input_size - kernel_size + 1}));
+          for (size_t i = 0; i < output.size(); ++i) {
+            EXPECT_EQ(output[i], kernel_size * kernel_size * depth);
+          }
+        }
+      }
+    }
+  }
+}
+
 TEST(MaxPoolTest, 1DRange) {
   size_t input_size = 10;
   Tensor input(array_t{input_size});
