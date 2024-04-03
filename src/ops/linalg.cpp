@@ -16,14 +16,8 @@ Tensor dot(const Tensor &left, const Tensor &right) {
     throw std::invalid_argument(ss.str());
   }
 
-  array_t result_shape(left_shape.size() + right_shape.size() - 2);
-  for (size_t i = 0; i < left_shape.size() - 1; ++i) {
-    result_shape[i] = left_shape[i];
-  }
-  for (size_t i = 1; i < right_shape.size(); ++i) {
-    result_shape[left_shape.size() + i - 2] = right_shape[i];
-  }
-
+  array_t result_shape =
+      sliceTo(left_shape, left_shape.size() - 1) | sliceFrom(right_shape, 1);
   Tensor result(result_shape);
   const array_t &left_strides = left.strides();
   const array_t &right_strides = right.strides();

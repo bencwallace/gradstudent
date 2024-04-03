@@ -53,7 +53,8 @@ const Tensor permute(const Tensor &tensor, std::initializer_list<size_t> axes) {
 
 // TRUNCATE
 
-array_t truncateShape(const Tensor &tensor, array_t start, array_t stop) {
+array_t truncateShape(const Tensor &tensor, const array_t &start,
+                      array_t stop) {
   if (start.size() != stop.size()) {
     std::stringstream ss;
     ss << "Expected start and stop arrays of equal length, got " << start.size()
@@ -67,12 +68,11 @@ array_t truncateShape(const Tensor &tensor, array_t start, array_t stop) {
     throw std::invalid_argument(ss.str());
   }
 
-  start.resize(tensor.ndims(), 0);
-  stop.insert(stop.end(), tensor.shape().begin() + stop.size(),
-              tensor.shape().end());
+  array_t Start = start | array_t(tensor.ndims() - start.size(), 0);
+  array_t Stop = stop | sliceFrom(tensor.shape(), start.size());
   array_t result_shape;
   try {
-    result_shape = stop - start;
+    result_shape = Stop - Start;
   } catch (const std::invalid_argument &e) {
     std::stringstream ss;
     ss << "Start index must precede stop index. Got " << start << " and "
@@ -128,8 +128,7 @@ const Tensor slice(const Tensor &tensor, const array_t &mIdx) {
 
 void broadcastStrides(array_t &out, const std::vector<int> &mask,
                       const array_t &in, int side) {
-  out = in;
-  out.insert(out.begin(), mask.size() - out.size(), 0);
+  out = in | array_t(mask.size() - out.size(), 1);
   for (size_t i = 0; i < mask.size(); ++i) {
     if (mask[i] == side) {
       out[i] = 0;

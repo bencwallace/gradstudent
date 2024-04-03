@@ -11,6 +11,13 @@ void checkEqualSize(const array_t &lhs, const array_t &rhs) {
   }
 }
 
+array_t operator|(const array_t &lhs, const array_t &rhs) {
+  array_t result(lhs.size() + rhs.size());
+  std::copy(lhs.begin(), lhs.end(), result.begin());
+  std::copy(rhs.begin(), rhs.end(), result.begin() + lhs.size());
+  return result;
+}
+
 array_t operator+(const array_t &lhs, size_t rhs) {
   array_t result(lhs);
   for (size_t &x : result) {

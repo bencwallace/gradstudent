@@ -41,8 +41,7 @@ void slidingWindowTransformFullStride(Tensor &result, const Tensor &input,
 
 Tensor singleConv(const Tensor &input, const Tensor &kernel) {
   array_t offset = kernel.shape() / 2;
-  array_t result_shape =
-      input.shape() - kernel.shape() + array_t(kernel.ndims(), 1);
+  array_t result_shape = input.shape() - kernel.shape() + 1;
 
   Tensor result(result_shape);
   slidingWindowTransformNoStride(
@@ -53,13 +52,9 @@ Tensor singleConv(const Tensor &input, const Tensor &kernel) {
 }
 
 Tensor multiConv(const Tensor &input, const Tensor &kernel) {
-  array_t singleKernelShape(kernel.shape().begin() + 1, kernel.shape().end());
-  array_t singleResultShape =
-      input.shape() - singleKernelShape + array_t(input.ndims(), 1);
-  array_t resultShape(kernel.ndims());
-  resultShape[0] = kernel.shape()[0];
-  std::copy(singleResultShape.begin(), singleResultShape.end(),
-            resultShape.begin() + 1);
+  auto singleKernelShape = sliceFrom(kernel.shape(), 1);
+  array_t singleResultShape = input.shape() - singleKernelShape + 1;
+  auto resultShape = array_t{kernel.shape()[0]} | singleResultShape;
 
   Tensor result(resultShape);
   for (size_t i = 0; i < kernel.shape()[0]; ++i) {
