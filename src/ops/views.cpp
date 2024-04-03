@@ -108,17 +108,8 @@ std::pair<array_t, array_t> sliceCommon(const Tensor &tensor,
     throw std::invalid_argument(ss.str());
   }
 
-  array_t shape = tensor.shape();
-  array_t strides = tensor.strides();
-
-  size_t result_ndims = ndims - mIdx.size();
-  array_t result_shape(result_ndims);
-  array_t result_strides(result_ndims);
-  for (size_t i = mIdx.size(); i < ndims; ++i) {
-    result_shape[i - mIdx.size()] = shape[i];
-    result_strides[i - mIdx.size()] = strides[i];
-  }
-
+  auto result_shape = sliceFrom(tensor.shape(), mIdx.size());
+  auto result_strides = sliceFrom(tensor.strides(), mIdx.size());
   return {result_shape, result_strides};
 }
 
