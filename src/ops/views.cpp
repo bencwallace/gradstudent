@@ -5,16 +5,6 @@
 
 namespace gradstudent {
 
-// FLATTEN
-
-Tensor flatten(Tensor &tensor) {
-  return Tensor(array_t{tensor.size()}, array_t{1}, tensor);
-}
-
-const Tensor flatten(const Tensor &tensor) {
-  return Tensor(array_t{tensor.size()}, array_t{1}, tensor, 0, true);
-}
-
 // PERMUTE
 
 std::tuple<array_t, array_t> permuteCommon(const Tensor &tensor,

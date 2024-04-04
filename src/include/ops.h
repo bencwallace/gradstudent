@@ -128,19 +128,13 @@ Tensor maxPool(const Tensor &input, const array_t &poolShape);
 /**
  * @brief Flattens a tensor.
  *
- * Produces a view of the original tensor with a single dimension containing all
+ * Produces a new tensor with a single dimension containing all
  * the elements of the original tensor.
  *
  * @param tensor The tensor to be flattened.
  * @return The flattened tensor.
  */
-Tensor flatten(Tensor &tensor);
-
-/**
- * @overload
- *
- */
-const Tensor flatten(const Tensor &tensor);
+Tensor flatten(const Tensor &tensor);
 
 /**
  * @brief Permutes the dimensions of a tensor.

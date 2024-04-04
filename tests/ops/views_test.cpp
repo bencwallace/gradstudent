@@ -43,56 +43,6 @@ TEST(SliceTest, SetSliceConst) {
   EXPECT_EQ(matrix1[1], 2);
 }
 
-TEST(FlattenTest, Subscript) {
-  Tensor matrix({2, 2}, {1, 2, 3, 4});
-  Tensor flat = flatten(matrix);
-
-  EXPECT_EQ(flat.ndims(), 1);
-  EXPECT_EQ(flat.shape(), array_t{4});
-
-  flat[0] = 4;
-  flat[1] = 3;
-  flat[2] = 2;
-  flat[3] = 1;
-  EXPECT_EQ(matrix[0], 4);
-  EXPECT_EQ(matrix[1], 3);
-  EXPECT_EQ(matrix[2], 2);
-  EXPECT_EQ(matrix[3], 1);
-}
-
-TEST(FlattenTest, Assign) {
-  Tensor matrix({2, 2}, {1, 2, 3, 4});
-  Tensor vector({4}, {4, 3, 2, 1});
-  flatten(matrix) = vector;
-  EXPECT_EQ(matrix[0], 4);
-  EXPECT_EQ(matrix[1], 3);
-  EXPECT_EQ(matrix[2], 2);
-  EXPECT_EQ(matrix[3], 1);
-}
-
-TEST(FlattenTest, SubscriptConst) {
-  const Tensor matrix({2, 2}, {1, 2, 3, 4});
-
-  // const tensor returned by flatten can be assigned to non-const tensor...
-  Tensor flat = flatten(matrix);
-  // ...but on wrote this non-const tensor detaches itself (internally: makes a
-  // copy)
-  flat[0] = 0;
-  // original tensor is unchanged
-  EXPECT_EQ(matrix[0], 1);
-}
-
-TEST(FlattenTest, AssignConst) {
-  const Tensor matrix({2, 2}, {1, 2, 3, 4});
-  Tensor vector({4}, {4, 3, 2, 1});
-  Tensor flat = flatten(matrix);
-  flat = vector;
-  EXPECT_EQ(matrix[0], 1);
-  EXPECT_EQ(matrix[1], 2);
-  EXPECT_EQ(matrix[2], 3);
-  EXPECT_EQ(matrix[3], 4);
-}
-
 TEST(PermuteTest, Subscript) {
   Tensor matrix({2, 3}, {1, 2, 3, 4, 5, 6});
   Tensor perm = permute(matrix, {1, 0});
