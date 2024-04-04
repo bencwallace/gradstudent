@@ -2,6 +2,7 @@
 
 #include "ops.h"
 #include "tensor.h"
+#include "tensor_iter.h"
 
 namespace gradstudent {
 
@@ -9,8 +10,9 @@ namespace gradstudent {
 
 Tensor flatten(const Tensor &tensor) {
   auto result = Tensor(array_t{tensor.size()});
-  for (size_t i = 0; i < tensor.size(); ++i) {
-    result[i] = tensor[i];
+  size_t i = 0;
+  for (const auto &[x] : TensorIter(tensor)) {
+    result[i++] = x;
   }
   return result;
 }
