@@ -185,6 +185,10 @@ public:
    */
   inline size_t ndims() const { return shape_.size(); }
 
+  inline size_t offset() const { return offset_; }
+
+  inline bool ro() const { return ro_; }
+
   /**
    * @brief Returns the tensor shape
    */

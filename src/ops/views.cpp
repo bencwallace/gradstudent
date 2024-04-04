@@ -33,12 +33,13 @@ std::tuple<array_t, array_t> permuteCommon(const Tensor &tensor,
 
 Tensor permute(Tensor &tensor, std::initializer_list<size_t> axes) {
   auto [result_shape, result_strides] = permuteCommon(tensor, axes);
-  return Tensor(result_shape, result_strides, tensor);
+  return Tensor(result_shape, result_strides, tensor, tensor.offset(),
+                tensor.ro());
 }
 
 const Tensor permute(const Tensor &tensor, std::initializer_list<size_t> axes) {
   auto [result_shape, result_strides] = permuteCommon(tensor, axes);
-  return Tensor(result_shape, result_strides, tensor, 0, true);
+  return Tensor(result_shape, result_strides, tensor, tensor.offset(), true);
 }
 
 // TRUNCATE
@@ -76,7 +77,7 @@ array_t truncateShape(const Tensor &tensor, const array_t &start,
 Tensor truncate(Tensor &tensor, const array_t &start, const array_t &stop) {
   auto result_shape = truncateShape(tensor, start, stop);
   return Tensor(result_shape, tensor.strides(), tensor, tensor.toIndex(start),
-                false);
+                tensor.ro());
 }
 
 const Tensor truncate(const Tensor &tensor, const array_t &start,
@@ -105,7 +106,8 @@ std::pair<array_t, array_t> sliceCommon(const Tensor &tensor,
 
 Tensor slice(Tensor &tensor, const array_t &mIdx) {
   auto [result_shape, result_strides] = sliceCommon(tensor, mIdx);
-  return Tensor(result_shape, result_strides, tensor, tensor.toIndex(mIdx));
+  return Tensor(result_shape, result_strides, tensor, tensor.toIndex(mIdx),
+                tensor.ro());
 }
 
 const Tensor slice(const Tensor &tensor, const array_t &mIdx) {
@@ -137,7 +139,8 @@ template <typename T> T broadcast(T &tensor, const array_t &shape) {
   array_t out_shape, out_strides;
   auto mask = broadcastShapes(out_shape, tensor.shape(), shape);
   broadcastStrides(out_strides, mask, tensor.strides(), BCAST_LEFT);
-  return Tensor(out_shape, out_strides, tensor, 0, std::is_const<T>::value);
+  return Tensor(out_shape, out_strides, tensor, tensor.offset(),
+                std::is_const_v<T> || tensor.ro());
 }
 template Tensor broadcast<Tensor>(Tensor &, const array_t &);
 template const Tensor broadcast<const Tensor>(const Tensor &, const array_t &);
@@ -149,8 +152,10 @@ std::tuple<S, T> broadcast(S &left, T &right) {
   broadcastStrides(left_strides, right_strides, mask, left.strides(),
                    right.strides());
 
-  return {S(shape, left_strides, left, 0, std::is_const<S>::value),
-          T(shape, right_strides, right, 0, std::is_const<T>::value)};
+  return {S(shape, left_strides, left, left.offset(),
+            std::is_const_v<S> || left.ro()),
+          T(shape, right_strides, right, right.offset(),
+            std::is_const_v<T> || right.ro())};
 }
 template std::tuple<Tensor, Tensor> broadcast(Tensor &, Tensor &);
 template std::tuple<const Tensor, Tensor> broadcast(const Tensor &, Tensor &);
