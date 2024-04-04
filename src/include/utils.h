@@ -1,3 +1,4 @@
+#include <array>
 #include <cstring>
 #include <fstream>
 
@@ -8,11 +9,12 @@ namespace gradstudent {
 template <typename T>
 Tensor parse_numpy_data(const array_t &shape, std::istream &file) {
   Tensor result(shape);
-  unsigned char data[sizeof(T)];
+  std::array<unsigned char, sizeof(T)> data;
   T val;
   for (size_t i = 0; i < prod(shape); ++i) {
-    file.read(reinterpret_cast<char *>(data), sizeof(T));
-    val = *reinterpret_cast<T *>(data);
+    file.read(reinterpret_cast<char *>(data.data()),
+              sizeof(T)); // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
+    std::memcpy(&val, data.data(), sizeof(T));
     result[i] = static_cast<double>(val);
   }
   return result;

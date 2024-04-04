@@ -45,7 +45,7 @@ const Tensor permute(const Tensor &tensor, std::initializer_list<size_t> axes) {
 // TRUNCATE
 
 array_t truncateShape(const Tensor &tensor, const array_t &start,
-                      array_t stop) {
+                      const array_t &stop) {
   if (start.size() != stop.size()) {
     std::stringstream ss;
     ss << "Expected start and stop arrays of equal length, got " << start.size()
