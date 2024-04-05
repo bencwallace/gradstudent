@@ -7,7 +7,7 @@
 namespace gs {
 
 array_t defaultStrides(const array_t &shape) {
-  array_t strides(shape.size());
+  array_t strides(shape.size(), 0);
   if (!shape.empty()) {
     strides[shape.size() - 1] = 1;
   }

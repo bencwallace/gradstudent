@@ -167,7 +167,7 @@ TEST(TruncateTest, MatrixElems) {
   Tensor tensor = Tensor::range(1, 17).reshape({4, 4});
   Tensor truncated = truncate(tensor, {1, 1}, {3, 3});
   EXPECT_EQ(truncated.shape(), (array_t{2, 2}));
-  Tensor expected({2, 2});
+  Tensor expected(array_t{2, 2});
   slice(expected, {0}) = Tensor::range(6, 8);
   slice(expected, {1}) = Tensor::range(10, 12);
   EXPECT_EQ(truncated, expected);

@@ -19,8 +19,8 @@ std::tuple<array_t, array_t> permuteCommon(const Tensor &tensor,
   const array_t &shape = tensor.shape();
   const array_t &strides = tensor.strides();
 
-  array_t result_shape(tensor.ndims());
-  array_t result_strides(tensor.ndims());
+  array_t result_shape(tensor.ndims(), 0);
+  array_t result_strides(tensor.ndims(), 0);
   size_t i = 0;
   for (size_t axis : axes) {
     result_shape[i] = shape[axis];

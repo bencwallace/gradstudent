@@ -92,7 +92,7 @@ TEST(CopyTest, Vector) {
 }
 
 TEST(CopyTest, Matrix) {
-  Tensor matrix1({2, 2});
+  Tensor matrix1(array_t{2, 2});
   Tensor matrix2 = Tensor::range(1, 5).reshape({2, 2});
   matrix1 = matrix2;
   EXPECT_EQ(matrix1.shape(), array_t({2, 2}));

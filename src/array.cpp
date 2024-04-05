@@ -14,7 +14,7 @@ void checkEqualSize(const array_t &lhs, const array_t &rhs) {
 }
 
 array_t operator|(const array_t &lhs, const array_t &rhs) {
-  array_t result(lhs.size() + rhs.size());
+  array_t result(lhs.size() + rhs.size(), 0);
   std::copy(lhs.begin(), lhs.end(), result.begin());
   std::copy(rhs.begin(), rhs.end(), result.begin() + lhs.size());
   return result;
@@ -30,7 +30,7 @@ array_t operator+(const array_t &lhs, size_t rhs) {
 
 array_t operator+(const array_t &lhs, const array_t &rhs) {
   checkEqualSize(lhs, rhs);
-  array_t result(lhs.size());
+  array_t result(lhs.size(), 0);
   for (size_t i = 0; i < lhs.size(); ++i) {
     result[i] = lhs[i] + rhs[i];
   }
@@ -39,7 +39,7 @@ array_t operator+(const array_t &lhs, const array_t &rhs) {
 
 array_t operator-(const array_t &lhs, const array_t &rhs) {
   checkEqualSize(lhs, rhs);
-  array_t result(lhs.size());
+  array_t result(lhs.size(), 0);
   for (size_t i = 0; i < lhs.size(); ++i) {
     if (lhs[i] < rhs[i]) {
       throw std::invalid_argument("Subtraction resulted in negative value");
@@ -51,7 +51,7 @@ array_t operator-(const array_t &lhs, const array_t &rhs) {
 
 array_t operator*(const array_t &lhs, const array_t &rhs) {
   checkEqualSize(lhs, rhs);
-  array_t result(lhs.size());
+  array_t result(lhs.size(), 0);
   for (size_t i = 0; i < lhs.size(); ++i) {
     result[i] = lhs[i] * rhs[i];
   }
@@ -60,7 +60,7 @@ array_t operator*(const array_t &lhs, const array_t &rhs) {
 
 array_t operator/(const array_t &lhs, const array_t &rhs) {
   checkEqualSize(lhs, rhs);
-  array_t result(lhs.size());
+  array_t result(lhs.size(), 0);
   for (size_t i = 0; i < lhs.size(); ++i) {
     if (lhs[i] % rhs[i] != 0) {
       throw std::invalid_argument("Division resulted in non-integer value");
@@ -88,6 +88,21 @@ array_t sliceFrom(const array_t &array, size_t start) {
 
 array_t sliceTo(const array_t &array, size_t stop) {
   return slice(array, 0, stop);
+}
+
+std::ostream &operator<<(std::ostream &os, const array_t &array) {
+  std::ostream &result = os << "(";
+  for (int i = 0; i < (int)array.size() - 1; ++i) {
+    result << array[i] << ", ";
+  }
+  if (!array.empty()) {
+    result << array[array.size() - 1];
+  }
+  if (array.size() == 1) {
+    result << ",";
+  }
+  result << ")";
+  return result;
 }
 
 } // namespace gs
