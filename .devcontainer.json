@@ -1,6 +1,6 @@
 {
     "dockerFile": "Dockerfile",
-    "remoteUser": "vscode",
+    "remoteUser": "ubuntu",
     "postCreateCommand": ["git", "config", "core.hooksPath", "hooks"],
     "remoteEnv": {"EDITOR": "code -w"},
     "customizations": {
@@ -8,7 +8,8 @@
             "extensions": [
                 "ms-vscode.cpptools",
                 "ms-vscode.cmake-tools",
-                "cschlosser.doxdocgen"
+                "cschlosser.doxdocgen",
+                "llvm-vs-code-extensions.vscode-clangd"
             ]
         }
     }
