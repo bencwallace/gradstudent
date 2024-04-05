@@ -4,7 +4,7 @@
 #include "tensor.h"
 #include "tensor_iter.h"
 
-namespace gradstudent {
+namespace gs {
 
 void Tensor::assignSelf(const Tensor &other) {
   auto temp(std::make_unique<double[]>(size_));
@@ -51,4 +51,4 @@ Tensor::operator double() const {
   return (*this)[0];
 }
 
-} // namespace gradstudent
+} // namespace gs

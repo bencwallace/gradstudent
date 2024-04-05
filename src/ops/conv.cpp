@@ -4,7 +4,7 @@
 #include "ops.h"
 #include "tensor_iter.h"
 
-namespace gradstudent {
+namespace gs {
 
 /* SLIDING WINDOW HELPER FUNCTIONS */
 
@@ -145,4 +145,4 @@ Tensor maxPool(const Tensor &input, const array_t &poolShape) {
   return result;
 }
 
-} // namespace gradstudent
+} // namespace gs

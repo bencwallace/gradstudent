@@ -6,7 +6,7 @@
 #include "internal/meta.h"
 #include "tensor.h"
 
-namespace gradstudent {
+namespace gs {
 
 /**
  * @brief Tensor iterator
@@ -214,4 +214,4 @@ private:
 template <typename... Args>
 ITensorIter(Args &...) -> ITensorIter<std::is_const_v<Args>...>;
 
-} // namespace gradstudent
+} // namespace gs

@@ -2,7 +2,7 @@
 
 #include "internal/utils.h"
 
-using namespace gradstudent;
+using namespace gs;
 
 TEST(BroadcastShapesTest, Fail_0) {
   array_t out_shape;

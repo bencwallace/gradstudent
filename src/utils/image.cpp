@@ -5,7 +5,7 @@
 #include "tensor.h"
 #include "tensor_iter.h"
 
-namespace gradstudent {
+namespace gs {
 
 Tensor read_image(const std::string &filename) {
   std::ifstream file(filename, std::ios::binary | std::ios::in);
@@ -56,4 +56,4 @@ void write_image(const std::string &filename, const Tensor &image) {
   }
 }
 
-} // namespace gradstudent
+} // namespace gs

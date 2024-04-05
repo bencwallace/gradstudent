@@ -3,7 +3,7 @@
 #include <tuple>
 #include <type_traits>
 
-namespace gradstudent {
+namespace gs {
 
 /* TUPLE CONCATENATOR */
 
@@ -66,4 +66,4 @@ template <typename... Ts> struct add_ref<std::tuple<Ts...>> {
  */
 template <typename... Types> using add_ref_t = typename add_ref<Types...>::type;
 
-} // namespace gradstudent
+} // namespace gs

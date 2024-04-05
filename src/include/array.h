@@ -15,7 +15,7 @@
 #include <sstream>
 #include <vector>
 
-namespace gradstudent {
+namespace gs {
 
 using std::size_t;
 
@@ -66,4 +66,4 @@ std::ostream &operator<<(std::ostream &os, const std::vector<T> &array) {
 }
 // @endcond
 
-} // namespace gradstudent
+} // namespace gs

@@ -4,7 +4,7 @@
 #include "internal/utils.h"
 #include "tensor.h"
 
-namespace gradstudent {
+namespace gs {
 
 array_t defaultStrides(const array_t &shape) {
   array_t strides(shape.size());
@@ -63,4 +63,4 @@ void checkCompatibleShape(const Tensor &left, const Tensor &right) {
   }
 }
 
-} // namespace gradstudent
+} // namespace gs

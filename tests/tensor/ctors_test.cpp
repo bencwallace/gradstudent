@@ -2,7 +2,7 @@
 
 #include "tensor.h"
 
-using namespace gradstudent;
+using namespace gs;
 
 TEST(CtorsTest, Empty) {
   Tensor t1({3, 4, 5});

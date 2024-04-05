@@ -3,7 +3,7 @@
 #include "ops.h"
 #include "tensor.h"
 
-using namespace gradstudent;
+using namespace gs;
 
 TEST(FlattenTest, Flatten) {
   const Tensor matrix({2, 2}, {1, 2, 3, 4});

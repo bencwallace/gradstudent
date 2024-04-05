@@ -2,7 +2,7 @@
 
 #include "internal/meta.h"
 
-using namespace gradstudent;
+using namespace gs;
 
 TEST(TupleCatTest, Empty) {
   static_assert(std::is_same_v<tuple_cat_t<std::tuple<>>, std::tuple<>>);

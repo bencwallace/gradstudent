@@ -3,7 +3,7 @@
 #include "ops.h"
 #include "tensor_iter.h"
 
-namespace gradstudent {
+namespace gs {
 
 Tensor operator+(const Tensor &left, const Tensor &right) {
   auto [bleft, bright] = broadcast(left, right);
@@ -45,4 +45,4 @@ bool operator==(const Tensor &left, const Tensor &right) {
   return true;
 }
 
-} // namespace gradstudent
+} // namespace gs

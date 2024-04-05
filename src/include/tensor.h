@@ -17,7 +17,7 @@
 #include "array.h"
 #include "internal/utils.h"
 
-namespace gradstudent {
+namespace gs {
 
 /**
  * @class Tensor
@@ -208,4 +208,4 @@ public:
   friend bool operator==(const Tensor &, const Tensor &);
 };
 
-} // namespace gradstudent
+} // namespace gs

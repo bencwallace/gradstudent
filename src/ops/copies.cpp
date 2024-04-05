@@ -4,7 +4,7 @@
 #include "tensor.h"
 #include "tensor_iter.h"
 
-namespace gradstudent {
+namespace gs {
 
 // FLATTEN
 
@@ -17,4 +17,4 @@ Tensor flatten(const Tensor &tensor) {
   return result;
 }
 
-} // namespace gradstudent
+} // namespace gs

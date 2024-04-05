@@ -4,7 +4,7 @@
 #include "tensor.h"
 #include "tensor_iter.h"
 
-namespace gradstudent {
+namespace gs {
 
 // tensor copy constructor
 Tensor::Tensor(const Tensor &other) : Tensor(other.shape_) {
@@ -58,4 +58,4 @@ Tensor Tensor::fill(const array_t &shape, double value) {
   return Tensor::fill(shape, defaultStrides(shape), value);
 }
 
-} // namespace gradstudent
+} // namespace gs

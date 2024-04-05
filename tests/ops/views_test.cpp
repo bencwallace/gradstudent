@@ -3,7 +3,7 @@
 #include "ops.h"
 #include "tensor.h"
 
-using namespace gradstudent;
+using namespace gs;
 
 TEST(SliceTest, GetSlice) {
   Tensor matrix1({2, 2}, {1, 2, 3, 4});

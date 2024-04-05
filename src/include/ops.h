@@ -16,7 +16,7 @@
 #include "array.h"
 #include "tensor.h"
 
-namespace gradstudent {
+namespace gs {
 
 /* OPERATORS */
 
@@ -204,4 +204,4 @@ template <typename T> T broadcast(T &tensor, const array_t &shape);
 template <typename S, typename T>
 std::tuple<S, T> broadcast(S &tensor1, T &tensor2);
 
-} // namespace gradstudent
+} // namespace gs

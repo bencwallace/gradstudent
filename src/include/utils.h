@@ -4,7 +4,7 @@
 
 #include "tensor.h"
 
-namespace gradstudent {
+namespace gs {
 
 template <typename T>
 Tensor parse_numpy_data(const array_t &shape, std::istream &file) {
@@ -26,4 +26,4 @@ Tensor read_image(const std::string &filename);
 
 void write_image(const std::string &filename, const Tensor &image);
 
-} // namespace gradstudent
+} // namespace gs

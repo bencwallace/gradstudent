@@ -2,7 +2,7 @@
 #include "tensor.h"
 #include "tensor_iter.h"
 
-namespace gradstudent {
+namespace gs {
 
 size_t argmax(const Tensor &tensor) {
   if (tensor.ndims() != 1) {
@@ -35,4 +35,4 @@ double sum(const Tensor &tensor) {
   return result;
 }
 
-} // namespace gradstudent
+} // namespace gs

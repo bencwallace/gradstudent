@@ -9,20 +9,20 @@ int main(int argc, char **argv) {
     return 1;
   }
   std::string filename(argv[1]);
-  auto image = gradstudent::read_image(filename);
-  gradstudent::Tensor kernel(gradstudent::array_t{3, 3});
-  for (auto [idx, x] : gradstudent::ITensorIter(kernel)) {
-    if (idx == gradstudent::array_t{1, 1}) {
+  auto image = gs::read_image(filename);
+  gs::Tensor kernel(gs::array_t{3, 3});
+  for (auto [idx, x] : gs::ITensorIter(kernel)) {
+    if (idx == gs::array_t{1, 1}) {
       x = 8;
     } else {
       x = -1;
     }
   }
-  gradstudent::Tensor out(gradstudent::conv(image, kernel));
-  for (const auto &[val] : gradstudent::TensorIter(out)) {
+  gs::Tensor out(gs::conv(image, kernel));
+  for (const auto &[val] : gs::TensorIter(out)) {
     val = std::max(0.0, std::min(255.0, val));
   }
-  gradstudent::write_image(filename + ".out.pgm", out);
+  gs::write_image(filename + ".out.pgm", out);
 
   return 0;
 }

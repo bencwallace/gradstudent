@@ -4,7 +4,7 @@
 #include "ops.h"
 #include "tensor_iter.h"
 
-namespace gradstudent {
+namespace gs {
 
 Tensor dot(const Tensor &left, const Tensor &right) {
   const array_t &left_shape = left.shape();
@@ -48,4 +48,4 @@ Tensor norm2(const Tensor &tensor) {
   return dot(flat, flat);
 }
 
-} // namespace gradstudent
+} // namespace gs

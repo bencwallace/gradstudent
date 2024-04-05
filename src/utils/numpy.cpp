@@ -8,7 +8,7 @@
 #include "tensor.h"
 #include "utils.h"
 
-namespace gradstudent {
+namespace gs {
 
 struct numpy_header {
   std::string descr;
@@ -187,4 +187,4 @@ Tensor read_numpy(const std::string &filename) {
   }
 }
 
-} // namespace gradstudent
+} // namespace gs

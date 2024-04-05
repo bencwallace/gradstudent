@@ -1,7 +1,7 @@
 #include "tensor.h"
 #include "tensor_iter.h"
 
-namespace gradstudent {
+namespace gs {
 
 void Tensor::ensureWritable() {
   // implements copy-on-write
@@ -19,4 +19,4 @@ void Tensor::ensureWritable() {
   }
 }
 
-} // namespace gradstudent
+} // namespace gs

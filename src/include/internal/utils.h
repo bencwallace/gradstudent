@@ -15,7 +15,7 @@
 
 #include "array.h"
 
-namespace gradstudent {
+namespace gs {
 
 class Tensor;
 
@@ -65,4 +65,4 @@ std::vector<int> broadcastShapes(array_t &out, const array_t &left,
 void checkCompatibleShape(const Tensor &, const Tensor &);
 // @endcond
 
-} // namespace gradstudent
+} // namespace gs

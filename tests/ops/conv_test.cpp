@@ -4,7 +4,7 @@
 
 #include <gtest/gtest.h>
 
-using namespace gradstudent;
+using namespace gs;
 
 TEST(ConvTest, 1DOnes) {
   for (size_t input_size = 2; input_size < 8; ++input_size) {

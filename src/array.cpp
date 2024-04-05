@@ -1,6 +1,6 @@
 #include "array.h"
 
-namespace gradstudent {
+namespace gs {
 
 void checkEqualSize(const array_t &lhs, const array_t &rhs) {
   if (lhs.size() != rhs.size()) {
@@ -88,4 +88,4 @@ array_t sliceTo(const array_t &array, size_t stop) {
   return slice(array, 0, stop);
 }
 
-} // namespace gradstudent
+} // namespace gs

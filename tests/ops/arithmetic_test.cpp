@@ -2,7 +2,7 @@
 
 #include "tensor.h"
 
-using namespace gradstudent;
+using namespace gs;
 
 TEST(SumTest, Scalar) {
   Tensor scalar(24);

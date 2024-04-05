@@ -3,7 +3,7 @@
 #include "tensor.h"
 #include "tensor_iter.h"
 
-using namespace gradstudent;
+using namespace gs;
 
 TEST(TensorIterTest, DefaultStrides) {
   Tensor t1({2, 2}, {1, 2, 3, 4});

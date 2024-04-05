@@ -2,7 +2,7 @@
 
 #include "tensor.h"
 
-using namespace gradstudent;
+using namespace gs;
 
 TEST(CastTest, Scalar) {
   Tensor scalar(24);

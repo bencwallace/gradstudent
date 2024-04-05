@@ -1,6 +1,6 @@
 #include "ops.h"
 
-namespace gradstudent {
+namespace gs {
 
 Tensor relu(const Tensor &tensor) {
   Tensor result(tensor.shape());
@@ -11,4 +11,4 @@ Tensor relu(const Tensor &tensor) {
   return result;
 }
 
-} // namespace gradstudent
+} // namespace gs

@@ -3,7 +3,7 @@
 #include "ops.h"
 #include "tensor.h"
 
-namespace gradstudent {
+namespace gs {
 
 // PERMUTE
 
@@ -163,4 +163,4 @@ template std::tuple<Tensor, const Tensor> broadcast(Tensor &, const Tensor &);
 template std::tuple<const Tensor, const Tensor> broadcast(const Tensor &,
                                                           const Tensor &);
 
-} // namespace gradstudent
+} // namespace gs

@@ -2,7 +2,7 @@
 
 #include "gradstudent.h"
 
-using namespace gradstudent;
+using namespace gs;
 
 static void BM_Dot(benchmark::State& state) {
   Tensor input({1000, 1000});
