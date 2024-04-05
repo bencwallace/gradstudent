@@ -11,4 +11,4 @@ while getopts "v" opt; do
 done
 
 cppcheck --enable=warning,performance,information,missingInclude -i build --project=build/compile_commands.json
-find examples src -name *.cpp -o -name *.h -exec clang-tidy -p build ${ARGS} {} \;
+find examples src \( -name *.cpp -o -name *.h \) -exec clang-tidy -p build ${ARGS} {} \;
