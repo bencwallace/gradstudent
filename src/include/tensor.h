@@ -10,6 +10,7 @@
  */
 #pragma once
 
+#include <initializer_list>
 #include <memory>
 #include <numeric>
 
@@ -107,6 +108,15 @@ public:
    * @overload
    */
   static Tensor fill(const array_t &shape, double value);
+
+  static Tensor range(const array_t &shape, const array_t &strides, int start,
+                      int stop);
+
+  static Tensor range(const array_t &shape, const array_t &strides, int stop);
+
+  static Tensor range(const array_t &shape, int start, int stop);
+
+  static Tensor range(const array_t &shape, int stop);
 
   ~Tensor() = default;
 

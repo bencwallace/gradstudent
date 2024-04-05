@@ -6,7 +6,7 @@
 using namespace gs;
 
 TEST(TensorIterTest, DefaultStrides) {
-  Tensor t1({2, 2}, {1, 2, 3, 4});
+  Tensor t1 = Tensor::range({2, 2}, 1, 5);
   const Tensor t2({2, 2}, {4, 3, 2, 1});
   TensorIter mit(t1, t2);
 
@@ -27,7 +27,7 @@ TEST(TensorIterTest, DefaultStrides) {
 }
 
 TEST(TensorIterTest, Strided) {
-  Tensor t1({2, 2}, {2, 1}, {1, 2, 3, 4});
+  Tensor t1 = Tensor::range({2, 2}, {2, 1}, 1, 5);
   const Tensor t2({2, 2}, {1, 2}, {4, 2, 3, 1});
 
   for (auto vals : TensorIter(t1, t2)) {
@@ -50,7 +50,7 @@ TEST(TensorIterTest, Strided) {
 }
 
 TEST(ITensorIterTest, DefaultStrides) {
-  Tensor t1({2, 2}, {1, 2, 3, 4});
+  Tensor t1 = Tensor::range({2, 2}, 1, 5);
   const Tensor t2({2, 2}, {4, 3, 2, 1});
   TensorIter mit(t1, t2);
 
@@ -73,7 +73,7 @@ TEST(ITensorIterTest, DefaultStrides) {
 }
 
 TEST(ITensorIterTest, Strided) {
-  Tensor t1({2, 2}, {2, 1}, {1, 2, 3, 4});
+  Tensor t1 = Tensor::range({2, 2}, {2, 1}, 1, 5);
   const Tensor t2({2, 2}, {1, 2}, {4, 2, 3, 1});
 
   for (auto vals : ITensorIter(t1, t2)) {

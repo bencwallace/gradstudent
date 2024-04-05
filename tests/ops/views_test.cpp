@@ -6,7 +6,7 @@
 using namespace gs;
 
 TEST(SliceTest, GetSlice) {
-  Tensor matrix1({2, 2}, {1, 2, 3, 4});
+  Tensor matrix1 = Tensor::range({2, 2}, 1, 5);
   Tensor sliced = slice(matrix1, array_t{0});
   EXPECT_EQ(sliced.shape(), array_t({2}));
   EXPECT_EQ(sliced, Tensor({2}, {1, 2}));
@@ -18,8 +18,8 @@ TEST(SliceTest, GetSlice) {
 }
 
 TEST(SliceTest, SetSlice) {
-  Tensor matrix1({2, 2}, {1, 2, 3, 4});
-  Tensor vector1({2}, {1}, {5, 6});
+  Tensor matrix1 = Tensor::range({2, 2}, 1, 5);
+  Tensor vector1 = Tensor::range({2}, {1}, 5, 7);
   slice(matrix1, array_t{0}) = vector1;
   EXPECT_EQ(matrix1[0], 5);
   EXPECT_EQ(matrix1[1], 6);
@@ -28,15 +28,15 @@ TEST(SliceTest, SetSlice) {
 }
 
 TEST(SliceTest, GetSliceConst) {
-  const Tensor matrix1({2, 2}, {1, 2, 3, 4});
+  const Tensor matrix1 = Tensor::range({2, 2}, 1, 5);
   Tensor sliced = slice(matrix1, array_t{0});
   sliced[0] = 0;
   EXPECT_EQ(matrix1[0], 1);
 }
 
 TEST(SliceTest, SetSliceConst) {
-  const Tensor matrix1({2, 2}, {1, 2, 3, 4});
-  Tensor vector1({2}, {1}, {5, 6});
+  const Tensor matrix1 = Tensor::range({2, 2}, 1, 5);
+  Tensor vector1 = Tensor::range({2}, {1}, 5, 7);
   Tensor sliced = slice(matrix1, array_t{0});
   sliced = vector1;
   EXPECT_EQ(matrix1[0], 1);
@@ -44,7 +44,7 @@ TEST(SliceTest, SetSliceConst) {
 }
 
 TEST(PermuteTest, Subscript) {
-  Tensor matrix({2, 3}, {1, 2, 3, 4, 5, 6});
+  Tensor matrix = Tensor::range({2, 3}, 1, 7);
   Tensor perm = permute(matrix, {1, 0});
 
   EXPECT_EQ(perm.ndims(), 2);
@@ -62,8 +62,8 @@ TEST(PermuteTest, Subscript) {
 }
 
 TEST(PermuteTest, Assign) {
-  Tensor matrix1({2, 2}, {1, 2, 3, 4});
-  Tensor matrix2({2, 2}, {5, 6, 7, 8});
+  Tensor matrix1 = Tensor::range({2, 2}, 1, 5);
+  Tensor matrix2 = Tensor::range({2, 2}, 5, 9);
   permute(matrix1, {1, 0}) = matrix2;
   EXPECT_EQ((matrix1[{0, 0}]), 5);
   EXPECT_EQ((matrix1[{0, 1}]), 7);
@@ -72,15 +72,15 @@ TEST(PermuteTest, Assign) {
 }
 
 TEST(PermuteTest, SubscriptConst) {
-  const Tensor matrix({2, 3}, {1, 2, 3, 4, 5, 6});
+  const Tensor matrix = Tensor::range({2, 3}, 1, 7);
   Tensor perm = permute(matrix, {1, 0});
   perm[0] = 0;
   EXPECT_EQ(matrix[0], 1);
 }
 
 TEST(PermuteTest, AssignConst) {
-  const Tensor matrix1({2, 2}, {1, 2, 3, 4});
-  Tensor matrix2({2, 2}, {5, 6, 7, 8});
+  const Tensor matrix1 = Tensor::range({2, 2}, 1, 5);
+  Tensor matrix2 = Tensor::range({2, 2}, 5, 9);
   Tensor perm = permute(matrix1, {1, 0});
   perm = matrix2;
   EXPECT_EQ((matrix1[{0, 0}]), 1);
@@ -103,7 +103,7 @@ TEST(BroadcastTest, NonConst0) {
 }
 
 TEST(BroadcastTest, NonConst1) {
-  Tensor tensor({4}, {1, 2, 3, 4});
+  Tensor tensor = Tensor::range({4}, 1, 5);
   const array_t shape{{1, 4}};
   Tensor result = broadcast(tensor, shape);
   EXPECT_EQ(result.shape(), shape);
@@ -115,7 +115,7 @@ TEST(BroadcastTest, NonConst1) {
 }
 
 TEST(BroadcastTest, NonConst2) {
-  Tensor tensor({4, 1}, {1, 2, 3, 4});
+  Tensor tensor = Tensor::range({4, 1}, 1, 5);
   const array_t shape{{4, 4}};
   Tensor result = broadcast(tensor, shape);
   EXPECT_EQ(result.shape(), shape);
@@ -142,30 +142,29 @@ TEST(BroadcastTest, Const0) {
 }
 
 TEST(BroadcastTest, TwoTensors) {
-  Tensor tensor1({1, 3}, {1, 2, 3});
-  Tensor tensor2({3, 1}, {1, 2, 3});
+  Tensor tensor1 = Tensor::range({1, 3}, 1, 4);
+  Tensor tensor2 = Tensor::range({3, 1}, 1, 4);
   auto [b1, b2] = broadcast(tensor1, tensor2);
   EXPECT_EQ(b1.shape(), (array_t{3, 3}));
   EXPECT_EQ(b2.shape(), (array_t{3, 3}));
 }
 
 TEST(TruncateTest, Vector) {
-  Tensor tensor({8}, {1, 2, 3, 4, 5, 6, 7, 8});
+  Tensor tensor = Tensor::range({8}, 1, 9);
   Tensor truncated = truncate(tensor, {1}, {3});
   EXPECT_EQ(truncated.shape(), array_t{2});
   EXPECT_EQ(truncated, Tensor({2}, {2, 3}));
 }
 
 TEST(TruncateTest, MatrixRows) {
-  Tensor tensor({4, 2}, {1, 2, 3, 4, 5, 6, 7, 8});
+  Tensor tensor = Tensor::range({4, 2}, 1, 9);
   Tensor truncated = truncate(tensor, {1}, {3});
   EXPECT_EQ(truncated.shape(), (array_t{2, 2}));
   EXPECT_EQ(truncated, Tensor({2, 2}, {3, 4, 5, 6}));
 }
 
 TEST(TruncateTest, MatrixElems) {
-  Tensor tensor({4, 4},
-                {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16});
+  Tensor tensor = Tensor::range({4, 4}, 1, 17);
   Tensor truncated = truncate(tensor, {1, 1}, {3, 3});
   EXPECT_EQ(truncated.shape(), (array_t{2, 2}));
   EXPECT_EQ(truncated, Tensor({2, 2}, {6, 7, 10, 11}));

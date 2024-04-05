@@ -13,7 +13,7 @@ TEST(SumTest, Scalar) {
 }
 
 TEST(SumTest, Matrix) {
-  Tensor matrix1({2, 2}, {1, 2, 3, 4});
+  Tensor matrix1 = Tensor::range({2, 2}, 1, 5);
   Tensor matrix2({2, 2}, {1, 3, 2, 4});
   Tensor matrix3 = matrix2 + matrix1;
 
@@ -27,8 +27,8 @@ TEST(SumTest, Matrix) {
 }
 
 TEST(SumTest, StridedMatrix) {
-  Tensor matrix1({2, 2}, {2, 1}, {1, 2, 3, 4});
-  Tensor matrix2({2, 2}, {1, 2}, {1, 3, 2, 4});
+  Tensor matrix1 = Tensor::range({2, 2}, {2, 1}, 1, 5);
+  Tensor matrix2 = Tensor::range({2, 2}, {1, 2}, 1, 5);
   Tensor matrix3 = matrix2 + matrix1;
 
   EXPECT_EQ(matrix3.shape(), array_t({2, 2}));
@@ -41,8 +41,8 @@ TEST(SumTest, StridedMatrix) {
 }
 
 TEST(SumTest, Broadcast) {
-  Tensor vector1({1, 3}, {0, 1, 2});
-  Tensor vector2({3, 1}, {0, 1, 2});
+  Tensor vector1 = Tensor::range({1, 3}, 3);
+  Tensor vector2 = Tensor::range({3, 1}, 3);
   Tensor vector3 = vector1 + vector2;
   EXPECT_EQ(vector3.shape(), (array_t{3, 3}));
   for (size_t i = 0; i < 3; ++i) {
@@ -62,7 +62,7 @@ TEST(ScalarProdTest, Scalar) {
 }
 
 TEST(ScalarProdTest, Matrix) {
-  Tensor matrix({2, 2}, {1, 2, 3, 4});
+  Tensor matrix = Tensor::range({2, 2}, 1, 5);
   Tensor multiple = 5 * matrix;
 
   EXPECT_EQ(multiple.shape(), array_t({2, 2}));
@@ -75,7 +75,7 @@ TEST(ScalarProdTest, Matrix) {
 }
 
 TEST(ScalarProdTest, StridedMatrix) {
-  Tensor matrix({2, 2}, {1, 2}, {1, 3, 2, 4});
+  Tensor matrix = Tensor::range({2, 2}, {1, 2}, 1, 5);
   Tensor multiple = 5 * matrix;
 
   EXPECT_EQ(multiple.shape(), array_t({2, 2}));
@@ -96,7 +96,7 @@ TEST(DiffTest, Scalar) {
 }
 
 TEST(DiffTest, Matrix) {
-  Tensor matrix({2, 2}, {1, 2, 3, 4});
+  Tensor matrix = Tensor::range({2, 2}, 1, 5);
   Tensor diff = matrix - matrix;
 
   EXPECT_EQ(diff.shape(), array_t({2, 2}));
@@ -109,8 +109,8 @@ TEST(DiffTest, Matrix) {
 }
 
 TEST(DiffTest, StridedMatrix) {
-  Tensor matrix1({2, 2}, {2, 1}, {1, 2, 3, 4});
-  Tensor matrix2({2, 2}, {1, 2}, {1, 3, 2, 4});
+  Tensor matrix1 = Tensor::range({2, 2}, {2, 1}, 1, 5);
+  Tensor matrix2 = Tensor::range({2, 2}, {1, 2}, 1, 5);
 
   Tensor diff = matrix1 - matrix2;
   EXPECT_EQ(diff.shape(), array_t({2, 2}));
@@ -124,8 +124,8 @@ TEST(DiffTest, StridedMatrix) {
 }
 
 TEST(DiffTest, Broadcast) {
-  Tensor vector1({1, 3}, {0, 1, 2});
-  Tensor vector2({3, 1}, {0, 1, 2});
+  Tensor vector1 = Tensor::range({1, 3}, 3);
+  Tensor vector2 = Tensor::range({3, 1}, 3);
   Tensor vector3 = vector1 - vector2;
   EXPECT_EQ(vector3.shape(), (array_t{3, 3}));
   for (int i = 0; i < 3; ++i) {
@@ -137,7 +137,7 @@ TEST(DiffTest, Broadcast) {
 }
 
 TEST(ProdTest, Matrix) {
-  Tensor matrix1({2, 2}, {1, 2, 3, 4});
+  Tensor matrix1 = Tensor::range({2, 2}, 1, 5);
   Tensor matrix2({2, 2}, {1, 3, 2, 4});
   Tensor matrix3 = matrix2 * matrix1;
 
@@ -150,8 +150,8 @@ TEST(ProdTest, Matrix) {
 }
 
 TEST(ProdTest, StridedMatrix) {
-  Tensor matrix1({2, 2}, {2, 1}, {1, 2, 3, 4});
-  Tensor matrix2({2, 2}, {1, 2}, {1, 3, 2, 4});
+  Tensor matrix1 = Tensor::range({2, 2}, {2, 1}, 1, 5);
+  Tensor matrix2 = Tensor::range({2, 2}, {1, 2}, 1, 5);
   Tensor matrix3 = matrix2 * matrix1;
   EXPECT_EQ((matrix3[0]), 1);
   EXPECT_EQ((matrix3[1]), 4);
@@ -160,8 +160,8 @@ TEST(ProdTest, StridedMatrix) {
 }
 
 TEST(ProdTest, Broadcast) {
-  Tensor vector1({1, 3}, {0, 1, 2});
-  Tensor vector2({3, 1}, {0, 1, 2});
+  Tensor vector1 = Tensor::range({1, 3}, 3);
+  Tensor vector2 = Tensor::range({3, 1}, 3);
   Tensor vector3 = vector1 * vector2;
   EXPECT_EQ(vector3.shape(), (array_t{3, 3}));
   for (size_t i = 0; i < 3; ++i) {
@@ -184,7 +184,7 @@ TEST(IsEqualTest, UnequalScalar) {
 }
 
 TEST(IsEqualTest, EqualMatrix) {
-  Tensor matrix1({2, 2}, {2, 1}, {1, 2, 3, 4});
-  Tensor matrix2({2, 2}, {1, 2}, {1, 3, 2, 4});
+  Tensor matrix1 = Tensor::range({2, 2}, {2, 1}, 1, 5);
+  Tensor matrix2 = Tensor::range({2, 2}, {1, 2}, 1, 5);
   EXPECT_TRUE(matrix1 == matrix2);
 }

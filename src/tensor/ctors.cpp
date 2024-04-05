@@ -60,4 +60,31 @@ Tensor Tensor::fill(const array_t &shape, double value) {
   return Tensor::fill(shape, defaultStrides(shape), value);
 }
 
+Tensor Tensor::range(const array_t &shape, const array_t &strides, int start,
+                     int stop) {
+  Tensor result(shape, strides, {});
+  if (result.size() != (size_t)stop - start) {
+    std::stringstream ss;
+    ss << "Range should have size " << stop - start << ", got size "
+       << result.size();
+    throw std::invalid_argument(ss.str());
+  }
+  for (const auto &[x] : TensorIter(result)) {
+    x = start++;
+  }
+  return result;
+}
+
+Tensor Tensor::range(const array_t &shape, const array_t &strides, int stop) {
+  return range(shape, strides, 0, stop);
+}
+
+Tensor Tensor::range(const array_t &shape, int start, int stop) {
+  return range(shape, defaultStrides(shape), start, stop);
+}
+
+Tensor Tensor::range(const array_t &shape, int stop) {
+  return range(shape, 0, stop);
+}
+
 } // namespace gs

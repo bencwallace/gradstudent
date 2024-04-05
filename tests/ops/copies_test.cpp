@@ -6,7 +6,7 @@
 using namespace gs;
 
 TEST(FlattenTest, Flatten) {
-  const Tensor matrix({2, 2}, {1, 2, 3, 4});
+  const Tensor matrix = Tensor::range({2, 2}, 1, 5);
   Tensor flat = flatten(matrix);
   ASSERT_EQ(flat.shape(), array_t{4});
   for (size_t i = 0; i < 4; ++i) {
