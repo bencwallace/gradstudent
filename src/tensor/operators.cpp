@@ -1,6 +1,5 @@
 #include <sstream>
 
-#include "ops.h"
 #include "tensor.h"
 #include "tensor_iter.h"
 
@@ -24,6 +23,7 @@ void Tensor::assignOther(const Tensor &other) {
   }
 }
 
+// NOLINTNEXTLINE(bugprone-unhandled-self-assignment)
 Tensor &Tensor::operator=(const Tensor &other) {
   if (size_ != other.size_ || shape_ != other.shape_) {
     std::stringstream ss;

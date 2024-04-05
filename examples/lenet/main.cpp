@@ -1,32 +1,38 @@
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <map>
-#include <vector>
 
 #include "gradstudent.h"
 
+const size_t img_dim = 28;
 const size_t num_examples = 100;
 
-gs::Tensor read_mnist_labels(std::filesystem::path path) {
+const size_t mnist_labels_header_size = 8;
+const size_t mnist_images_header_size = 16;
+
+gs::Tensor read_mnist_labels(const std::filesystem::path &path) {
   std::ifstream file(path, std::ios::binary | std::ios::in);
-  file.ignore(8);
+  file.ignore(mnist_labels_header_size);
   return gs::parse_numpy_data<unsigned char>(gs::array_t{num_examples}, file);
 }
 
-gs::Tensor read_mnist_images(std::filesystem::path path) {
+gs::Tensor read_mnist_images(const std::filesystem::path &path) {
   std::ifstream file(path, std::ios::binary | std::ios::in);
-  file.ignore(16);
+  file.ignore(mnist_images_header_size);
   return gs::parse_numpy_data<unsigned char>(
-      gs::array_t{num_examples, 28, 28, 1}, file);
+      gs::array_t{num_examples, img_dim, img_dim, 1}, file);
 }
 
-std::pair<gs::Tensor, gs::Tensor> load_mnist(std::filesystem::path path) {
+std::pair<gs::Tensor, gs::Tensor>
+load_mnist(const std::filesystem::path &path) {
   auto labels_path = path / "t10k-labels-idx1-ubyte";
   auto images_path = path / "t10k-images-idx3-ubyte";
   return {read_mnist_labels(labels_path), read_mnist_images(images_path)};
 }
 
-std::map<std::string, gs::Tensor> load_weights(std::filesystem::path path) {
+std::map<std::string, gs::Tensor>
+load_weights(const std::filesystem::path &path) {
   std::map<std::string, gs::Tensor> weights;
 
   // TODO: get the shapes right
@@ -118,23 +124,26 @@ double accuracy(const gs::Tensor &preds, const gs::Tensor &labels) {
 
 int main(int argc, char **argv) {
   if (argc != 3) {
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
     std::cerr << "Usage: " << argv[0] << " <weights_path>"
-              << " <data_path>" << std::endl;
+              << " <data_path>\n";
     return 1;
   }
+  // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
   std::string weights_path(argv[1]);
   auto weights = load_weights(weights_path);
 
-  std::cout << "Loading data" << std::endl;
+  std::cout << "Loading data\n";
+  // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
   std::string data_path(argv[2]);
   auto data = load_mnist(data_path);
 
-  std::cout << "Running inference" << std::endl;
+  std::cout << "Running inference\n";
   auto runner = InferenceRunner(weights);
   auto preds = runner.run_inference(data.second);
 
-  std::cout << "Computing accuracy" << std::endl;
-  std::cout << "Accuracy: " << accuracy(preds, data.first) << std::endl;
+  std::cout << "Computing accuracy\n";
+  std::cout << "Accuracy: " << accuracy(preds, data.first) << '\n';
 
   return 0;
 }

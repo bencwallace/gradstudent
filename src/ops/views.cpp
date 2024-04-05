@@ -37,6 +37,7 @@ Tensor permute(Tensor &tensor, std::initializer_list<size_t> axes) {
                 tensor.ro());
 }
 
+// NOLINTNEXTLINE(readability-const-return-type)
 const Tensor permute(const Tensor &tensor, std::initializer_list<size_t> axes) {
   auto [result_shape, result_strides] = permuteCommon(tensor, axes);
   return Tensor(result_shape, result_strides, tensor, tensor.offset(), true);
@@ -80,6 +81,7 @@ Tensor truncate(Tensor &tensor, const array_t &start, const array_t &stop) {
                 tensor.ro());
 }
 
+// NOLINTNEXTLINE(readability-const-return-type)
 const Tensor truncate(const Tensor &tensor, const array_t &start,
                       const array_t &stop) {
   auto result_shape = truncateShape(tensor, start, stop);
@@ -110,6 +112,7 @@ Tensor slice(Tensor &tensor, const array_t &mIdx) {
                 tensor.ro());
 }
 
+// NOLINTNEXTLINE(readability-const-return-type)
 const Tensor slice(const Tensor &tensor, const array_t &mIdx) {
   auto [result_shape, result_strides] = sliceCommon(tensor, mIdx);
   return Tensor(result_shape, result_strides, tensor, tensor.toIndex(mIdx),
@@ -135,8 +138,10 @@ void broadcastStrides(array_t &out_left, array_t &out_right,
   broadcastStrides(out_right, mask, right, BCAST_RIGHT);
 }
 
+// NOLINTNEXTLINE(readability-const-return-type)
 template <typename T> T broadcast(T &tensor, const array_t &shape) {
-  array_t out_shape, out_strides;
+  array_t out_shape;
+  array_t out_strides;
   auto mask = broadcastShapes(out_shape, tensor.shape(), shape);
   broadcastStrides(out_strides, mask, tensor.strides(), BCAST_LEFT);
   return Tensor(out_shape, out_strides, tensor, tensor.offset(),
@@ -147,7 +152,9 @@ template const Tensor broadcast<const Tensor>(const Tensor &, const array_t &);
 
 template <typename S, typename T>
 std::tuple<S, T> broadcast(S &left, T &right) {
-  array_t shape, left_strides, right_strides;
+  array_t shape;
+  array_t left_strides;
+  array_t right_strides;
   auto mask = broadcastShapes(shape, left.shape(), right.shape());
   broadcastStrides(left_strides, right_strides, mask, left.strides(),
                    right.strides());

@@ -1,6 +1,5 @@
 #include <fstream>
 #include <iostream>
-#include <limits>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -10,9 +9,11 @@
 
 namespace gs {
 
+const std::string numpy_header_magic = "\x93NUMPY";
+
 struct numpy_header {
   std::string descr;
-  bool fortran_order;
+  bool fortran_order{};
   array_t shape;
 };
 
@@ -64,7 +65,7 @@ bool parse_other(std::pair<std::string, size_t> &result,
 std::pair<std::string, size_t> parse_value(const std::string &str) {
   std::pair<std::string, size_t> result;
   char symbol = str[str.find_first_not_of(" \t\n\r\f\v")];
-  bool success;
+  bool success = false;
   if (symbol == '\'') {
     success = parse_substring(result, str);
   } else if (symbol == '(') {
@@ -121,28 +122,33 @@ numpy_header parse_numpy_header(std::istream &file) {
   numpy_header result;
 
   // expect magic character and numpy string
-  std::string numpy(6, '\0');
-  file.read(&numpy[0], 6);
-  if (numpy != "\x93NUMPY") {
+  std::string numpy(numpy_header_magic.size(), '\0');
+  file.read(numpy.data(), numpy_header_magic.size());
+  if (numpy != numpy_header_magic) {
     throw std::runtime_error("Unsupported file format. Header: " + numpy);
   }
 
   // expect version 1.0
   unsigned char version[2];
+  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
   file.read(reinterpret_cast<char *>(version), 2);
   if (version[0] != '\x01' || version[1] != '\x00') {
-    throw std::runtime_error("Unsupported file version: " +
-                             std::string(reinterpret_cast<char *>(version), 2));
+    throw std::runtime_error(
+        "Unsupported file version: " +
+        // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
+        std::string(reinterpret_cast<char *>(version), 2));
   }
 
   // parse header length
   unsigned char header_len_bytes[2];
+  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
   file.read(reinterpret_cast<char *>(&header_len_bytes), 2);
+  // NOLINTNEXTLINE
   unsigned short header_len = (header_len_bytes[1] << 8) | header_len_bytes[0];
 
   // parse header
   std::string header(header_len, '\0');
-  file.read(&header[0], header_len);
+  file.read(header.data(), header_len);
   auto header_dict = parse_dict(header);
 
   // parse descr (dtype)
@@ -182,9 +188,8 @@ Tensor read_numpy(const std::string &filename) {
   }
   if (header.descr == "<f8") {
     return parse_numpy_data<double>(header.shape, file);
-  } else {
-    throw std::runtime_error("Unsupported dtype: " + header.descr);
   }
+  throw std::runtime_error("Unsupported dtype: " + header.descr);
 }
 
 } // namespace gs

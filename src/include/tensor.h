@@ -10,7 +10,6 @@
  */
 #pragma once
 
-#include <initializer_list>
 #include <memory>
 #include <numeric>
 
@@ -169,7 +168,7 @@ public:
   // @cond
   inline size_t toIndex(const array_t &mIdx) const {
     return offset_ +
-           std::inner_product(mIdx.begin(), mIdx.end(), strides_.begin(), 0);
+           std::inner_product(mIdx.begin(), mIdx.end(), strides_.begin(), 0UL);
   }
   // @endcond
 
@@ -201,10 +200,48 @@ public:
 
   /* FRIEND OPERATORS */
 
+  /**
+   * @brief Addition operator for tensors.
+   *
+   * Tensors must be broadcastable.
+   *
+   * @return The result of element-wise addition of the two tensors.
+   * @throws std::invalid_argument If the tensors cannot be broadcasted.
+   */
   friend Tensor operator+(const Tensor &, const Tensor &);
+
+  /**
+   * @brief Unary negation operator for tensors.
+   * @param tensor The tensor to be negated.
+   * @return The result of element-wise negation of the tensor.
+   */
   friend Tensor operator-(const Tensor &);
+
+  /**
+   * @brief Subtraction operator for tensors.
+   *
+   * Tensors must be broadcastable.
+   *
+   * @return The result of element-wise subtraction of the two tensors.
+   * @throws std::invalid_argument If the tensors cannot be broadcasted.
+   */
   friend Tensor operator-(const Tensor &, const Tensor &);
+
+  /**
+   * @brief Element-wise multiplication operator for tensors.
+   *
+   * Tensors must be broadcastable.
+   *
+   * @return The result of element-wise multiplication of the two tensors.
+   * @throws std::invalid_argument If the tensors cannot be broadcasted.
+   */
   friend Tensor operator*(const Tensor &, const Tensor &);
+
+  /**
+   * @brief Equality operator for tensors.
+   * @return True if the two tensors have the same shape and are element-wise
+   * equal, false otherwise.
+   */
   friend bool operator==(const Tensor &, const Tensor &);
 };
 

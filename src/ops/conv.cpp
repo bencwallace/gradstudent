@@ -10,17 +10,17 @@ namespace gs {
 
 void slidingWindowTransform(
     Tensor &result, const Tensor &input,
-    std::function<Tensor(const Tensor &, const array_t &)> windowFn,
-    std::function<double(const Tensor &)> transform) {
+    const std::function<Tensor(const Tensor &, const array_t &)> &windowFn,
+    const std::function<double(const Tensor &)> &transform) {
   for (auto [resIdx, res] : ITensorIter(result)) {
     Tensor window(windowFn(input, resIdx));
     res = transform(window);
   }
 }
 
-void slidingWindowTransformNoStride(Tensor &result, const Tensor &input,
-                                    const array_t &windowShape,
-                                    std::function<double(Tensor)> transform) {
+void slidingWindowTransformNoStride(
+    Tensor &result, const Tensor &input, const array_t &windowShape,
+    const std::function<double(Tensor)> &transform) {
   slidingWindowTransform(
       result, input,
       [&](const Tensor &input, const array_t &resIdx) {
@@ -29,9 +29,9 @@ void slidingWindowTransformNoStride(Tensor &result, const Tensor &input,
       transform);
 }
 
-void slidingWindowTransformFullStride(Tensor &result, const Tensor &input,
-                                      const array_t &windowShape,
-                                      std::function<double(Tensor)> transform) {
+void slidingWindowTransformFullStride(
+    Tensor &result, const Tensor &input, const array_t &windowShape,
+    const std::function<double(Tensor)> &transform) {
   slidingWindowTransform(
       result, input,
       [&](const Tensor &input, const array_t &resIdx) {
@@ -86,12 +86,11 @@ Tensor conv(const Tensor &input, const Tensor &kernel, size_t n) {
     throw std::invalid_argument(ss.str());
   }
 
-  n = n ? n : input.ndims();
+  n = n > 0 ? n : input.ndims();
   if (kernel.ndims() == input.ndims()) {
     return singleConv(input, kernel, n);
-  } else {
-    return multiConv(input, kernel, n);
   }
+  return multiConv(input, kernel, n);
 }
 
 /* MAX POOLING */

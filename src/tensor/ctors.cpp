@@ -14,6 +14,7 @@ Tensor::Tensor(const Tensor &other) : Tensor(other.shape_) {
 }
 
 // tensor view constructor
+// NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
 Tensor::Tensor(const array_t &shape, const array_t &strides,
                const Tensor &tensor, size_t offset, bool ro)
     : ro_(ro), offset_(offset), size_(prod(shape)), shape_(shape),
@@ -26,11 +27,12 @@ Tensor::Tensor(const array_t &shape)
       data_(std::shared_ptr<double[]>(new double[size_])) {}
 
 // non-empty tensor constructor
+// NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
 Tensor::Tensor(const array_t &shape, const array_t &strides,
                const std::vector<double> &data)
     : offset_(0), size_(prod(shape)), shape_(shape), strides_(strides),
       data_(std::shared_ptr<double[]>(new double[size_])) {
-  if (data.size() > 0 && data.size() != size_) {
+  if (!data.empty() && data.size() != size_) {
     std::stringstream ss;
     ss << "Data should be empty or of size " << size_ << ", got size "
        << data.size();

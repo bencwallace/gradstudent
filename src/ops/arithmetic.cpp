@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "ops.h"
 #include "tensor_iter.h"
 
@@ -37,6 +35,7 @@ Tensor operator-(const Tensor &left, const Tensor &right) {
 
 bool operator==(const Tensor &left, const Tensor &right) {
   checkCompatibleShape(left, right);
+  // NOLINTNEXTLINE(readability-use-anyofallof)
   for (const auto &[lt, rt] : TensorIter(left, right)) {
     if (lt != rt) {
       return false;

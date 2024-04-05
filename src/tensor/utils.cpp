@@ -10,6 +10,7 @@ void Tensor::ensureWritable() {
     double *temp = new double[size_];
     size_t i = 0;
     for (const auto &[val] : TensorIter(*this)) {
+      // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
       temp[i++] = val;
     }
     data_.reset(temp);

@@ -26,10 +26,10 @@ Tensor dot(const Tensor &left, const Tensor &right) {
     auto res_idx = res_it.index();
     size_t thisIndex = std::inner_product(res_idx.begin(),
                                           res_idx.begin() + (left.ndims() - 1),
-                                          left_strides.begin(), 0);
+                                          left_strides.begin(), 0UL);
     size_t otherIndex = std::inner_product(
         res_idx.rbegin(), res_idx.rbegin() + (right.ndims() - 1),
-        right_strides.rbegin(), 0);
+        right_strides.rbegin(), 0UL);
 
     auto [res_val] = *res_it;
     res_val = 0;

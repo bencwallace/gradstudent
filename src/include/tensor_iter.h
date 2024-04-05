@@ -39,7 +39,7 @@ public:
    */
   TensorIter(std::conditional_t<Const, const Tensor, Tensor> &...tensors)
       : tensors_(tensors...), shape_(std::get<0>(tensors_).shape()),
-        mIdx_(shape_.size(), 0), isEnd_(false) {
+        mIdx_(shape_.size(), 0) {
     syncIndicesHelper(std::make_index_sequence<sizeof...(Const)>{});
   }
 
@@ -95,7 +95,7 @@ private:
       indices_;   // indices into each tensor's buffer
   array_t shape_; // common tensor shape
   array_t mIdx_;  // current multi-index
-  bool isEnd_;    // needed for scalar case, in which there is a unique (empty)
+  bool isEnd_{};  // needed for scalar case, in which there is a unique (empty)
                   // multi-index
 
   /* TEMPLATE HELPERS */

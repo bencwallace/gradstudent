@@ -20,50 +20,6 @@ namespace gs {
 
 /* OPERATORS */
 
-/**
- * @brief Addition operator for tensors.
- *
- * Tensors must be broadcastable.
- *
- * @return The result of element-wise addition of the two tensors.
- * @throws std::invalid_argument If the tensors cannot be broadcasted.
- */
-Tensor operator+(const Tensor &tensor1, const Tensor &tensor2);
-
-/**
- * @brief Unary negation operator for tensors.
- * @param tensor The tensor to be negated.
- * @return The result of element-wise negation of the tensor.
- */
-Tensor operator-(const Tensor &tensor);
-
-/**
- * @brief Subtraction operator for tensors.
- *
- * Tensors must be broadcastable.
- *
- * @return The result of element-wise subtraction of the two tensors.
- * @throws std::invalid_argument If the tensors cannot be broadcasted.
- */
-Tensor operator-(const Tensor &tensor1, const Tensor &tensor2);
-
-/**
- * @brief Element-wise multiplication operator for tensors.
- *
- * Tensors must be broadcastable.
- *
- * @return The result of element-wise multiplication of the two tensors.
- * @throws std::invalid_argument If the tensors cannot be broadcasted.
- */
-Tensor operator*(const Tensor &tensor1, const Tensor &tensor2);
-
-/**
- * @brief Equality operator for tensors.
- * @return True if the two tensors have the same shape and are element-wise
- * equal, false otherwise.
- */
-bool operator==(const Tensor &tensor1, const Tensor &tensor2);
-
 /* ACTIVATIONS */
 
 Tensor relu(const Tensor &tensor);
@@ -88,7 +44,7 @@ double sum(const Tensor &tensor);
  * @throws std::invalid_argument If the tensor contraction axes have different
  * sizes.
  */
-Tensor dot(const Tensor &tensor1, const Tensor &tensor2);
+Tensor dot(const Tensor &left, const Tensor &right);
 
 /**
  * @brief Computes the squared L2 norm of a tensor.
@@ -170,12 +126,12 @@ const Tensor truncate(const Tensor &tensor, const array_t &start,
  * @param indices The indices specifying the slice.
  * @return The sliced tensor.
  */
-Tensor slice(Tensor &tensor, const array_t &indices);
+Tensor slice(Tensor &tensor, const array_t &mIdx);
 
 /**
  * @overload
  */
-const Tensor slice(const Tensor &tensor, const array_t &indices);
+const Tensor slice(const Tensor &tensor, const array_t &mIdx);
 
 /**
  * @brief Broadcasts a tensor to a given shape.
@@ -201,7 +157,6 @@ template <typename T> T broadcast(T &tensor, const array_t &shape);
  * @return A tuple containing the broadcasted tensors.
  * @throws std::invalid_argument If the tensors cannot be broadcasted.
  */
-template <typename S, typename T>
-std::tuple<S, T> broadcast(S &tensor1, T &tensor2);
+template <typename S, typename T> std::tuple<S, T> broadcast(S &left, T &right);
 
 } // namespace gs

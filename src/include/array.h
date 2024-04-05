@@ -12,7 +12,6 @@
 
 #include <cstddef>
 #include <ostream>
-#include <sstream>
 #include <vector>
 
 namespace gs {

@@ -8,7 +8,7 @@ namespace gs {
 
 array_t defaultStrides(const array_t &shape) {
   array_t strides(shape.size());
-  if (shape.size() > 0) {
+  if (!shape.empty()) {
     strides[shape.size() - 1] = 1;
   }
   for (int i = (int)shape.size() - 2; i >= 0; --i) {
@@ -25,12 +25,10 @@ std::vector<int> broadcastShapes(array_t &out, const array_t &left,
   std::fill(mask.begin(), mask.end(),
             left.size() > right.size() ? BCAST_RIGHT : BCAST_LEFT);
 
-  size_t out_idx;
-  size_t left_dim, right_dim;
   for (size_t i = 0; i < std::min(left.size(), right.size()); ++i) {
-    out_idx = out.size() - i - 1;
-    left_dim = left[left.size() - i - 1];
-    right_dim = right[right.size() - i - 1];
+    size_t out_idx = out.size() - i - 1;
+    size_t left_dim = left[left.size() - i - 1];
+    size_t right_dim = right[right.size() - i - 1];
 
     if (left_dim == right_dim) {
       out[out_idx] = left_dim;
