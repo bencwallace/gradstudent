@@ -109,14 +109,9 @@ public:
    */
   static Tensor fill(const array_t &shape, double value);
 
-  static Tensor range(const array_t &shape, const array_t &strides, int start,
-                      int stop);
+  static Tensor range(int stop);
 
-  static Tensor range(const array_t &shape, const array_t &strides, int stop);
-
-  static Tensor range(const array_t &shape, int start, int stop);
-
-  static Tensor range(const array_t &shape, int stop);
+  static Tensor range(int start, int stop);
 
   ~Tensor() = default;
 
@@ -197,6 +192,18 @@ public:
   inline size_t offset() const { return offset_; }
 
   inline bool ro() const { return ro_; }
+
+  /* VIEWS */
+
+  void reshapeCommon(const array_t &shape, const array_t &strides) const;
+
+  Tensor reshape(const array_t &shape);
+
+  Tensor reshape(const array_t &shape, const array_t &strides);
+
+  const Tensor reshape(const array_t &shape) const;
+
+  const Tensor reshape(const array_t &shape, const array_t &strides) const;
 
   /**
    * @brief Returns the tensor shape

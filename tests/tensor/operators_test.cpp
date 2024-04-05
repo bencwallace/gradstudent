@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "tensor.h"
+#include "tensor_iter.h"
 
 using namespace gs;
 
@@ -30,7 +31,7 @@ TEST(SubscriptGetTest, Empty) {
 }
 
 TEST(SubscriptGetTest, DefaultStrides) {
-  Tensor matrix = Tensor::range({2, 2}, 1, 5);
+  Tensor matrix = Tensor::range(1, 5).reshape({2, 2});
   EXPECT_EQ((matrix[{0, 0}]), 1);
   EXPECT_EQ((matrix[{0, 1}]), 2);
   EXPECT_EQ((matrix[{1, 0}]), 3);
@@ -38,10 +39,10 @@ TEST(SubscriptGetTest, DefaultStrides) {
 }
 
 TEST(SubscriptGetTest, CustomStrides) {
-  Tensor matrix = Tensor::range({2, 2}, {1, 2}, 1, 5);
+  Tensor matrix = Tensor::range(1, 5).reshape({2, 2}, {1, 2});
   EXPECT_EQ((matrix[{0, 0}]), 1);
-  EXPECT_EQ((matrix[{0, 1}]), 2);
-  EXPECT_EQ((matrix[{1, 0}]), 3);
+  EXPECT_EQ((matrix[{0, 1}]), 3);
+  EXPECT_EQ((matrix[{1, 0}]), 2);
   EXPECT_EQ((matrix[{1, 1}]), 4);
 }
 
@@ -57,7 +58,7 @@ TEST(SubscriptSetTest, Empty) {
 }
 
 TEST(SubscriptSetTest, DefaultStrides) {
-  Tensor matrix = Tensor::range({2, 2}, 5, 9);
+  Tensor matrix = Tensor::range(5, 9).reshape({2, 2});
   matrix[{0, 0}] = 1;
   matrix[{0, 1}] = 2;
   matrix[{1, 0}] = 3;
@@ -70,7 +71,7 @@ TEST(SubscriptSetTest, DefaultStrides) {
 }
 
 TEST(SubscriptSetTest, CustomStrides) {
-  Tensor matrix = Tensor::range({2, 2}, {1, 2}, 5, 9);
+  Tensor matrix = Tensor::range(5, 9).reshape({2, 2}, {1, 2});
   matrix[{0, 0}] = 1;
   matrix[{0, 1}] = 2;
   matrix[{1, 0}] = 3;
@@ -84,7 +85,7 @@ TEST(SubscriptSetTest, CustomStrides) {
 
 TEST(CopyTest, Vector) {
   Tensor vector1(array_t({4}));
-  Tensor vector2 = Tensor::range({4}, 1, 5);
+  Tensor vector2 = Tensor::range(1, 5).reshape({4});
   vector1 = vector2;
   EXPECT_EQ(vector1.shape(), array_t({4}));
   EXPECT_EQ(vector1, vector2);
@@ -92,7 +93,7 @@ TEST(CopyTest, Vector) {
 
 TEST(CopyTest, Matrix) {
   Tensor matrix1({2, 2});
-  Tensor matrix2 = Tensor::range({2, 2}, 1, 5);
+  Tensor matrix2 = Tensor::range(1, 5).reshape({2, 2});
   matrix1 = matrix2;
   EXPECT_EQ(matrix1.shape(), array_t({2, 2}));
   EXPECT_EQ(matrix1, matrix2);
@@ -100,22 +101,22 @@ TEST(CopyTest, Matrix) {
 
 TEST(CopyTest, StridedMatrix) {
   Tensor matrix1({2, 2}, {2, 1}, {});
-  Tensor matrix2 = Tensor::range({2, 2}, {1, 2}, 1, 5);
+  Tensor matrix2 = Tensor::range(1, 5).reshape({2, 2}, {1, 2});
   matrix1 = matrix2;
   EXPECT_EQ((matrix1[{0, 0}]), 1);
-  EXPECT_EQ((matrix1[{0, 1}]), 2);
-  EXPECT_EQ((matrix1[{1, 0}]), 3);
+  EXPECT_EQ((matrix1[{0, 1}]), 3);
+  EXPECT_EQ((matrix1[{1, 0}]), 2);
   EXPECT_EQ((matrix1[{1, 1}]), 4);
 }
 
 TEST(AssignTest, DifferentShapes) {
-  Tensor matrix1 = Tensor::range({2, 2}, 1, 5);
-  Tensor matrix2 = Tensor::range({4}, 1, 5);
+  Tensor matrix1 = Tensor::range(1, 5).reshape({2, 2});
+  Tensor matrix2 = Tensor::range(1, 5).reshape({4});
   EXPECT_THROW(matrix1 = matrix2, std::invalid_argument);
 }
 
 TEST(AssignTest, SameShape) {
-  Tensor matrix1 = Tensor::range({2, 2}, 1, 5);
+  Tensor matrix1 = Tensor::range(1, 5).reshape({2, 2});
   Tensor matrix2({2, 2}, {4, 3, 2, 1});
   matrix1 = matrix2;
   EXPECT_EQ(matrix1[0], 4);
@@ -127,7 +128,7 @@ TEST(AssignTest, SameShape) {
 }
 
 TEST(AssignTest, SameBuffer) {
-  Tensor matrix1 = Tensor::range({2, 2}, {2, 1}, 1, 5);
+  Tensor matrix1 = Tensor::range(1, 5).reshape({2, 2}, {2, 1});
   Tensor matrix2 = Tensor(matrix1.shape(), {1, 2}, matrix1);
   matrix1 = matrix2;
   EXPECT_EQ((matrix1[{0, 0}]), 1);

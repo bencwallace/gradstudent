@@ -170,4 +170,37 @@ template std::tuple<Tensor, const Tensor> broadcast(Tensor &, const Tensor &);
 template std::tuple<const Tensor, const Tensor> broadcast(const Tensor &,
                                                           const Tensor &);
 
+void Tensor::reshapeCommon(const array_t &shape, const array_t &strides) const {
+  if (prod(shape) != size()) {
+    std::stringstream ss;
+    ss << "Cannot reshape tensor of size " << size() << " to shape " << shape;
+    throw std::invalid_argument(ss.str());
+  }
+  if (strides.size() != shape.size()) {
+    std::stringstream ss;
+    ss << "Expected strides of size " << shape.size() << ", got "
+       << strides.size();
+    throw std::invalid_argument(ss.str());
+  }
+}
+
+Tensor Tensor::reshape(const array_t &shape, const array_t &strides) {
+  reshapeCommon(shape, strides);
+  return Tensor(shape, strides, *this, offset_, ro_);
+}
+
+const Tensor Tensor::reshape(const array_t &shape,
+                             const array_t &strides) const {
+  reshapeCommon(shape, strides);
+  return Tensor(shape, strides, *this, offset_, true);
+}
+
+Tensor Tensor::reshape(const array_t &shape) {
+  return reshape(shape, defaultStrides(shape));
+}
+
+const Tensor Tensor::reshape(const array_t &shape) const {
+  return reshape(shape, defaultStrides(shape));
+}
+
 } // namespace gs

@@ -13,7 +13,7 @@ TEST(SumTest, Scalar) {
 }
 
 TEST(SumTest, Matrix) {
-  Tensor matrix1 = Tensor::range({2, 2}, 1, 5);
+  Tensor matrix1 = Tensor::range(1, 5).reshape({2, 2});
   Tensor matrix2({2, 2}, {1, 3, 2, 4});
   Tensor matrix3 = matrix2 + matrix1;
 
@@ -27,22 +27,22 @@ TEST(SumTest, Matrix) {
 }
 
 TEST(SumTest, StridedMatrix) {
-  Tensor matrix1 = Tensor::range({2, 2}, {2, 1}, 1, 5);
-  Tensor matrix2 = Tensor::range({2, 2}, {1, 2}, 1, 5);
+  Tensor matrix1 = Tensor::range(1, 5).reshape({2, 2}, {2, 1});
+  Tensor matrix2 = Tensor::range(1, 5).reshape({2, 2}, {1, 2});
   Tensor matrix3 = matrix2 + matrix1;
 
   EXPECT_EQ(matrix3.shape(), array_t({2, 2}));
   EXPECT_EQ(matrix3.size(), 4);
 
-  EXPECT_EQ((matrix3[0]), 2);
-  EXPECT_EQ((matrix3[1]), 4);
-  EXPECT_EQ((matrix3[2]), 6);
-  EXPECT_EQ((matrix3[3]), 8);
+  EXPECT_EQ((matrix3[{0, 0}]), 2);
+  EXPECT_EQ((matrix3[{0, 1}]), 5);
+  EXPECT_EQ((matrix3[{1, 0}]), 5);
+  EXPECT_EQ((matrix3[{1, 1}]), 8);
 }
 
 TEST(SumTest, Broadcast) {
-  Tensor vector1 = Tensor::range({1, 3}, 3);
-  Tensor vector2 = Tensor::range({3, 1}, 3);
+  Tensor vector1 = Tensor::range(3).reshape({1, 3});
+  Tensor vector2 = Tensor::range(3).reshape({3, 1});
   Tensor vector3 = vector1 + vector2;
   EXPECT_EQ(vector3.shape(), (array_t{3, 3}));
   for (size_t i = 0; i < 3; ++i) {
@@ -62,7 +62,7 @@ TEST(ScalarProdTest, Scalar) {
 }
 
 TEST(ScalarProdTest, Matrix) {
-  Tensor matrix = Tensor::range({2, 2}, 1, 5);
+  Tensor matrix = Tensor::range(1, 5).reshape({2, 2});
   Tensor multiple = 5 * matrix;
 
   EXPECT_EQ(multiple.shape(), array_t({2, 2}));
@@ -75,15 +75,15 @@ TEST(ScalarProdTest, Matrix) {
 }
 
 TEST(ScalarProdTest, StridedMatrix) {
-  Tensor matrix = Tensor::range({2, 2}, {1, 2}, 1, 5);
+  Tensor matrix = Tensor::range(1, 5).reshape({2, 2}, {1, 2});
   Tensor multiple = 5 * matrix;
 
   EXPECT_EQ(multiple.shape(), array_t({2, 2}));
   EXPECT_EQ(multiple.size(), 4);
 
   EXPECT_EQ((multiple[0]), 5);
-  EXPECT_EQ((multiple[1]), 10);
-  EXPECT_EQ((multiple[2]), 15);
+  EXPECT_EQ((multiple[1]), 15);
+  EXPECT_EQ((multiple[2]), 10);
   EXPECT_EQ((multiple[3]), 20);
 }
 
@@ -96,7 +96,7 @@ TEST(DiffTest, Scalar) {
 }
 
 TEST(DiffTest, Matrix) {
-  Tensor matrix = Tensor::range({2, 2}, 1, 5);
+  Tensor matrix = Tensor::range(1, 5).reshape({2, 2});
   Tensor diff = matrix - matrix;
 
   EXPECT_EQ(diff.shape(), array_t({2, 2}));
@@ -109,23 +109,22 @@ TEST(DiffTest, Matrix) {
 }
 
 TEST(DiffTest, StridedMatrix) {
-  Tensor matrix1 = Tensor::range({2, 2}, {2, 1}, 1, 5);
-  Tensor matrix2 = Tensor::range({2, 2}, {1, 2}, 1, 5);
+  Tensor matrix1 = Tensor::range(1, 5).reshape({2, 2}, {2, 1});
+  Tensor matrix2 = Tensor::range(1, 5).reshape({2, 2}, {1, 2});
 
   Tensor diff = matrix1 - matrix2;
   EXPECT_EQ(diff.shape(), array_t({2, 2}));
   EXPECT_EQ(diff.size(), 4);
 
-  ASSERT_EQ(matrix1, matrix2);
   EXPECT_EQ((diff[0]), 0);
-  EXPECT_EQ((diff[1]), 0);
-  EXPECT_EQ((diff[2]), 0);
+  EXPECT_EQ((diff[1]), -1);
+  EXPECT_EQ((diff[2]), 1);
   EXPECT_EQ((diff[3]), 0);
 }
 
 TEST(DiffTest, Broadcast) {
-  Tensor vector1 = Tensor::range({1, 3}, 3);
-  Tensor vector2 = Tensor::range({3, 1}, 3);
+  Tensor vector1 = Tensor::range(3).reshape({1, 3});
+  Tensor vector2 = Tensor::range(3).reshape({3, 1});
   Tensor vector3 = vector1 - vector2;
   EXPECT_EQ(vector3.shape(), (array_t{3, 3}));
   for (int i = 0; i < 3; ++i) {
@@ -137,7 +136,7 @@ TEST(DiffTest, Broadcast) {
 }
 
 TEST(ProdTest, Matrix) {
-  Tensor matrix1 = Tensor::range({2, 2}, 1, 5);
+  Tensor matrix1 = Tensor::range(1, 5).reshape({2, 2});
   Tensor matrix2({2, 2}, {1, 3, 2, 4});
   Tensor matrix3 = matrix2 * matrix1;
 
@@ -150,18 +149,18 @@ TEST(ProdTest, Matrix) {
 }
 
 TEST(ProdTest, StridedMatrix) {
-  Tensor matrix1 = Tensor::range({2, 2}, {2, 1}, 1, 5);
-  Tensor matrix2 = Tensor::range({2, 2}, {1, 2}, 1, 5);
+  Tensor matrix1 = Tensor::range(1, 5).reshape({2, 2}, {2, 1});
+  Tensor matrix2 = Tensor::range(1, 5).reshape({2, 2}, {1, 2});
   Tensor matrix3 = matrix2 * matrix1;
   EXPECT_EQ((matrix3[0]), 1);
-  EXPECT_EQ((matrix3[1]), 4);
-  EXPECT_EQ((matrix3[2]), 9);
+  EXPECT_EQ((matrix3[1]), 6);
+  EXPECT_EQ((matrix3[2]), 6);
   EXPECT_EQ((matrix3[3]), 16);
 }
 
 TEST(ProdTest, Broadcast) {
-  Tensor vector1 = Tensor::range({1, 3}, 3);
-  Tensor vector2 = Tensor::range({3, 1}, 3);
+  Tensor vector1 = Tensor::range(3).reshape({1, 3});
+  Tensor vector2 = Tensor::range(3).reshape({3, 1});
   Tensor vector3 = vector1 * vector2;
   EXPECT_EQ(vector3.shape(), (array_t{3, 3}));
   for (size_t i = 0; i < 3; ++i) {
@@ -181,10 +180,4 @@ TEST(IsEqualTest, UnequalScalar) {
   Tensor scalar1(13);
   Tensor scalar2(31);
   EXPECT_FALSE(scalar1 == scalar2);
-}
-
-TEST(IsEqualTest, EqualMatrix) {
-  Tensor matrix1 = Tensor::range({2, 2}, {2, 1}, 1, 5);
-  Tensor matrix2 = Tensor::range({2, 2}, {1, 2}, 1, 5);
-  EXPECT_TRUE(matrix1 == matrix2);
 }

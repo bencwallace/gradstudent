@@ -6,15 +6,15 @@
 using namespace gs;
 
 TEST(DotTest, MatrixVector) {
-  Tensor matrix = Tensor::range({2, 2}, 1, 5);
-  Tensor vector1 = Tensor::range({2, 1}, 5, 7);
+  Tensor matrix = Tensor::range(1, 5).reshape({2, 2});
+  Tensor vector1 = Tensor::range(5, 7).reshape({2, 1});
   Tensor vector2 = dot(matrix, vector1);
   EXPECT_EQ((vector2[{0, 0}]), 17);
   EXPECT_EQ((vector2[{1, 0}]), 39);
 }
 
 TEST(DotTest, MatrixMatrix) {
-  Tensor matrix1 = Tensor::range({2, 2}, 1, 5);
+  Tensor matrix1 = Tensor::range(1, 5).reshape({2, 2});
   Tensor matrix2({2, 3}, {6, 5, 4, 3, 2, 1});
   Tensor matrix3 = dot(matrix1, matrix2);
   EXPECT_EQ((matrix3[{0, 0}]), 12);
@@ -40,6 +40,6 @@ TEST(DotTest, TensorMatrix) {
 }
 
 TEST(NormTest, Matrix) {
-  Tensor tensor = Tensor::range({2, 2}, 1, 5);
+  Tensor tensor = Tensor::range(1, 5).reshape({2, 2});
   EXPECT_EQ(norm2(tensor), 30);
 }
