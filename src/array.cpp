@@ -41,10 +41,10 @@ array_t operator-(const array_t &lhs, const array_t &rhs) {
   checkEqualSize(lhs, rhs);
   array_t result(lhs.size());
   for (size_t i = 0; i < lhs.size(); ++i) {
-    result[i] = lhs[i] - rhs[i];
-    if (result[i] < 0) {
+    if (lhs[i] < rhs[i]) {
       throw std::invalid_argument("Subtraction resulted in negative value");
     }
+    result[i] = lhs[i] - rhs[i];
   }
   return result;
 }
