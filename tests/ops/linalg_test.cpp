@@ -15,7 +15,7 @@ TEST(DotTest, MatrixVector) {
 
 TEST(DotTest, MatrixMatrix) {
   Tensor matrix1 = Tensor::range(1, 5).reshape({2, 2});
-  Tensor matrix2({2, 3}, {6, 5, 4, 3, 2, 1});
+  Tensor matrix2 = Tensor::range(6, 0, -1).reshape({2, 3});
   Tensor matrix3 = dot(matrix1, matrix2);
   EXPECT_EQ((matrix3[{0, 0}]), 12);
   EXPECT_EQ((matrix3[{0, 1}]), 9);

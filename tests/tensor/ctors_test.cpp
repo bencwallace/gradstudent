@@ -12,30 +12,6 @@ TEST(CtorsTest, Empty) {
   EXPECT_EQ(t1.strides(), array_t({20, 5, 1}));
 }
 
-TEST(CtorsTest, NonEmpty) {
-  std::initializer_list<double> data{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
-  Tensor t1({3, 4}, {1, 3}, data);
-  EXPECT_EQ(t1.ndims(), 2);
-  EXPECT_EQ(t1.size(), 12);
-  EXPECT_EQ(t1.shape(), array_t({3, 4}));
-  EXPECT_EQ(t1.strides(), array_t({1, 3}));
-  for (size_t i = 0; i < 12; ++i) {
-    EXPECT_EQ(t1[i], i);
-  }
-}
-
-TEST(CtorsTest, NonEmptyDefaultStrides) {
-  std::initializer_list<double> data{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
-  Tensor t1({3, 4}, data);
-  EXPECT_EQ(t1.ndims(), 2);
-  EXPECT_EQ(t1.size(), 12);
-  EXPECT_EQ(t1.shape(), array_t({3, 4}));
-  EXPECT_EQ(t1.strides(), array_t({4, 1}));
-  for (size_t i = 0; i < 12; ++i) {
-    EXPECT_EQ(t1[i], i);
-  }
-}
-
 TEST(CtorsTest, Scalar) {
   Tensor t1(3.14);
   EXPECT_EQ(t1.ndims(), 0);

@@ -11,17 +11,17 @@ TEST(CastTest, Scalar) {
 }
 
 TEST(CastTest, Vector) {
-  Tensor vector({1}, {24});
+  Tensor vector = Tensor(24).reshape({1});
   EXPECT_EQ(static_cast<double>(vector), 24);
 }
 
 TEST(CastTest, Matrix) {
-  Tensor matrix({1, 1}, {24});
+  Tensor matrix = Tensor(24).reshape({1, 1});
   EXPECT_EQ(static_cast<double>(matrix), 24);
 }
 
 TEST(CastTest, NonScalar) {
-  Tensor vector({2}, {24, 24});
+  Tensor vector = Tensor::fill({2}, 24);
   EXPECT_THROW((void)static_cast<double>(vector), std::invalid_argument);
 }
 
@@ -100,7 +100,7 @@ TEST(CopyTest, Matrix) {
 }
 
 TEST(CopyTest, StridedMatrix) {
-  Tensor matrix1({2, 2}, {2, 1}, {});
+  Tensor matrix1 = Tensor::fill({2, 2}, {2, 1}, 0);
   Tensor matrix2 = Tensor::range(1, 5).reshape({2, 2}, {1, 2});
   matrix1 = matrix2;
   EXPECT_EQ((matrix1[{0, 0}]), 1);
@@ -117,7 +117,7 @@ TEST(AssignTest, DifferentShapes) {
 
 TEST(AssignTest, SameShape) {
   Tensor matrix1 = Tensor::range(1, 5).reshape({2, 2});
-  Tensor matrix2({2, 2}, {4, 3, 2, 1});
+  Tensor matrix2 = Tensor::range(4, 0, -1).reshape({2, 2});
   matrix1 = matrix2;
   EXPECT_EQ(matrix1[0], 4);
   EXPECT_EQ(matrix1[1], 3);

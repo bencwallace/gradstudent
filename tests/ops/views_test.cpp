@@ -9,7 +9,7 @@ TEST(SliceTest, GetSlice) {
   Tensor matrix1 = Tensor::range(1, 5).reshape({2, 2});
   Tensor sliced = slice(matrix1, array_t{0});
   EXPECT_EQ(sliced.shape(), array_t({2}));
-  EXPECT_EQ(sliced, Tensor({2}, {1, 2}));
+  EXPECT_EQ(sliced, Tensor::range(1, 3).reshape({2}));
   sliced[0] = 0;
   EXPECT_EQ(matrix1[0], 0);
   EXPECT_EQ(matrix1[1], 2);
@@ -90,7 +90,7 @@ TEST(PermuteTest, AssignConst) {
 }
 
 TEST(BroadcastTest, NonConst0) {
-  Tensor tensor({1}, {6});
+  Tensor tensor = Tensor(6).reshape({1});
   const array_t shape{8};
   Tensor result = broadcast(tensor, shape);
   EXPECT_EQ(result.shape(), shape);
@@ -129,7 +129,7 @@ TEST(BroadcastTest, NonConst2) {
 }
 
 TEST(BroadcastTest, Const0) {
-  const Tensor tensor({1}, {6});
+  const Tensor tensor = Tensor(6).reshape({1});
   const array_t shape{8};
   auto result = broadcast(tensor, shape);
   EXPECT_EQ(result.shape(), array_t{8});
@@ -153,19 +153,22 @@ TEST(TruncateTest, Vector) {
   Tensor tensor = Tensor::range(1, 9).reshape({8});
   Tensor truncated = truncate(tensor, {1}, {3});
   EXPECT_EQ(truncated.shape(), array_t{2});
-  EXPECT_EQ(truncated, Tensor({2}, {2, 3}));
+  EXPECT_EQ(truncated, Tensor::range(2, 4).reshape({2}));
 }
 
 TEST(TruncateTest, MatrixRows) {
   Tensor tensor = Tensor::range(1, 9).reshape({4, 2});
   Tensor truncated = truncate(tensor, {1}, {3});
   EXPECT_EQ(truncated.shape(), (array_t{2, 2}));
-  EXPECT_EQ(truncated, Tensor({2, 2}, {3, 4, 5, 6}));
+  EXPECT_EQ(truncated, Tensor::range(3, 7).reshape({2, 2}));
 }
 
 TEST(TruncateTest, MatrixElems) {
   Tensor tensor = Tensor::range(1, 17).reshape({4, 4});
   Tensor truncated = truncate(tensor, {1, 1}, {3, 3});
   EXPECT_EQ(truncated.shape(), (array_t{2, 2}));
-  EXPECT_EQ(truncated, Tensor({2, 2}, {6, 7, 10, 11}));
+  Tensor expected({2, 2});
+  slice(expected, {0}) = Tensor::range(6, 8);
+  slice(expected, {1}) = Tensor::range(10, 12);
+  EXPECT_EQ(truncated, expected);
 }

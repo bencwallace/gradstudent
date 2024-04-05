@@ -14,16 +14,16 @@ TEST(SumTest, Scalar) {
 
 TEST(SumTest, Matrix) {
   Tensor matrix1 = Tensor::range(1, 5).reshape({2, 2});
-  Tensor matrix2({2, 2}, {1, 3, 2, 4});
+  Tensor matrix2 = Tensor::range(4, 0, -1).reshape({2, 2});
   Tensor matrix3 = matrix2 + matrix1;
 
   EXPECT_EQ(matrix3.shape(), array_t({2, 2}));
   EXPECT_EQ(matrix3.size(), 4);
 
-  EXPECT_EQ((matrix3[0]), 2);
+  EXPECT_EQ((matrix3[0]), 5);
   EXPECT_EQ((matrix3[1]), 5);
   EXPECT_EQ((matrix3[2]), 5);
-  EXPECT_EQ((matrix3[3]), 8);
+  EXPECT_EQ((matrix3[3]), 5);
 }
 
 TEST(SumTest, StridedMatrix) {
@@ -137,14 +137,14 @@ TEST(DiffTest, Broadcast) {
 
 TEST(ProdTest, Matrix) {
   Tensor matrix1 = Tensor::range(1, 5).reshape({2, 2});
-  Tensor matrix2({2, 2}, {1, 3, 2, 4});
+  Tensor matrix2 = Tensor::range(1, 5).reshape({2, 2});
   Tensor matrix3 = matrix2 * matrix1;
 
   EXPECT_EQ(matrix3.shape(), array_t({2, 2}));
 
   EXPECT_EQ((matrix3[0]), 1);
-  EXPECT_EQ((matrix3[1]), 6);
-  EXPECT_EQ((matrix3[2]), 6);
+  EXPECT_EQ((matrix3[1]), 4);
+  EXPECT_EQ((matrix3[2]), 9);
   EXPECT_EQ((matrix3[3]), 16);
 }
 

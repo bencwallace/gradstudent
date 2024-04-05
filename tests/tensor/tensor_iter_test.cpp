@@ -44,7 +44,7 @@ TEST(TensorIterTest, Strided) {
 
 TEST(ITensorIterTest, DefaultStrides) {
   Tensor t1 = Tensor::range(1, 5).reshape({2, 2});
-  const Tensor t2({2, 2}, {4, 3, 2, 1});
+  const Tensor t2 = Tensor::range(4, 0, -1).reshape({2, 2});
   TensorIter mit(t1, t2);
 
   for (auto vals : ITensorIter(t1, t2)) {
