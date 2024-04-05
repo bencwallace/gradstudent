@@ -127,10 +127,7 @@ TEST(Conv2dTest, 2DOnesSquareFilters) {
 
 TEST(MaxPoolTest, 1DRange) {
   size_t input_size = 10;
-  Tensor input(array_t{input_size});
-  for (size_t i = 0; i < input_size; ++i) {
-    input[i] = i;
-  }
+  Tensor input = Tensor::range(input_size);
 
   auto result = maxPool(input, array_t{2});
   ASSERT_EQ(result.shape(), array_t{input_size / 2});
@@ -141,10 +138,8 @@ TEST(MaxPoolTest, 1DRange) {
 
 TEST(MaxPoolTest, 2DRange) {
   size_t input_size = 10;
-  Tensor input(array_t{input_size, input_size});
-  for (size_t i = 0; i < input_size * input_size; ++i) {
-    input[i] = i;
-  }
+  Tensor input =
+      Tensor::range(input_size * input_size).reshape({input_size, input_size});
 
   auto result = maxPool(input, array_t{2, 5});
   ASSERT_EQ(result.shape(), (array_t{5, 2}));
@@ -159,9 +154,8 @@ TEST(MaxPoolTest, 2DRangeChannels) {
   size_t num_channels = 4;
   Tensor input(array_t{num_channels, input_size, input_size});
   for (size_t i = 0; i < num_channels; ++i) {
-    for (size_t j = 0; j < input_size * input_size; ++j) {
-      slice(input, {i})[j] = j;
-    }
+    slice(input, {i}) = Tensor::range(input_size * input_size)
+                            .reshape({input_size, input_size});
   }
 
   auto result = maxPool(input, array_t{2, 5});

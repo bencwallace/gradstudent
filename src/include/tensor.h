@@ -113,6 +113,8 @@ public:
 
   static Tensor range(int start, int stop);
 
+  static Tensor range(int start, int stop, int step);
+
   ~Tensor() = default;
 
   /* OPERATORS */

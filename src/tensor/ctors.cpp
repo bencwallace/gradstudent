@@ -60,13 +60,16 @@ Tensor Tensor::fill(const array_t &shape, double value) {
   return Tensor::fill(shape, defaultStrides(shape), value);
 }
 
-Tensor Tensor::range(int start, int stop) {
-  auto result = Tensor(array_t{static_cast<size_t>(stop - start)});
+Tensor Tensor::range(int start, int stop, int step) {
+  auto result = Tensor(array_t{static_cast<size_t>((stop - start) / step)});
   for (const auto &[x] : TensorIter(result)) {
-    x = start++;
+    x = start;
+    start += step;
   }
   return result;
 }
+
+Tensor Tensor::range(int start, int stop) { return range(start, stop, 1); }
 
 Tensor Tensor::range(int stop) { return range(0, stop); }
 
