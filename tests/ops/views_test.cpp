@@ -108,7 +108,10 @@ TEST(BroadcastTest, NonConst1) {
   Tensor result = broadcast(tensor, shape);
   EXPECT_EQ(result.shape(), shape);
   for (size_t i = 0; i < 4; ++i) {
-    EXPECT_EQ((result[{0, i}]), i + 1);
+    auto a = result[{0, i}];
+    auto b = i + 1;
+    EXPECT_EQ(a, b);
+    // EXPECT_EQ((result[{0, i}]), i + 1);
     result[{0, i}] = -i;
     EXPECT_EQ(tensor[i], -i);
   }

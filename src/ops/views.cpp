@@ -123,7 +123,7 @@ const Tensor slice(const Tensor &tensor, const array_t &mIdx) {
 
 void broadcastStrides(array_t &out, const std::vector<int> &mask,
                       const array_t &in, int side) {
-  out = in | array_t(mask.size() - out.size(), 1);
+  out = in | array_t(mask.size() - out.size(), 1); // TODO: something's off here
   for (size_t i = 0; i < mask.size(); ++i) {
     if (mask[i] == side) {
       out[i] = 0;
