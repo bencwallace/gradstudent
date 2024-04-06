@@ -4,6 +4,36 @@
 
 namespace gs {
 
+Array &Array::operator=(const Array &other) {
+  if (this == &other) {
+    return *this;
+  }
+  if (data_ == nullptr) {
+    size_ = other.size_;
+    data_ = std::make_unique<size_t[]>(size_);
+  }
+  if (other.size_ != size_) {
+    std::stringstream ss;
+    ss << "Cannot assign array of size " << other.size_ << " to array of size "
+       << size_;
+  }
+  std::memcpy(data_.get(), other.data_.get(), size_ * sizeof(size_t));
+  return *this;
+}
+
+bool Array::operator==(const Array &other) const {
+  if (size_ != other.size_) {
+    return false;
+  }
+  for (size_t i = 0; i < size_; ++i) {
+    if (data_[i] != other.data_[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+bool Array::operator!=(const Array &other) const { return !(*this == other); }
+
 void checkEqualSize(const array_t &lhs, const array_t &rhs) {
   if (lhs.size() != rhs.size()) {
     std::stringstream ss;
@@ -76,18 +106,6 @@ array_t operator/(const array_t &lhs, size_t rhs) {
     x /= rhs;
   }
   return result;
-}
-
-array_t slice(const array_t &array, size_t start, size_t stop) {
-  return array_t(array.begin() + start, array.begin() + stop);
-}
-
-array_t sliceFrom(const array_t &array, size_t start) {
-  return slice(array, start, array.size());
-}
-
-array_t sliceTo(const array_t &array, size_t stop) {
-  return slice(array, 0, stop);
 }
 
 std::ostream &operator<<(std::ostream &os, const array_t &array) {

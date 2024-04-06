@@ -16,7 +16,6 @@
 #include <iterator>
 #include <memory>
 #include <ostream>
-#include <sstream>
 #include <vector>
 
 #include <boost/iterator/iterator_facade.hpp>
@@ -62,65 +61,26 @@ public:
     size_t &dereference() const { return *data_; }
   };
 
-  Array() : size_(0), data_(nullptr){};
-  Array(const Array &other) : Array(other.size_, sentinel{}) {
-    std::memcpy(data_.get(), other.data_.get(), size_ * sizeof(size_t));
-  }
-  Array(std::initializer_list<size_t> data) : Array(data.size(), sentinel{}) {
-    size_t i = 0;
-    for (const auto &x : data) {
-      data_[i++] = x;
-    }
-  }
+  Array();
+
+  Array(const Array &other);
+
+  Array(std::initializer_list<size_t> data);
+
   Array(const std::vector<size_t>::const_iterator &begin,
-        const std::vector<size_t>::const_iterator &end)
-      : Array(end - begin, sentinel{}) {
-    for (auto it = begin; it != end; ++it) {
-      data_[it - begin] = *it;
-    }
-  }
-  Array(const Iterator &begin, const Iterator &end)
-      : Array(end - begin, sentinel{}) {
-    for (auto it = begin; it != end; ++it) {
-      data_[it - begin] = *it;
-    }
-  }
-  Array(size_t size, size_t value) : Array(size, sentinel{}) {
-    for (size_t i = 0; i < size_; ++i) {
-      data_[i] = value;
-    }
-  }
+        const std::vector<size_t>::const_iterator &end);
+
+  Array(const Iterator &begin, const Iterator &end);
+
+  Array(size_t size, size_t value);
+
   ~Array() = default;
 
-  Array &operator=(const Array &other) {
-    if (this == &other) {
-      return *this;
-    }
-    if (data_ == nullptr) {
-      size_ = other.size_;
-      data_ = std::make_unique<size_t[]>(size_);
-    }
-    if (other.size_ != size_) {
-      std::stringstream ss;
-      ss << "Cannot assign array of size " << other.size_
-         << " to array of size " << size_;
-    }
-    std::memcpy(data_.get(), other.data_.get(), size_ * sizeof(size_t));
-    return *this;
-  }
+  Array &operator=(const Array &other);
 
-  bool operator==(const Array &other) const {
-    if (size_ != other.size_) {
-      return false;
-    }
-    for (size_t i = 0; i < size_; ++i) {
-      if (data_[i] != other.data_[i]) {
-        return false;
-      }
-    }
-    return true;
-  }
-  bool operator!=(const Array &other) const { return !(*this == other); }
+  bool operator==(const Array &other) const;
+
+  bool operator!=(const Array &other) const;
 
   size_t &operator[](size_t i) { return data_[i]; }
   size_t operator[](size_t i) const { return data_[i]; }
