@@ -2,16 +2,16 @@
 
 namespace gs {
 
-array_t slice(const array_t &array, size_t start, size_t stop) {
-  return array_t(array.begin() + start, array.begin() + stop);
+array_t Array::slice(size_t start, size_t stop) const {
+  array_t result = array_t(stop - start, sentinel{});
+  for (size_t i = 0; i < result.size(); ++i) {
+    result.data_[i] = data_[start + i];
+  }
+  return result;
 }
 
-array_t sliceFrom(const array_t &array, size_t start) {
-  return slice(array, start, array.size());
-}
+array_t Array::sliceFrom(size_t start) const { return slice(start, size_); }
 
-array_t sliceTo(const array_t &array, size_t stop) {
-  return slice(array, 0, stop);
-}
+array_t Array::sliceTo(size_t stop) const { return slice(0, stop); }
 
 } // namespace gs

@@ -44,8 +44,8 @@ void slidingWindowTransformFullStride(
 /* CONVOLUTION OVER ALL DIMENSIONS */
 
 Tensor singleConv(const Tensor &input, const Tensor &kernel, size_t n) {
-  array_t kernel_shape = sliceTo(kernel.shape(), n);
-  array_t result_shape = sliceTo(input.shape(), n) - kernel_shape + 1;
+  array_t kernel_shape = kernel.shape().sliceTo(n);
+  array_t result_shape = input.shape().sliceTo(n) - kernel_shape + 1;
   Tensor result(result_shape);
   slidingWindowTransformNoStride(
       result, input, kernel_shape,
@@ -55,8 +55,8 @@ Tensor singleConv(const Tensor &input, const Tensor &kernel, size_t n) {
 }
 
 Tensor multiConv(const Tensor &input, const Tensor &kernel, size_t n) {
-  auto singleKernelShape = slice(kernel.shape(), 1, 1 + n);
-  array_t singleResultShape = sliceTo(input.shape(), n) - singleKernelShape + 1;
+  auto singleKernelShape = kernel.shape().slice(1, 1 + n);
+  array_t singleResultShape = input.shape().sliceTo(n) - singleKernelShape + 1;
   auto resultShape = array_t{kernel.shape()[0]} | singleResultShape;
 
   Tensor result(resultShape);
@@ -125,7 +125,7 @@ Tensor maxPool(const Tensor &input, const array_t &poolShape) {
     return singleMaxPool(input, poolShape);
   }
 
-  array_t inputSliceShape = sliceFrom(input.shape(), 1);
+  array_t inputSliceShape = input.shape().sliceFrom(1);
   array_t resultSliceShape;
   try {
     resultSliceShape = inputSliceShape / poolShape;

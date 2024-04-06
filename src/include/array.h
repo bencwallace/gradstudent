@@ -67,10 +67,7 @@ public:
 
   Array(std::initializer_list<size_t> data);
 
-  Array(const std::vector<size_t>::const_iterator &begin,
-        const std::vector<size_t>::const_iterator &end);
-
-  Array(const Iterator &begin, const Iterator &end);
+  Array(const std::vector<size_t> &data);
 
   Array(size_t size, size_t value);
 
@@ -87,6 +84,10 @@ public:
 
   size_t size() const { return size_; }
   bool empty() const { return size_ == 0; }
+
+  array_t slice(size_t start, size_t stop) const;
+  array_t sliceFrom(size_t start) const;
+  array_t sliceTo(size_t stop) const;
 
   auto begin() const { return Iterator(data_.get()); }
   auto end() const { return Iterator(data_.get() + size_); }
@@ -119,12 +120,6 @@ array_t operator*(const array_t &lhs, const array_t &rhs);
 array_t operator/(const array_t &lhs, const array_t &rhs);
 
 array_t operator/(const array_t &lhs, size_t rhs);
-
-array_t slice(const array_t &array, size_t start, size_t stop);
-
-array_t sliceFrom(const array_t &array, size_t start);
-
-array_t sliceTo(const array_t &array_t, size_t stop);
 
 std::ostream &operator<<(std::ostream &os, const array_t &array);
 // @endcond

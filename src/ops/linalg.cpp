@@ -17,7 +17,7 @@ Tensor dot(const Tensor &left, const Tensor &right) {
   }
 
   array_t result_shape =
-      sliceTo(left_shape, left_shape.size() - 1) | sliceFrom(right_shape, 1);
+      left_shape.sliceTo(left_shape.size() - 1) | right_shape.sliceFrom(1);
   Tensor result(result_shape);
   const array_t &left_strides = left.strides();
   const array_t &right_strides = right.strides();

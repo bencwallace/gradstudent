@@ -61,7 +61,7 @@ array_t truncateShape(const Tensor &tensor, const array_t &start,
   }
 
   array_t Start = start | array_t(tensor.ndims() - start.size(), 0);
-  array_t Stop = stop | sliceFrom(tensor.shape(), start.size());
+  array_t Stop = stop | tensor.shape().sliceFrom(start.size());
   array_t result_shape;
   try {
     result_shape = Stop - Start;
@@ -101,8 +101,8 @@ std::pair<array_t, array_t> sliceCommon(const Tensor &tensor,
     throw std::invalid_argument(ss.str());
   }
 
-  auto result_shape = sliceFrom(tensor.shape(), mIdx.size());
-  auto result_strides = sliceFrom(tensor.strides(), mIdx.size());
+  auto result_shape = tensor.shape().sliceFrom(mIdx.size());
+  auto result_strides = tensor.strides().sliceFrom(mIdx.size());
   return {result_shape, result_strides};
 }
 

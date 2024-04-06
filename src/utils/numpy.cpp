@@ -171,9 +171,7 @@ numpy_header parse_numpy_header(std::istream &file) {
   if (it == header_dict.end()) {
     throw std::runtime_error("Cannot find 'shape' in header: " + header);
   }
-  // result.shape = parse_int_tuple(it->second);
-  auto shape = parse_int_tuple(it->second);
-  result.shape = array_t(shape.begin(), shape.end());
+  result.shape = parse_int_tuple(it->second);
 
   return result;
 }
