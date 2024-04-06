@@ -1,7 +1,7 @@
 {
     "dockerFile": "Dockerfile",
     "remoteUser": "ubuntu",
-    "postCreateCommand": ["git", "config", "core.hooksPath", "hooks"],
+    "postCreateCommand": ["git", "config", "core.hooksPath", "tools/git"],
     "remoteEnv": {"EDITOR": "code -w"},
     "customizations": {
         "vscode": {

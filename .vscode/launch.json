@@ -23,7 +23,7 @@
                 },
                 {
                     "description": "Source custom pretty printers",
-                    "text": "source ${workspaceFolder}/tools/array_printer.py",
+                    "text": "source ${workspaceFolder}/tools/gdb/array_printer.py",
                     "ignoreFailures": true
                 },
                 {

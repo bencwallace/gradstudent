@@ -13,7 +13,7 @@ See the [examples](examples/README.md) directory.
 ## Requirements
 
 This project uses [CMake](CMakeLists.txt). clang is the assumed compiler. [Doxygen](Doxyfile) is used to build documentation.
-Tools used to help ensure code quality and consistency include ASan, GoogleTest, [clang-format](scripts/format.sh), [cppcheck](scripts/lint.sh), and [clang-tidy](.clang-tidy).
+Tools used to help ensure code quality and consistency include ASan, GoogleTest, [clang-format](tools/format.sh), [cppcheck](tools/lint.sh), and [clang-tidy](.clang-tidy).
 
 An example [Dockerfile](./Dockerfile) containing the requirements used by this project is given. For the convenience
 of VSCode users, a [devcontainer](./.devcontainer.json) configuration is given as well.
@@ -54,16 +54,16 @@ ctest -j8
 
 **Linting and documentation**
 
-Git hooks can be found in the `./hooks` directory. From the repository root, they can be installed as follows:
+Git hooks can be found in the `./tools/git` directory. From the repository root, they can be installed as follows:
 
 ```
-git config core.hooksPath hooks
+git config core.hooksPath tools/git
 ```
 
 Scripts for linting and generating documentation can be found in the `./scripts` directory. They can be used as follows:
 
 ```
-./scripts/format.sh     # run formatter
-./scripts/makedocs.sh   # build docs
-./scripts/tidy.sh       # run linter
+./tools/format.sh     # run formatter
+./tools/makedocs.sh   # build docs
+./tools/lint.sh       # run linter
 ```
