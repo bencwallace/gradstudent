@@ -7,6 +7,7 @@ void Tensor::ensureWritable() {
   // implements copy-on-write
   // should be called prior to any write operation
   if (ro_) {
+    // NOLINTNEXTLINE(cppcoreguidelines-owning-memory)
     double *temp = new double[size_];
     size_t i = 0;
     for (const auto &[val] : TensorIter(*this)) {

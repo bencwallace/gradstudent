@@ -16,6 +16,7 @@ Array::Array(const std::vector<size_t> &data) : Array(data.size(), sentinel{}) {
   std::memcpy(data_.get(), data.data(), size_ * sizeof(size_t));
 }
 
+// NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
 Array::Array(size_t size, size_t value) : Array(size, sentinel{}) {
   for (size_t i = 0; i < size_; ++i) {
     data_[i] = value;

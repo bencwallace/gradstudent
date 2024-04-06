@@ -33,7 +33,7 @@ private:
   const size_t size_;
   const array_t shape_;
   array_t strides_;
-  std::shared_ptr<double[]> data_; // NOLINT(cppcoreguidelines-avoid-c-arrays)
+  std::shared_ptr<double[]> data_;
 
   void ensureWritable();
 

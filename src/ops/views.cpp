@@ -189,6 +189,7 @@ Tensor Tensor::reshape(const array_t &shape, const array_t &strides) {
   return Tensor(shape, strides, *this, offset_, ro_);
 }
 
+// NOLINTNEXTLINE(readability-const-return-type)
 const Tensor Tensor::reshape(const array_t &shape,
                              const array_t &strides) const {
   reshapeCommon(shape, strides);
@@ -199,6 +200,7 @@ Tensor Tensor::reshape(const array_t &shape) {
   return reshape(shape, defaultStrides(shape));
 }
 
+// NOLINTNEXTLINE(readability-const-return-type)
 const Tensor Tensor::reshape(const array_t &shape) const {
   return reshape(shape, defaultStrides(shape));
 }

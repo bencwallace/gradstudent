@@ -1,5 +1,3 @@
-#include <sstream>
-
 #include "internal/utils.h"
 #include "tensor.h"
 #include "tensor_iter.h"
@@ -20,6 +18,7 @@ Tensor::Tensor(const array_t &shape, const array_t &strides,
     : ro_(ro), offset_(offset), size_(prod(shape)), shape_(shape),
       strides_(strides), data_(tensor.data_) {}
 
+// NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
 Tensor::Tensor(const array_t &shape, const array_t &strides)
     : offset_(0), size_(prod(shape)), shape_(shape), strides_(strides),
       data_(std::shared_ptr<double[]>(new double[size_])) {}

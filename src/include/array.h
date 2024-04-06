@@ -19,7 +19,6 @@
 #include <vector>
 
 #include <boost/iterator/iterator_facade.hpp>
-#include <boost/iterator/reverse_iterator.hpp>
 
 namespace gs {
 
@@ -45,19 +44,30 @@ public:
                                       std::random_access_iterator_tag> {
   public:
     using value_type = size_t;
+
     Iterator() : data_(nullptr) {}
     Iterator(size_t *data) : data_(data) {}
 
   private:
     size_t *data_;
+
     friend class boost::iterator_core_access;
+
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
     void increment() { ++data_; }
+
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
     void decrement() { --data_; }
+
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
     void advance(size_t n) { data_ += n; }
+
     size_t distance_to(const Iterator &other) const {
       return other.data_ - data_;
     }
+
     bool equal(const Iterator &other) const { return data_ == other.data_; }
+
     size_t &dereference() const { return *data_; }
   };
 
