@@ -2,7 +2,8 @@
 #include <cstring>
 #include <istream>
 
-#include "tensor.h"
+#include "gradstudent/tensor.h"
+#include "gradstudent/internal/utils.h"
 
 namespace gs {
 

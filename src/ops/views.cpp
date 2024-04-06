@@ -1,7 +1,8 @@
 #include <sstream>
 
-#include "ops.h"
-#include "tensor.h"
+#include "gradstudent/internal/utils.h"
+#include "gradstudent/ops.h"
+#include "gradstudent/tensor.h"
 
 namespace gs {
 

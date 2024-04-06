@@ -1,8 +1,8 @@
 #include <functional>
 #include <sstream>
 
-#include "ops.h"
-#include "tensor_iter.h"
+#include "gradstudent/iter.h"
+#include "gradstudent/ops.h"
 
 namespace gs {
 

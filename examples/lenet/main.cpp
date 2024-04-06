@@ -3,7 +3,8 @@
 #include <iostream>
 #include <map>
 
-#include "gradstudent.h"
+#include "gradstudent/ops.h"
+#include "gradstudent/utils.h"
 
 const size_t img_dim = 28;
 const size_t num_examples = 100;

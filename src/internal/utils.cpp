@@ -1,8 +1,8 @@
 #include <algorithm>
 #include <sstream>
 
-#include "internal/utils.h"
-#include "tensor.h"
+#include "gradstudent/internal/utils.h"
+#include "gradstudent/tensor.h"
 
 namespace gs {
 

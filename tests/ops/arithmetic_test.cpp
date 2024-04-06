@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "tensor.h"
+#include "gradstudent/tensor.h"
 
 using namespace gs;
 

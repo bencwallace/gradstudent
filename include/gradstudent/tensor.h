@@ -13,8 +13,7 @@
 #include <memory>
 #include <numeric>
 
-#include "array.h"
-#include "internal/utils.h"
+#include "gradstudent/array.h"
 
 namespace gs {
 

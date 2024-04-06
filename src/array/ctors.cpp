@@ -1,4 +1,4 @@
-#include "array.h"
+#include "gradstudent/array.h"
 #include <cstring>
 
 namespace gs {

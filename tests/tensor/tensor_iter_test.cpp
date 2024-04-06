@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
-#include "tensor.h"
-#include "tensor_iter.h"
+#include "gradstudent/iter.h"
+#include "gradstudent/tensor.h"
 
 using namespace gs;
 

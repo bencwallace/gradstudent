@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "internal/meta.h"
+#include "gradstudent/internal/meta.h"
 
 using namespace gs;
 

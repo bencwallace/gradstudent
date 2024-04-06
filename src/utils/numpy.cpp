@@ -4,8 +4,8 @@
 #include <unordered_map>
 #include <vector>
 
-#include "tensor.h"
-#include "utils.h"
+#include "gradstudent/tensor.h"
+#include "gradstudent/utils.h"
 
 namespace gs {
 

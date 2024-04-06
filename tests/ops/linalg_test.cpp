@@ -1,5 +1,5 @@
-#include "ops.h"
-#include "tensor.h"
+#include "gradstudent/ops.h"
+#include "gradstudent/tensor.h"
 
 #include <gtest/gtest.h>
 

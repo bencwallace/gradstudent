@@ -1,6 +1,6 @@
-#include "ops.h"
-#include "tensor.h"
-#include "tensor_iter.h"
+#include "gradstudent/iter.h"
+#include "gradstudent/ops.h"
+#include "gradstudent/tensor.h"
 
 namespace gs {
 

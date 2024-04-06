@@ -1,6 +1,8 @@
 #include <iostream>
 
-#include "gradstudent.h"
+#include "gradstudent/iter.h"
+#include "gradstudent/ops.h"
+#include "gradstudent/utils.h"
 
 int main(int argc, char **argv) {
   if (argc != 2) {

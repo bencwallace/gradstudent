@@ -2,9 +2,10 @@
 
 #include <tuple>
 
-#include "array.h"
-#include "internal/meta.h"
-#include "tensor.h"
+#include "gradstudent/array.h"
+#include "gradstudent/internal/meta.h"
+
+#include "gradstudent/tensor.h"
 
 namespace gs {
 

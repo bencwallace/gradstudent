@@ -1,9 +1,9 @@
 #include <fstream>
 #include <sstream>
 
-#include "internal/utils.h"
-#include "tensor.h"
-#include "tensor_iter.h"
+#include "gradstudent/internal/utils.h"
+#include "gradstudent/iter.h"
+#include "gradstudent/tensor.h"
 
 namespace gs {
 

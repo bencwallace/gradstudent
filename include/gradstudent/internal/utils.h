@@ -13,7 +13,7 @@
 #include <numeric>
 #include <vector>
 
-#include "array.h"
+#include "gradstudent/array.h"
 
 namespace gs {
 
