@@ -6,7 +6,9 @@ namespace gs {
 Array::Array() : size_(0), data_(nullptr){};
 
 Array::Array(const Array &other) : Array(other.size_, sentinel{}) {
-  std::memcpy(data_.get(), other.data_.get(), size_ * sizeof(size_t));
+  if (size_ > 0) {
+    std::memcpy(data_.get(), other.data_.get(), size_ * sizeof(size_t));
+  }
 }
 
 Array::Array(std::initializer_list<size_t> data)

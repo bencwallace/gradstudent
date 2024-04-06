@@ -60,7 +60,7 @@ public:
     void decrement() { --data_; }
 
     // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
-    void advance(size_t n) { data_ += n; }
+    void advance(difference_type n) { data_ += n; }
 
     size_t distance_to(const Iterator &other) const {
       return other.data_ - data_;

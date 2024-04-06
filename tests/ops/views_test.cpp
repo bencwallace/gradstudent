@@ -111,7 +111,6 @@ TEST(BroadcastTest, NonConst1) {
     auto a = result[{0, i}];
     auto b = i + 1;
     EXPECT_EQ(a, b);
-    // EXPECT_EQ((result[{0, i}]), i + 1);
     result[{0, i}] = -i;
     EXPECT_EQ(tensor[i], -i);
   }
