@@ -1,4 +1,4 @@
 # Examples
 
-* [Image Processing](image-processing/README.md)
-* [LeNet](lenet/README.md)
+* [Edge detection](image-processing/README.md)
+* [ConvNet inference](lenet/README.md)
