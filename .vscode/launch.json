@@ -51,6 +51,11 @@
                     "ignoreFailures": true
                 },
                 {
+                  "description": "Source custom pretty printers",
+                  "text": "source ${workspaceFolder}/tools/gdb/array_printer.py",
+                  "ignoreFailures": true
+                },
+                {
                     "description": "Set Disassembly Flavor to Intel",
                     "text": "-gdb-set disassembly-flavor intel",
                     "ignoreFailures": true

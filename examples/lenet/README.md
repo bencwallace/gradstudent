@@ -15,3 +15,5 @@ To run LeNet inference:
 cd ../../build
 ./examples/lenet/lenet ../examples/lenet/weights ../examples/lenet/data
 ```
+
+An additional integer argument may be provided to limit the number of workers.

@@ -1,13 +1,18 @@
+#include <algorithm>
+#include <cmath>
+#include <execution>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <map>
+#include <string>
+#include <thread>
 
 #include "gradstudent/ops.h"
 #include "gradstudent/utils.h"
 
 const size_t img_dim = 28;
-const size_t num_examples = 100;
+const size_t num_examples = 10000;
 
 const size_t mnist_labels_header_size = 8;
 const size_t mnist_images_header_size = 16;
@@ -90,8 +95,7 @@ public:
     const auto &x0 = input;
     const auto &x1 = conv_block(x0, 1);
     const auto &x2 = conv_block(x1, 2);
-    const auto &x3 = gs::flatten(
-        gs::permute(x2, {2, 0, 1})); // TODO: permute before flattening
+    const auto &x3 = gs::flatten(gs::permute(x2, {2, 0, 1}));
     const auto &x4 = fc(x3, 1);
     const auto &x5 = fc(x4, 2);
     const auto &x6 = fc(x5, 3);
@@ -99,12 +103,32 @@ public:
     return x7;
   }
 
-  gs::Tensor run_inference(const gs::Tensor &input) {
+  gs::Tensor run_inference(const gs::Tensor &input, size_t num_workers = 0) {
+    num_workers =
+        num_workers > 0 ? num_workers : std::thread::hardware_concurrency();
+    num_workers = std::min(
+        num_workers, static_cast<size_t>(std::thread::hardware_concurrency()));
+
     size_t n = input.shape()[0];
     gs::Tensor result(gs::array_t{n});
-    for (size_t i = 0; i < n; ++i) {
-      result[i] = static_cast<double>(infer(slice(input, {i})));
+
+    size_t workload = std::ceil(static_cast<float>(n) / num_workers);
+    std::vector<size_t> chunks(num_workers, 0);
+    for (size_t i = 0; i < num_workers; ++i) {
+      chunks.insert(chunks.begin(), i);
     }
+    std::for_each(std::execution::par, std::begin(chunks), std::end(chunks),
+                  [&](size_t i) {
+                    auto in = gs::truncate(input, {i * workload},
+                                           {std::min((i + 1) * workload, n)});
+                    auto res = gs::truncate(result, {i * workload},
+                                            {std::min((i + 1) * workload, n)});
+                    for (size_t i = 0; i < in.shape()[0]; ++i) {
+                      slice(res, {i}) =
+                          static_cast<double>(infer(slice(in, {i})));
+                    }
+                  });
+
     return result;
   }
 
@@ -124,10 +148,10 @@ double accuracy(const gs::Tensor &preds, const gs::Tensor &labels) {
 }
 
 int main(int argc, char **argv) {
-  if (argc != 3) {
+  if (argc < 3) {
     // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
     std::cerr << "Usage: " << argv[0] << " <weights_path>"
-              << " <data_path>\n";
+              << " <data_path> [<max_workers>]";
     return 1;
   }
   // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
@@ -140,8 +164,12 @@ int main(int argc, char **argv) {
   auto data = load_mnist(data_path);
 
   std::cout << "Running inference\n";
+  size_t num_workers = 0;
+  if (argc > 3) {
+    num_workers = std::stoi(argv[3]);
+  }
   auto runner = InferenceRunner(weights);
-  auto preds = runner.run_inference(data.second);
+  auto preds = runner.run_inference(data.second, num_workers);
 
   std::cout << "Computing accuracy\n";
   std::cout << "Accuracy: " << accuracy(preds, data.first) << '\n';
