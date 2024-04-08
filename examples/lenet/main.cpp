@@ -34,7 +34,14 @@ std::pair<gs::Tensor, gs::Tensor>
 load_mnist(const std::filesystem::path &path) {
   auto labels_path = path / "t10k-labels-idx1-ubyte";
   auto images_path = path / "t10k-images-idx3-ubyte";
-  return {read_mnist_labels(labels_path), read_mnist_images(images_path)};
+
+  auto labels = read_mnist_labels(labels_path);
+  auto images = read_mnist_images(images_path);
+
+  images = (1. / 255.) * images;
+  images = 2 * (images - 0.5);
+
+  return {labels, images};
 }
 
 std::map<std::string, gs::Tensor>
