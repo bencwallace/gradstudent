@@ -10,37 +10,56 @@ goals with modern C++. Performance alone is not the main objective.
 
 See the [examples](examples/README.md) directory.
 
-## Requirements
-
-An example [Dockerfile](./Dockerfile) containing the requirements used by this project is given. For the convenience
-of VSCode users, a [devcontainer](./.devcontainer.json) configuration is given as well.
-
-This project uses [CMake](CMakeLists.txt). [Doxygen](Doxyfile) is used to build documentation.
-Tools used to help ensure code quality include ASan, [clang-format](tools/format.sh), [cppcheck](tools/lint.sh), and [clang-tidy](.clang-tidy).
-For correctness and performance, [GoogleTest](https://github.com/google/googletest) and [Google Benchmark](https://github.com/google/benchmark) are used.
-
-In the future, the following would be nice to have: Test coverage (gcov/lcov), CI/CD (GitHub workflows).
-
 ## Features
 
 Presently, `gradstudent` implements a `Tensor` [class](include/tensor.h) that acts as a container for (strided) multidimensional arrays.
-Several simple [operations](include/ops.h) on `Tensor` objects are supported:
+Several simple [operations](include/ops.h) are supported:
 
 * [arithmetic](src/ops/arithmetic.cpp);
 * [linear algebra](src/ops/linalg.cpp);
 * [views](src/ops/views.cpp);
-* [convolution](src/ops/conv.cpp).
+* [convolution](src/ops/conv.cpp);
+* [activations](src/ops/activations.cpp);
+* [reductions](src/ops/reductions.cpp).
 
-The next hurdle is the implementation of automatic differentiation.
+`gradstudent` also contains the following utilities:
+
+* [PGM image reader/writer](src/utils/image.cpp);
+* [NumPy format reader](src/utils/numpy.cpp).
+
+### Future work
+
+The next main hurdle:
+
+* automatic differentiation.
 
 Other things that could be interesting to explore:
 
-* optimizations (SIMD, multithreading, cache-friendly implementations);
+* improvements to kernels/optimizations;
 * lazy evaluation;
-* support for different backends (e.g. OpenBLAS, CUDA);
-* templatization (support for different data types).
+* support for different data types.
 
-## Build and test
+Enhancements that would be desirable for the development process:
+
+* CI/CD: GitHub workflows;
+* Test coverage: gcov/lcov.
+
+## Development
+
+### Requirements
+
+An example [Dockerfile](./Dockerfile) containing the requirements used by this project is given. For the convenience
+of VSCode users, a [devcontainer](./.devcontainer.json) configuration is given as well.
+
+Briefly, the requirements are as follows:
+
+* Build: CMake, clang (recommended);
+* Documentation: Doxygen;
+* Testing: [GoogleTest](https://github.com/google/googletest);
+* Benchmarking (limited for now): [Google Benchmark](https://github.com/google/benchmark);
+* Code quality: clang-format, clang-tidy, cppcheck.
+
+### Build and test
 
 ```
 git clone https://github.com/bencwallace/gradstudent.git
@@ -50,7 +69,7 @@ cmake --build build -j
 cmake --build --target test
 ```
 
-**Linting and documentation**
+### Linting and documentation
 
 Git hooks can be found in the `./tools/git` directory. From the repository root, they can be installed as follows:
 
@@ -58,7 +77,7 @@ Git hooks can be found in the `./tools/git` directory. From the repository root,
 git config core.hooksPath tools/git
 ```
 
-Scripts for linting and generating documentation can be found in the `./scripts` directory. They can be used as follows:
+Scripts for linting and generating documentation can be found in the `./tools` directory. They can be used as follows:
 
 ```
 ./tools/format.sh     # run formatter
