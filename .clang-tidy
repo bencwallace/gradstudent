@@ -12,7 +12,7 @@ Checks:          'clang-diagnostic-*,
                   -readability-identifier-length,
                   -readability-named-parameter,
                   misc-*'
-WarningsAsErrors: ''
+WarningsAsErrors: '*'
 HeaderFilterRegex: ''
 AnalyzeTemporaryDtors: false
 FormatStyle:     none

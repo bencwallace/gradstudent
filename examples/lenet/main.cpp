@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <cmath>
+#include <exception>
 #include <execution>
 #include <filesystem>
 #include <fstream>
@@ -38,8 +39,8 @@ load_mnist(const std::filesystem::path &path) {
   auto labels = read_mnist_labels(labels_path);
   auto images = read_mnist_images(images_path);
 
-  images = (1. / 255.) * images;
-  images = 2 * (images - 0.5);
+  images = (1. / 255.) * images;  // NOLINT
+  images = 2 * (images - 0.5);  // NOLINT
 
   return {labels, images};
 }
@@ -163,7 +164,12 @@ int main(int argc, char **argv) {
   }
   // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
   std::string weights_path(argv[1]);
-  auto weights = load_weights(weights_path);
+  std::map<std::string, gs::Tensor> weights;
+  try {
+    weights = load_weights(weights_path);
+  } catch (const std::exception &e) {
+    std::cerr << "Error loading weights from " << weights_path << '\n';
+  }
 
   std::cout << "Loading data\n";
   // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
@@ -173,13 +179,19 @@ int main(int argc, char **argv) {
   std::cout << "Running inference\n";
   size_t num_workers = 0;
   if (argc > 3) {
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
     num_workers = std::stoi(argv[3]);
   }
   auto runner = InferenceRunner(weights);
-  auto preds = runner.run_inference(data.second, num_workers);
+  std::unique_ptr<gs::Tensor> preds;
+  try {
+    *preds = runner.run_inference(data.second, num_workers);
+  } catch (const std::exception &e) {
+    std::cerr << "Error running inference";
+  }
 
   std::cout << "Computing accuracy\n";
-  std::cout << "Accuracy: " << accuracy(preds, data.first) << '\n';
+  std::cout << "Accuracy: " << accuracy(*preds, data.first) << '\n';
 
   return 0;
 }
