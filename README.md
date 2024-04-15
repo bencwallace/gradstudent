@@ -41,7 +41,6 @@ Other things that could be interesting to explore:
 
 Enhancements that would be desirable for the development process:
 
-* CI/CD: GitHub workflows;
 * Test coverage: gcov/lcov.
 
 ## Development
