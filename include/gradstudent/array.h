@@ -36,9 +36,6 @@ class Array {
   Array(size_t size, sentinel)
       : size_(size), data_(new size_t[size_ * sizeof(size_t)]){};
 
-public:
-  using value_type = size_t;
-
   class Iterator
       : public boost::iterator_facade<Iterator, size_t,
                                       std::random_access_iterator_tag> {
@@ -70,6 +67,9 @@ public:
 
     size_t &dereference() const { return *data_; }
   };
+
+public:
+  using value_type = size_t;
 
   Array();
 
