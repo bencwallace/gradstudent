@@ -1,8 +1,7 @@
 *.o
 build/*
 Testing/*
-**/html
-**/latex
+**/docs
 .cache
 
 *.png
