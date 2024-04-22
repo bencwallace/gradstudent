@@ -22,14 +22,18 @@ namespace gs {
 
 /* ACTIVATIONS */
 
+/** @brief Computes the ReLU activation elementwise */
 Tensor relu(const Tensor &tensor);
 
 /* REDUCTIONS */
 
+/** Computes the argmax over all elements */
 size_t argmax(const Tensor &tensor);
 
+/** Computes the maximum value of all elements */
 double max(const Tensor &tensor);
 
+/** Computes the sum of all elements */
 double sum(const Tensor &tensor);
 
 /* LINEAR ALGEBRA */
@@ -77,6 +81,19 @@ Tensor norm2(const Tensor &tensor);
  */
 Tensor conv(const Tensor &input, const Tensor &kernel, size_t n = 0);
 
+/**
+ * @brief Max pooling operation
+ *
+ * The input tensor must have dimensions divisible by the corresponding
+ * pooling window dimensions. The returned tensor has dimensions the
+ * corresponding quotients. The pooling window is applied to disjoint
+ * views of the input tensor. The maximum value over each such view is the
+ * value of the corresponding element of the output.
+ *
+ * @param input The input tensor
+ * @param poolShape The shape of the pooling window
+ * @return Tensor
+ */
 Tensor maxPool(const Tensor &input, const array_t &poolShape);
 
 /* VIEWS */
@@ -111,8 +128,27 @@ Tensor permute(Tensor &tensor, std::initializer_list<size_t> axes);
  */
 const Tensor permute(const Tensor &tensor, std::initializer_list<size_t> axes);
 
+/**
+ * @brief Truncates a tensor
+ *
+ * Start and stop multi-indices must have size the tensor rank and must point
+ * to elements of the tensor (with the exception that the stop index may point
+ * one element past the end of the tensor). Moreover, the stop index must be
+ * greater than or equal to the start index (with respect to the ordering on
+ * Array).
+ *
+ * The resulting tensor is a view of the input whose first (respectively,
+ * last) element is the element corresponding to start (respectively, last)
+ * with respect to the lexicographical ordering on multi-indices.
+ *
+ * @param tensor Tensor to truncate
+ * @param start Start multi-index
+ * @param stop Stop multi-index
+ * @return Tensor The truncated tensor
+ */
 Tensor truncate(Tensor &tensor, const array_t &start, const array_t &stop);
 
+/** @overload */
 const Tensor truncate(const Tensor &tensor, const array_t &start,
                       const array_t &stop);
 
@@ -123,7 +159,7 @@ const Tensor truncate(const Tensor &tensor, const array_t &start,
  * all other indices free.
  *
  * @param tensor The tensor to be sliced.
- * @param indices The indices specifying the slice.
+ * @param mIdx The indices specifying the slice.
  * @return The sliced tensor.
  */
 Tensor slice(Tensor &tensor, const array_t &mIdx);
