@@ -39,6 +39,8 @@ private:
   void assignOther(const Tensor &);
   void assignSelf(const Tensor &);
 
+  void reshapeCommon(const array_t &shape, const array_t &strides) const;
+
 public:
   template <bool... Const> friend class TensorIter;
 
@@ -71,6 +73,12 @@ public:
    */
   Tensor(const array_t &shape);
 
+  /**
+   * @brief Empty strided tensor constructor
+   *
+   * Constructs a tensor with the given shape and strides, and an allocated but
+   * uninitialized data buffer.
+   */
   Tensor(const array_t &shape, const array_t &strides);
 
   /**
@@ -93,10 +101,29 @@ public:
    */
   static Tensor fill(const array_t &shape, double value);
 
+  /**
+   * @brief Tensor range constructor
+   *
+   * Constructs the 1D tensor of values from 0 (inclusive) to stop (exclusive)
+   * with step size 1.
+   */
   static Tensor range(int stop);
 
+  /**
+   * @brief Tensor range constructor
+   *
+   * Constructs the 1D tensor of values from start (inclusive) to stop (exclusive)
+   * with step size 1.
+   *
+   */
   static Tensor range(int start, int stop);
 
+  /**
+   * @brief Tensor range constructor
+   *
+   * Constructs the 1D tensor of values from start (inclusive) to stop (exclusive),
+   * with the given step size.
+   */
   static Tensor range(int start, int stop, int step);
 
   ~Tensor() = default;
@@ -156,12 +183,11 @@ public:
 
   /* UTILITIES */
 
-  // @cond
+  /** @brief Computes the buffer index corresponding to the given multi-index */
   inline size_t toIndex(const array_t &mIdx) const {
     return offset_ +
            std::inner_product(mIdx.begin(), mIdx.end(), strides_.begin(), 0UL);
   }
-  // @endcond
 
   /* GETTERS/SETTERS */
 
@@ -175,20 +201,40 @@ public:
    */
   inline size_t ndims() const { return shape_.size(); }
 
+  /** @brief Returns the tensor offset */
   inline size_t offset() const { return offset_; }
 
+  /** @brief Returns the value of tensor read-only flag */
   inline bool ro() const { return ro_; }
 
   /* VIEWS */
 
-  void reshapeCommon(const array_t &shape, const array_t &strides) const;
-
+  /**
+   * @brief Reshapes the tensor
+   *
+   * Returns a view of the tensor with the given shape, whose corresponding
+   * size must be the same as the tensor size.
+   *
+   * @param shape The new shape
+   * @return Tensor
+   */
   Tensor reshape(const array_t &shape);
 
+  /**
+   * @brief Returns a view of the tensor with the given shape and strides.
+   * The shape and strides arrays must have the same size and the size corresponding
+   * to the shape must be the same as the tensor size.
+   * 
+   * @param shape The new shape
+   * @param strides The new strides
+   * @return Tensor 
+   */
   Tensor reshape(const array_t &shape, const array_t &strides);
 
+  /** @overload */
   const Tensor reshape(const array_t &shape) const;
 
+  /** @overload */
   const Tensor reshape(const array_t &shape, const array_t &strides) const;
 
   /**
@@ -215,7 +261,6 @@ public:
 
   /**
    * @brief Unary negation operator for tensors.
-   * @param tensor The tensor to be negated.
    * @return The result of element-wise negation of the tensor.
    */
   friend Tensor operator-(const Tensor &);
