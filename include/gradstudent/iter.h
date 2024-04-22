@@ -1,3 +1,18 @@
+/**
+ * @file iter.h
+ * @author Ben Wallace (me@bcwallace.com)
+ * @brief Tensor iterators
+ * @version 0.1
+ * @date 2024-04-22
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ * @todo It would be better to have a single TensorTuple container, which would hold
+ * a tuple of references to Tensor objects. Then the various tensor iterators could
+ * be obtained by calling appropriate begin/end methods on this object. Moreover,
+ * the tensor iterator objects should hold raw pointers instead of references so they
+ * can be default-constructed.
+ */
 #pragma once
 
 #include <tuple>
@@ -22,18 +37,19 @@ namespace gs {
 template <bool... Const> class TensorIter {
 
 public:
+  /** @brief Tuple of possibly const tensor element values */
   using value_type = bool_to_const_t<double, Const...>;
+
+  /** @brief Tuple of references to possibly const tensor element values */
   using reference = add_ref_t<value_type>;
+
+  // @cond
   using difference_type = std::ptrdiff_t;
   using iterator_category = std::forward_iterator_tag;
+  // @endcond
 
   /**
    * @brief Construct a new TensorIter object
-   *
-   * A deduction guide is provided so that each parameter in Const is set
-   * according to whether or not the corresponding tensor is constant. If any of
-   * the non-constant tensors should be treated as constant, the Const
-   * parameters must be specified explicitly.
    *
    * @param tensors Pack of tensors to iterate through. Must have the same
    * shape.
@@ -44,11 +60,10 @@ public:
     syncIndicesHelper(std::make_index_sequence<sizeof...(Const)>{});
   }
 
-  /**
-   * @brief Returns the current multi-index
-   */
+  /** @brief Returns the current multi-index */
   const array_t &index() const { return mIdx_; }
 
+  /** @brief Advances to the next tensor elements */
   TensorIter &operator++() {
     if (!shape_.empty()) {
       increment();
@@ -58,24 +73,31 @@ public:
     return *this;
   }
 
+  /** @overload */
   TensorIter operator++(int) {
     TensorIter tmp(*this);
     operator++();
     return tmp;
   }
 
+  /** @brief Returns the current tensor elements */
   reference operator*() const {
     return derefHelper(std::make_index_sequence<sizeof...(Const)>{});
   }
 
+  /** @brief Returns true if both iterators are at the same multi-index */
   bool operator==(const TensorIter &other) const {
     return mIdx_ == other.mIdx_ && isEnd_ == other.isEnd_;
   }
 
+  // @cond
   bool operator!=(const TensorIter &other) const { return !((*this) == other); }
+  // @endcond
 
+  /** @brief Returns a TensorIter at the all-zero multi-index */
   TensorIter begin() { return *this; }
 
+  /** @brief Returns a TensorIter one past the final multi-index for the current shape */
   TensorIter end() {
     auto it = std::apply(
         [](auto &...tensors) { return TensorIter(tensors...); }, tensors_);
@@ -163,16 +185,34 @@ private:
   }
 };
 
+/**
+ * @brief Deduction guide for TensorIter constructor
+ * 
+ * Sets each parameter in Const according to whether or not the corresponding tensor
+ * is constant. If any of the non-constant tensors should be treated as constant, the
+ * Const parameters must be specified explicitly.
+ */
 template <typename... Args>
 TensorIter(Args &...) -> TensorIter<std::is_const_v<Args>...>;
 
+/**
+ * @brief Indexed tensor iterator
+ *
+ * Similar to TensorIter but includes the current multi-index as the first
+ * element of its tuple of returned values.
+ */
 template <bool... Const> class ITensorIter {
 
 public:
+  /** @brief A tuple type consisting of a multi-index followed by tensor elements */
   using value_type = tuple_cat_t<std::tuple<array_t>,
                                  typename TensorIter<Const...>::value_type>;
+  
+  /** @brief A tuple type consisting of references to the types of value_type */
   using reference = tuple_cat_t<std::tuple<const array_t &>,
                                 typename TensorIter<Const...>::reference>;
+
+  // @cond
   using difference_type = std::ptrdiff_t;
   using iterator_category = std::forward_iterator_tag;
 
@@ -205,6 +245,7 @@ public:
   ITensorIter begin() { return *this; }
 
   ITensorIter end() { return ITensorIter(iter_.end()); }
+  // @endcond
 
 private:
   TensorIter<Const...> iter_;
@@ -212,7 +253,9 @@ private:
   ITensorIter(const TensorIter<Const...> &iter) : iter_(iter) {}
 };
 
+// @cond
 template <typename... Args>
 ITensorIter(Args &...) -> ITensorIter<std::is_const_v<Args>...>;
+// @endcond
 
 } // namespace gs
