@@ -1,6 +1,6 @@
 # gradstudent
 
-A gradient learner.
+A gradient learner (well, hopefully some day).
 
 `gradstudent` is a learning project. The goal is to build a simple library for manipulating tensors (multidimensional arrays)
 and computing the derivatives of these manipulations via (reverse-mode) autograd. Emphasis is placed on accomplishing these
